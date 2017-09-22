@@ -16,6 +16,8 @@ This function creates count tables summarizing counts for each observed read in 
 Input files are taken from the given input directory and are selected based on the given fastQ suffix.
 }
 \examples{
-createCountTableFromFastQs("./my_experiment/fastQs",".trimmed.fastq.gz")
-createCountTableFromFastQs("./my_experiment/fastQs") #use if fastq files end with ".fq.gz"
+in_dir <- system.file("extdata", package = "USBseq")
+countTable <- createCountTableFromFastQs(in_dir)
 }
+\keyword{counting}
+\keyword{read}

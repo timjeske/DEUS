@@ -4,11 +4,11 @@
 #' Input files are taken from the given input directory and are selected based on the given fastQ suffix.
 #' @param in_dir input directory containing fastq files to be analyzed
 #' @param fq_suffix suffix of your fastq files, default is ".fq.gz"
-#' @keywords
+#' @keywords read counting
 #' @export
 #' @examples
-#' createCountTableFromFastQs("./my_experiment/fastQs",".trimmed.fastq.gz")
-#' createCountTableFromFastQs("./my_experiment/fastQs") #use if fastq files end with ".fq.gz"
+#' in_dir <- system.file("extdata", package = "USBseq")
+#' countTable <- createCountTableFromFastQs(in_dir)
 
 createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz") {
   file.list <- list.files(in_dir)

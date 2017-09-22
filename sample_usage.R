@@ -6,7 +6,12 @@ setwd("~")
 install("USBseq")
 
 library(USBseq)
-in_dir <- system.file("sample_fastqs", package = "USBseq")
-countTable <- USBseq::createCountTableFromFastQs(in_dir)
-write.table(countTable, "~/tmp/AllCounts_R.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+in_dir <- system.file("extdata", package = "USBseq")
+countTable <- createCountTableFromFastQs(in_dir)
 
+#write.table(countTable, "~/tmp/AllCounts_R.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+
+map <- createMap(countTable)
+
+phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
+countDataFilt <- filterLowExp(countTable, phenofile)
