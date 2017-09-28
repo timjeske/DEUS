@@ -3,4 +3,5 @@
 export(createCountTableFromFastQs)
 export(createMap)
 export(filterLowExp)
+export(mergeResults)
 export(runBlast)

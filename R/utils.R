@@ -51,3 +51,28 @@ filterLowExp<-function(countData,pheno){
 
   return(countData)
 }
+
+#' Function to merge DEA and blast result
+#'
+#' @param deResult
+#' @param blastResult
+#' @param map
+#' @keywords summary
+#' @export
+#' @examples
+
+mergeResults <- function(deResult, blastResult, map) {
+  blastResult <- blastResult[c("qseqid", "sseqid","length", "evalue")]
+  sigResults <- deResult[c(2, 5:ncol(deResult))]
+  sigResults$qseqid <- map[row.names(sigResults),1]
+  sigResults$sequence <- row.names(sigResults)
+  res <- plyr::join(blastResult, sigResults, type = "full")
+
+  group <- data.frame(feature_list=c(by(res$sseqid, res$sequence, function(x)paste(x, collapse=","))))
+  group$sequence <- row.names(group)
+  group <- plyr::join(group, res, type = "full", match="first")
+  group <- group[-which(names(group)=="sseqid")]
+  group <- group[,c(which(names(group)!="feature_list"),2)]
+
+  return(group)
+}

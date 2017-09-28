@@ -8,7 +8,6 @@
 #' @keywords blastn
 #' @export
 #' @examples
-#' runBlast(...)
 
 runBlast <- function(blast_exec, blast_db, ncores, sigResults, map){
   sig_sequences <- as.vector(rbind(paste(">",map[row.names(sigResults),1],sep=""),row.names(sigResults)))

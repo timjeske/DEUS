@@ -20,7 +20,4 @@ runBlast(blast_exec, blast_db, ncores, sigResults, map)
 \description{
 Function to blast significant sequences
 }
-\examples{
-runBlast(...)
-}
 \keyword{blastn}
