@@ -10,9 +10,11 @@ in_dir <- system.file("extdata", package = "USBseq")
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
+out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_09_28_Rpackage"
+
 countTable <- createCountTableFromFastQs(in_dir)
 countDataFilt <- filterLowExp(countTable, phenoInfo)
-#write.table(countDataFilt, "~/tmp/AllCounts_filtered.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+write.table(countDataFilt, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 #do differential expression analysis
 countData <- countDataFilt
@@ -21,12 +23,13 @@ map <- createMap(countTable)
 design <- ~ condition
 filter_val <- 'IHWPval'
 filter_threshold <- 0.05
-out_dir <- "~/tmp/"
+
 source("~/Dropbox/Scripts/DiffExpression/DESeq2.R")
-sigResults <- read.table("~/tmp/DESeq2_sig_output.tsv", head=T, row.names=1)
+sigResults <- read.table(paste(out_dir,"DESeq2_sig_output.tsv",sep="/"), head=T, row.names=1)
 
 #run blast
-blast_exec <-...
-blast_db <-...
+blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
+blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB2.fa"
 ncores <- 2
 blastResult <- runBlast(blast_exec, blast_db, ncores, sigResults, map)
+write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)

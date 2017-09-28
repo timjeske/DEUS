@@ -6,10 +6,21 @@
 \usage{
 runBlast(blast_exec, blast_db, ncores, sigResults, map)
 }
+\arguments{
+\item{blast_exec}{path to your installation of 'blastn'}
+
+\item{blast_db}{path to your local blastdb}
+
+\item{ncores}{number of cores used for blasting}
+
+\item{sigResults}{data frame with significant sequences as row names}
+
+\item{map}{data frame with sequences as row names and some identifier for each sequence in the first column}
+}
 \description{
 Function to blast significant sequences
 }
 \examples{
 runBlast(...)
 }
-\keyword{filtering}
+\keyword{blastn}

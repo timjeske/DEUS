@@ -1,11 +1,11 @@
 #' Function to blast significant sequences
 #'
-#' @param blast_exec
-#' @param blast_db
-#' @param ncores
-#' @param sigResults
-#' @param map
-#' @keywords filtering
+#' @param blast_exec path to your installation of 'blastn'
+#' @param blast_db path to your local blastdb
+#' @param ncores number of cores used for blasting
+#' @param sigResults data frame with significant sequences as row names
+#' @param map data frame with sequences as row names and some identifier for each sequence in the first column
+#' @keywords blastn
 #' @export
 #' @examples
 #' runBlast(...)
