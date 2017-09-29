@@ -25,7 +25,7 @@ map <- createMap(countTable)
 design <- ~ condition
 filter_val <- 'IHWPval'
 filter_threshold <- 0.05
-source("~/Dropbox/Scripts/DiffExpression/DESeq2.R")
+source("~/USBseq/R/DESeq2.R")
 sigResults <- read.table(paste(out_dir,"DESeq2_sig_output.tsv",sep="/"), head=T, row.names=1)
 
 # run blast
