@@ -62,7 +62,7 @@ filterLowExp<-function(countData,pheno){
 #' @examples
 
 mergeResults <- function(deResult, blastResult, map) {
-  blastResult <- blastResult[c("qseqid", "sseqid","length", "evalue")]
+  blastResult <- blastResult[c("qseqid", "sseqid", "length", "evalue")]
   sigResults <- deResult[c(2, 5:ncol(deResult))]
   sigResults$qseqid <- map[row.names(sigResults),1]
   sigResults$sequence <- row.names(sigResults)
@@ -73,6 +73,35 @@ mergeResults <- function(deResult, blastResult, map) {
   group <- plyr::join(group, res, type = "full", match="first")
   group <- group[-which(names(group)=="sseqid")]
   group <- group[,c(which(names(group)!="feature_list"),2)]
-
+  group$length <- nchar(group$sequence)
   return(group)
+}
+
+#' Function add counts of different feature classes
+#'
+#' @param mergedResult
+#' @param featureClasses
+#' @keywords feature counting
+#' @export
+#' @examples
+#'
+addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
+  res <- mergedResult
+  v_features <- strsplit(paste(mergedResult$feature_list),",")
+  sum <- 0
+  for(i in featureClasses) {
+    res[i] <- stringr::str_count(string=v_features, i)
+    sum <- sum + res[[i]]
+  }
+  res$"other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
+  res <- res[,c(which(names(res)!="feature_list"),which(names(res)=="feature_list"))]
+
+  return(res)
+}
+
+writeSummaryFiles <- function(summaryTable, outDir) {
+  write.table(summaryTable, paste(outDir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
+
+  filtered <- summaryTable[!summaryTable$feature_list=="NA",]
+  write.table(filtered, paste(outDir, "SummaryTable_withBlast.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
 }

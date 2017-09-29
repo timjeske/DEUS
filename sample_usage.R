@@ -37,3 +37,4 @@ write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col
 
 # merge results
 summary <- mergeResults(sigResults, blastResult, map)
+summary <- addCountsOfFeatureClasses(summary, classes)
