@@ -74,10 +74,12 @@ mergeResults <- function(deResult, blastResult, map) {
   group <- group[-which(names(group)=="sseqid")]
   group <- group[,c(which(names(group)!="feature_list"),2)]
   group$length <- nchar(group$sequence)
+  row.names(group) <- group$sequence
+  group <- group[-which(names(group)=="sequence")]
   return(group)
 }
 
-#' Function add counts of different feature classes
+#' Function to add counts of different feature classes
 #'
 #' @param mergedResult
 #' @param featureClasses
@@ -99,9 +101,28 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
   return(res)
 }
 
+#' Function to write summary tables and fasta files for USBseq result
+#'
+#' @param summaryTable
+#' @param outDir
+#' @keywords summary
+#' @export
+#' @examples
+#'
 writeSummaryFiles <- function(summaryTable, outDir) {
-  write.table(summaryTable, paste(outDir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
+  write.table(summaryTable, paste(outDir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=T, col.names=T)
 
   filtered <- summaryTable[!summaryTable$feature_list=="NA",]
-  write.table(filtered, paste(outDir, "SummaryTable_withBlast.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
+  write.table(filtered, paste(outDir, "SummaryTable_withBlast.tsv", sep="/"), sep="\t", quote=F, row.names=T, col.names=T)
+
+  filtered = filtered[filtered$length<36,]
+  sequences_withBlast<-paste(paste(">",filtered$qseqid,sep=""),row.names(filtered),sep="\n")
+  write.table(sequences_withBlast, paste(out_dir,"SummaryTable_withBlast.35L.fasta",sep="/"),quote=F,row.names=F,col.names=F)
+
+  filtered = summaryTable[summaryTable$feature_list=="NA" | is.na(summaryTable$feature_list),]
+  write.table(filtered, paste(out_dir,"SummaryTable_noBlast.tsv",sep="/"), sep="\t", quote=F,row.names=T,col.names=T)
+
+  filtered = filtered[filtered$length<36,]
+  sequences_noBlast<-paste(paste(">",filtered$qseqid,sep=""),row.names(filtered),sep="\n")
+  write.table(sequences_noBlast, paste(out_dir,"SummaryTable_noBlast.35L.fasta",sep="/"),quote=F,row.names=F,col.names=F)
 }

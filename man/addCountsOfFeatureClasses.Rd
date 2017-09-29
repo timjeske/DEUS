@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{addCountsOfFeatureClasses}
 \alias{addCountsOfFeatureClasses}
-\title{Function add counts of different feature classes}
+\title{Function to add counts of different feature classes}
 \usage{
 addCountsOfFeatureClasses(mergedResult, featureClasses)
 }
 \description{
-Function add counts of different feature classes
+Function to add counts of different feature classes
 }
 \examples{
 
