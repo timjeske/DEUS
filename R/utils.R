@@ -76,6 +76,7 @@ mergeResults <- function(deResult, blastResult, map) {
   group$length <- nchar(group$sequence)
   row.names(group) <- group$sequence
   group <- group[-which(names(group)=="sequence")]
+  group <- group[order(group$pvalue),]
   return(group)
 }
 
@@ -97,7 +98,7 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
   }
   res$"other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
   res <- res[,c(which(names(res)!="feature_list"),which(names(res)=="feature_list"))]
-
+  res <- res[order(res$pvalue),]
   return(res)
 }
 

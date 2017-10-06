@@ -15,6 +15,7 @@ createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz") {
   fastqs <- file.list[endsWith(file.list,fq_suffix)]
   fastqs <- paste(in_dir,fastqs,sep="/")
 
+  print(paste("Counting all reads in",fastqs[1]))
   content <- ShortRead::readFastq(fastqs[1])
   counts <- ShortRead::tables(content,n=length(content))
   countTable <- as.data.frame(counts$top)
