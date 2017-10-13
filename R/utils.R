@@ -61,12 +61,13 @@ filterLowExp<-function(countData,pheno){
 #' @export
 #' @examples
 
-mergeResults <- function(deResult, blastResult, map) {
+mergeResults <- function(deResult, blastResult, cl.df, map) {
   blastResult <- blastResult[c("qseqid", "sseqid", "length", "evalue")]
   sigResults <- deResult[c(2, 5:ncol(deResult))]
   sigResults$qseqid <- map[row.names(sigResults),1]
   sigResults$sequence <- row.names(sigResults)
   res <- plyr::join(blastResult, sigResults, type = "full")
+  res <- plyr::join(res, cl.df,by="qseqid", type = "full")
 
   group <- data.frame(feature_list=c(by(res$sseqid, res$sequence, function(x)paste(x, collapse=","))))
   group$sequence <- row.names(group)

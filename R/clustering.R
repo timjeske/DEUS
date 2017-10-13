@@ -6,38 +6,46 @@
 #' @param identityCutoff Sequence identity cutoff used for clustering
 #' @param lengthCutoff Length difference cutoff
 #' @param wordlength CD-Hit word length
+#' @param map data frame with sequences as row names and some identifier for each sequence in the first column
 #' @param optional Optional execution parameters
 #' @keywords clustering
 #' @export
 #' @examples
 
 # run clustering
-runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff, wordlength, optional="") {
-  outfile <- paste(out_dir,"DESeq2_sig_sequences.cd_hit",sep="/")
-  command <- paste("-i",sequences,"-c",identityCutoff,"-s",lengthCutoff,"-n",wordlength,"-g 1",optional,"-o",outfile,sep=" ")
+runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff, wordlength, map, optional="") {
+  clusters <- paste(out_dir,"DESeq2_sig_sequences.cd_hit",sep="/")
+  command <- paste("-i",sequences,"-c",identityCutoff,"-s",lengthCutoff,"-n",wordlength,"-g 1",optional,"-o",clusters,sep=" ")
   cluster.out <- system2(cdhit_path,command, stdout=TRUE)
 
-  fileName <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_10_12_checkCluster/DESeq2_sig_sequences.cd_hit.clstr"
-  out=readChar(fileName, file.info(fileName)$size)
-  li=strsplit(out,">Cluster ")
-  li[[1]]=li[[1]][-1]
-  d=data.frame(unlist(li))
-  outdir=paste(out_dir, "Clusters",sep="/")
-  dir.create(outdir, showWarnings = FALSE)
-  apply(d,1,extractSequences,map=map)
+  #Read in outfile and prepare for further processing
+  cluster.file <- paste(clusters,".clstr",sep="")
+  out<-readChar(cluster.file, file.info(cluster.file)$size)
+  cl.list<-strsplit(out,">Cluster ")
+  #Remove first empty element
+  cl.list[[1]]<-cl.list[[1]][-1]
+  cl.df<-data.frame(unlist(cl.list))
+  cl.dir<-paste(out_dir, "Clusters",sep="/")
+  dir.create(cl.dir, showWarnings = FALSE)
+  out.df<-(apply(cl.df,1,extractSequences,map=map))
+  out.df<-do.call("rbind",out.df)
+  out.df["sequences"] <- NULL
+  names(out.df)[2]<-"ClusterID"
+  return(out.df)
 }
-
-
 
 
 
 extractSequences<-function(entry,map){
   cl_id<-unlist(strsplit(entry,"\n"))[1]
-  outfile=paste(outdir,cl_id,sep="/")
-  splitentry=unlist(strsplit(entry,","))
-  m=regexpr("seq_[0-9]+",splitentry,perl=TRUE)
-  o=c(regmatches(splitentry, m))
-  seq=row.names(map)[map[,1]%in%o]
-  out=paste(">",o,"\n",seq,sep="")
+  outfile<-paste(outdir,cl_id,sep="/")
+  splitentry<-unlist(strsplit(entry,","))
+  seqIDsIndex<-regexpr("seq_[0-9]+",splitentry,perl=TRUE)
+  qseqid<-c(regmatches(splitentry, seqIDsIndex))
+  sequences<-row.names(map)[map[,1]%in%qseqid]
+  out=paste(">",qseqid,"\n",sequences,sep="")
   write.table(out,outfile,row.names=F,col.names=F,quote=F)
+
+  out.df<-as.data.frame(cbind(qseqid,sequences,cl_id))
+  return(out.df)
 }

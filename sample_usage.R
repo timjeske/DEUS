@@ -37,9 +37,9 @@ write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col
 
 cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
 sequences=paste(out_dir,"SummaryTable_withBlast.35L.fasta",sep="/")
-#runClustering(cd_hit,sequences,out_dir,0.9,0.9,9)
+cl.df<-runClustering(cd_hit,sequences,out_dir,0.9,0.9,9,map)
 
 # merge results
-summary <- mergeResults(sigResults, blastResult, map)
+summary <- mergeResults(sigResults, blastResult, cl.df, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary,out_dir)
