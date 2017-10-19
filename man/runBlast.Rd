@@ -4,7 +4,7 @@
 \alias{runBlast}
 \title{Function to blast significant sequences}
 \usage{
-runBlast(blast_exec, blast_db, ncores, sigResults, map)
+runBlast(blast_exec, blast_db, ncores, sigResults, map, out_dir)
 }
 \arguments{
 \item{blast_exec}{path to your installation of 'blastn'}
@@ -16,6 +16,8 @@ runBlast(blast_exec, blast_db, ncores, sigResults, map)
 \item{sigResults}{data frame with significant sequences as row names}
 
 \item{map}{data frame with sequences as row names and some identifier for each sequence in the first column}
+
+\item{outdir}{output folder}
 }
 \description{
 Function to blast significant sequences

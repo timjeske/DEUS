@@ -5,7 +5,7 @@
 \title{Function to execute CD-HIT Clustering}
 \usage{
 runClustering(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff,
-  wordlength, optional = "")
+  wordlength, map, optional = "")
 }
 \arguments{
 \item{cdhit_path}{Path to cd-hit-est executable}
@@ -19,6 +19,8 @@ runClustering(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff,
 \item{lengthCutoff}{Length difference cutoff}
 
 \item{wordlength}{CD-Hit word length}
+
+\item{map}{data frame with sequences as row names and some identifier for each sequence in the first column}
 
 \item{optional}{Optional execution parameters}
 }

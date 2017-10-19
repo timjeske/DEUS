@@ -112,7 +112,9 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
 #' @examples
 #'
 writeSummaryFiles <- function(summaryTable, outDir) {
-  write.table(summaryTable, paste(outDir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=T, col.names=T)
+  summaryTable$Sequences=row.names(summaryTable)
+  summaryTable <- summaryTable[,c(ncol(summaryTable),1:ncol(summaryTable)-1)]
+  write.table(summaryTable, paste(outDir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
 
   filtered <- summaryTable[!summaryTable$feature_list=="NA",]
   write.table(filtered, paste(outDir, "SummaryTable_withBlast.tsv", sep="/"), sep="\t", quote=F, row.names=T, col.names=T)
@@ -127,4 +129,19 @@ writeSummaryFiles <- function(summaryTable, outDir) {
   filtered = filtered[filtered$length<36,]
   sequences_noBlast<-paste(paste(">",filtered$qseqid,sep=""),row.names(filtered),sep="\n")
   write.table(sequences_noBlast, paste(out_dir,"SummaryTable_noBlast.35L.fasta",sep="/"),quote=F,row.names=F,col.names=F)
+}
+
+#' Function to remove temporary files after pipeline execution
+#'
+#' @param outDir output folder
+#' @keywords clean-up
+#' @export
+#' @examples
+#'
+deleteTmp <- function(outDir){
+  tmp <- paste(out_dir,"sig_sequences.fa",sep="/")
+  if(file.exists(tmp)){
+    file.remove(tmp)
+  }
+
 }

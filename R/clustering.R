@@ -27,7 +27,7 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
   cl.df<-data.frame(unlist(cl.list))
   cl.dir<-paste(out_dir, "Clusters",sep="/")
   dir.create(cl.dir, showWarnings = FALSE)
-  out.df<-(apply(cl.df,1,extractSequences,map=map))
+  out.df<-(apply(cl.df,1,extractSequences,map=map,cl.dir=cl.dir))
   out.df<-do.call("rbind",out.df)
   out.df["sequences"] <- NULL
   names(out.df)[2]<-"ClusterID"
@@ -36,9 +36,9 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
 
 
 
-extractSequences<-function(entry,map){
+extractSequences<-function(entry,map,cl.dir){
   cl_id<-unlist(strsplit(entry,"\n"))[1]
-  outfile<-paste(outdir,cl_id,sep="/")
+  outfile<-paste(cl.dir,cl_id,sep="/")
   splitentry<-unlist(strsplit(entry,","))
   seqIDsIndex<-regexpr("seq_[0-9]+",splitentry,perl=TRUE)
   qseqid<-c(regmatches(splitentry, seqIDsIndex))

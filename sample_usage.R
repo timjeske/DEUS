@@ -32,14 +32,18 @@ sigResults <- read.table(paste(out_dir,"DESeq2_sig_output.tsv",sep="/"), head=T,
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB2.fa"
 ncores <- 2
-blastResult <- runBlast(blast_exec, blast_db, ncores, sigResults, map)
+blastResult <- runBlast(blast_exec, blast_db, ncores, sigResults, map,out_dir)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-sequences=paste(out_dir,"SummaryTable_withBlast.35L.fasta",sep="/")
+sequences=paste(out_dir,"sig_sequences.fa",sep="/")
 cl.df<-runClustering(cd_hit,sequences,out_dir,0.9,0.9,9,map)
 
 # merge results
 summary <- mergeResults(sigResults, blastResult, cl.df, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary,out_dir)
+
+#Remove tmp files
+deleteTmp(out_dir)
+

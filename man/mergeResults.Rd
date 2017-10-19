@@ -4,7 +4,7 @@
 \alias{mergeResults}
 \title{Function to merge DEA and blast result}
 \usage{
-mergeResults(deResult, blastResult, map)
+mergeResults(deResult, blastResult, cl.df, map)
 }
 \description{
 Function to merge DEA and blast result

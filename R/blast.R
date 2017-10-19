@@ -5,12 +5,14 @@
 #' @param ncores number of cores used for blasting
 #' @param sigResults data frame with significant sequences as row names
 #' @param map data frame with sequences as row names and some identifier for each sequence in the first column
+#' @param outdir output folder
 #' @keywords blastn
 #' @export
 #' @examples
 
-runBlast <- function(blast_exec, blast_db, ncores, sigResults, map){
+runBlast <- function(blast_exec, blast_db, ncores, sigResults, map, out_dir){
   sig_sequences <- as.vector(rbind(paste(">",map[row.names(sigResults),1],sep=""),row.names(sigResults)))
+  write.table(sig_sequences,paste(out_dir,"sig_sequences.fa",sep="/"),quote = F,row.names = F,col.names = F)
   blast.f6 <- c('qseqid', 'qlen', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart' ,'send', 'evalue', 'bitscore')
   command=paste("-db",blast_db, "-num_threads", ncores , "-perc_identity 100 -strand plus -task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt", sprintf(" '6 %s'",paste(collapse=" ",blast.f6)),sep=" ")
   blast.out <- system2(blast_exec,command, input=sig_sequences, stdout=TRUE)

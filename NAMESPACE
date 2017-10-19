@@ -3,6 +3,7 @@
 export(addCountsOfFeatureClasses)
 export(createCountTableFromFastQs)
 export(createMap)
+export(deleteTmp)
 export(filterLowExp)
 export(mergeResults)
 export(runBlast)
