@@ -19,18 +19,18 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
   cluster.out <- system2(cdhit_path,command, stdout=TRUE)
 
   #Read in outfile and prepare for further processing
-#  cluster.file <- paste(clusters,".clstr",sep="")
-#  out<-readChar(cluster.file, file.info(cluster.file)$size)
-#  cl.list<-strsplit(out,">Cluster ")
-#  #Remove first empty element
-#  cl.list[[1]]<-cl.list[[1]][-1]
-#  cl.df<-data.frame(unlist(cl.list))
+  #  cluster.file <- paste(clusters,".clstr",sep="")
+  #  out<-readChar(cluster.file, file.info(cluster.file)$size)
+  #  cl.list<-strsplit(out,">Cluster ")
+  #  #Remove first empty element
+  #  cl.list[[1]]<-cl.list[[1]][-1]
+  #  cl.df<-data.frame(unlist(cl.list))
   cl.dir<-paste(out_dir, "Clusters",sep="/")
   dir.create(cl.dir, showWarnings = FALSE)
   out.df <- processClusters(map,out_dir)
 
-#  out.df<-(apply(cl.df,1,extractSequences,map=map,cl.dir=cl.dir))
-#  out.df<-do.call("rbind",out.df)
+  #  out.df<-(apply(cl.df,1,extractSequences,map=map,cl.dir=cl.dir))
+  #  out.df<-do.call("rbind",out.df)
   out.df["sequences"] <- NULL
   names(out.df)[2]<-"ClusterID"
   return(out.df)
@@ -73,7 +73,6 @@ processClusters <- function(map,out_dir) {
 
   map$sequences<-row.names(map)
   out.df<-merge(x = out.df, y = map, by.x = "qseqid",by.y="seq_id", all.x = TRUE)
-  names(out.df)
   by(out.df,out.df$cl_id,printCluster,cl.dir=cl.dir)
   return(out.df)
 }
@@ -85,4 +84,3 @@ printCluster<-function(data,cl.dir){
   out<-paste(">",data[,1],"\n",data[,3],sep="")
   write.table(out,outfile,col.names=F,row.names=F,quote=F)
 }
-
