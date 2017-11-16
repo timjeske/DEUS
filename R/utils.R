@@ -65,7 +65,6 @@ filterLowExp<-function(countData,pheno){
 #' summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
 #' summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
 #' summary <- mergeResults(sigResults, blastResult, clustResult, map)
-#'
 
 mergeResults <- function(deResult, countStats=NULL, blastResult=NULL, clustResult=NULL, map) {
 
@@ -115,7 +114,7 @@ mergeResults <- function(deResult, countStats=NULL, blastResult=NULL, clustResul
 #' @keywords count statistics
 #' @export
 #' @examples
-#'
+
 getConditionCountStats<-function(countData,phenoData){
 
   pheno <- phenoData
@@ -140,7 +139,7 @@ getConditionCountStats<-function(countData,phenoData){
 #' @keywords feature counting
 #' @export
 #' @examples
-#'
+
 addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
   if(!("FeatureList" %in% names(mergedResult))) stop('Feature classes can only be counted if blast results have been merged to DE results!')
   res <- mergedResult
@@ -163,7 +162,7 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
 #' @keywords summary
 #' @export
 #' @examples
-#'
+
 writeSummaryFiles <- function(summaryTable, outDir) {
   summaryTable$Sequence=row.names(summaryTable)
   summaryTable <- summaryTable[,c(ncol(summaryTable),1:ncol(summaryTable)-1)]
@@ -191,7 +190,7 @@ writeSummaryFiles <- function(summaryTable, outDir) {
 #' @keywords fasta
 #' @export
 #' @examples
-#'
+
 sequencesAsFasta <- function(sigResults, map) {
   res <- as.vector(rbind(paste(">",map[row.names(sigResults),1],sep=""),row.names(sigResults)))
   return(res)
@@ -203,7 +202,7 @@ sequencesAsFasta <- function(sigResults, map) {
 #' @keywords clean-up
 #' @export
 #' @examples
-#'
+
 deleteTmp <- function(outDir){
   tmp <- paste(out_dir,"sig_sequences.fa",sep="/")
   if(file.exists(tmp)){

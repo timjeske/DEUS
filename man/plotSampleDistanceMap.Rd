@@ -14,9 +14,6 @@ plotSampleDistanceMap(rld, out_dir)
 \description{
 Function to plot sample distance map
 }
-\examples{
-
-}
 \keyword{distance}
 \keyword{map}
 \keyword{sample}

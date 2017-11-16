@@ -14,7 +14,4 @@ sequencesAsFasta(sigResults, map)
 \description{
 Function to get sequences as a vector of fasta IDs and sequences
 }
-\examples{
-
-}
 \keyword{fasta}

@@ -7,7 +7,7 @@
 #' @keywords differential expression analysis
 #' @export
 #' @examples
-#'
+
 runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
   dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = design)
   dds <- dds[rowMeans(counts(dds)) > 1, ]
@@ -37,7 +37,7 @@ runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
 #' @keywords sample distance map
 #' @export
 #' @examples
-#'
+
 plotSampleDistanceMap <- function(rld, out_dir) {
   pdf(paste(out_dir, "DESeq2_sample_dist.pdf", sep="/"), onefile=FALSE)
   sampleDists <- dist(t(assay(rld)))

@@ -14,8 +14,5 @@ addCountsOfFeatureClasses(mergedResult, featureClasses)
 \description{
 Function to add counts of different feature classes
 }
-\examples{
-
-}
 \keyword{counting}
 \keyword{feature}

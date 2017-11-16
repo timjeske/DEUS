@@ -14,7 +14,4 @@ writeSummaryFiles(summaryTable, outDir)
 \description{
 Function to write summary tables and fasta files for USBseq result
 }
-\examples{
-
-}
 \keyword{summary}

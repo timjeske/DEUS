@@ -12,7 +12,4 @@ deleteTmp(outDir)
 \description{
 Function to remove temporary files after pipeline execution
 }
-\examples{
-
-}
 \keyword{clean-up}

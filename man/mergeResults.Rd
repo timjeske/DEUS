@@ -4,10 +4,13 @@
 \alias{mergeResults}
 \title{Function to merge DEA, blast result}
 \usage{
-mergeResults(deResult, blastResult = NULL, clustResult = NULL, map)
+mergeResults(deResult, countStats = NULL, blastResult = NULL,
+  clustResult = NULL, map)
 }
 \arguments{
-\item{deResult}{result of differential expression analysis}
+\item{deResult}{result of differential expression analysis (columns log2FoldChange, pvalue, IHWPval are required)}
+
+\item{countStats}{result of getConditionCountStats function}
 
 \item{blastResult}{result of blast function}
 
@@ -22,7 +25,6 @@ Function to merge DEA, blast result
 summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
 summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
 summary <- mergeResults(sigResults, blastResult, clustResult, map)
-
 }
 \keyword{generating}
 \keyword{summary}

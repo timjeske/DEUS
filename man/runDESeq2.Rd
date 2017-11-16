@@ -18,9 +18,6 @@ runDESeq2(countData, phenoData, design, map, out_dir)
 \description{
 Function to run differential expression analysis based on DESeq2
 }
-\examples{
-
-}
 \keyword{analysis}
 \keyword{differential}
 \keyword{expression}

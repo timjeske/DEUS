@@ -14,8 +14,5 @@ getConditionCountStats(countData, phenoData)
 \description{
 Function to compute mean and sd of normalized counts for each condition
 }
-\examples{
-
-}
 \keyword{count}
 \keyword{statistics}
