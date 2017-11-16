@@ -6,6 +6,11 @@
 \usage{
 addCountsOfFeatureClasses(mergedResult, featureClasses)
 }
+\arguments{
+\item{mergedResult}{summary table including blast results}
+
+\item{featureClasses}{list of prefixes of features representing classes to be counted}
+}
 \description{
 Function to add counts of different feature classes
 }

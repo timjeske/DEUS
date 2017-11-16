@@ -2,11 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{mergeResults}
 \alias{mergeResults}
-\title{Function to merge DEA and blast result}
+\title{Function to merge DEA, blast result}
 \usage{
-mergeResults(deResult, blastResult, cl.df, map)
+mergeResults(deResult, blastResult = NULL, clustResult = NULL, map)
+}
+\arguments{
+\item{deResult}{result of differential expression analysis}
+
+\item{blastResult}{result of blast function}
+
+\item{clustResult}{result of clustering function}
+
+\item{map}{data frame with sequences as row names and sequence IDs in first column}
 }
 \description{
-Function to merge DEA and blast result
+Function to merge DEA, blast result
 }
+\examples{
+summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
+summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
+summary <- mergeResults(sigResults, blastResult, clustResult, map)
+
+}
+\keyword{generating}
 \keyword{summary}
+\keyword{tables}

@@ -38,11 +38,16 @@ write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col
 cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
 seq_fasta <- paste(out_dir,"sig_sequences.fa",sep="/")
 write.table(sequencesAsFasta(sigResults,map),seq_fasta,quote = F,row.names = F,col.names = F)
-cl.df<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
+clustResult<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
 
 # merge results
-summary <- mergeResults(sigResults, blastResult, cl.df, map)
+summary_err <- mergeResults(sigResults,map=map)
+summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
+summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
+
+summary <- mergeResults(sigResults, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
+summary_err <- addCountsOfFeatureClasses(summary_clust, classes)
 writeSummaryFiles(summary,out_dir)
 
 #Remove tmp files
