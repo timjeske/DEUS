@@ -23,10 +23,12 @@ countData <- countDataFilt
 colData <- phenoInfo
 map <- createMap(countTable)
 design <- ~ condition
-filter_val <- 'IHWPval'
-filter_threshold <- 0.05
-source("~/USBseq/DESeq2.R")
-sigResults <- read.table(paste(out_dir,"DESeq2_sig_output.tsv",sep="/"), head=T, row.names=1)
+deResults <- runDESeq2(countData, colData, design, map, out_dir)
+sigResults <- deResults$deResult
+sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+
+# get count stats
+countStats <- getCountStats(deResults$normCounts, colData)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
@@ -45,7 +47,7 @@ summary_err <- mergeResults(sigResults,map=map)
 summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
 summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
 
-summary <- mergeResults(sigResults, blastResult, clustResult, map)
+summary <- mergeResults(sigResults,countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 summary_err <- addCountsOfFeatureClasses(summary_clust, classes)
 writeSummaryFiles(summary,out_dir)

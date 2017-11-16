@@ -54,7 +54,8 @@ filterLowExp<-function(countData,pheno){
 
 #' Function to merge DEA, blast result
 #'
-#' @param deResult result of differential expression analysis
+#' @param deResult result of differential expression analysis (columns log2FoldChange, pvalue, IHWPval are required)
+#' @param countStats result of getConditionCountStats function
 #' @param blastResult result of blast function
 #' @param clustResult result of clustering function
 #' @param map data frame with sequences as row names and sequence IDs in first column
@@ -66,19 +67,21 @@ filterLowExp<-function(countData,pheno){
 #' summary <- mergeResults(sigResults, blastResult, clustResult, map)
 #'
 
-mergeResults <- function(deResult, blastResult=NULL, clustResult=NULL, map) {
+mergeResults <- function(deResult, countStats=NULL, blastResult=NULL, clustResult=NULL, map) {
 
-  if(is.null(blastResult) && is.null(clustResult)) stop("mergeResults requires at least blastResult or clustResult!")
+  if(is.null(countStats) && is.null(blastResult) && is.null(clustResult)) {
+    stop("mergeResults requires at least countStats, blastResult or clustResult!")
+  }
 
-  sigResults <- deResult[c(2, 5:ncol(deResult))]
+  sigResults <- deResult[c("log2FoldChange","pvalue","IHWPval")]
+  colnames(sigResults) <- c("Log2FoldChange","Pvalue","IHWPvalue")
   sigResults$SequenceID <- map[row.names(sigResults),1]
   sigResults$sequence <- row.names(sigResults)
   res <- sigResults
 
-  if(!is.null(blastResult)) {
-    blastResult <- blastResult[c("qseqid", "sseqid", "length", "evalue")]
-    colnames(blastResult) <- c("SequenceID","sseqid","Length","Evalue")
-    res <- plyr::join(blastResult, sigResults, type = "full")
+  if(!is.null(countStats)) {
+    countStats$sequence <- row.names(countStats)
+    res <- plyr::join(res, countStats, type = "inner")
   }
 
   if(!is.null(clustResult)) {
@@ -86,17 +89,48 @@ mergeResults <- function(deResult, blastResult=NULL, clustResult=NULL, map) {
   }
 
   if(!is.null(blastResult)) {
+    blastResult <- blastResult[c("qseqid", "sseqid", "length", "evalue")]
+    colnames(blastResult) <- c("SequenceID","sseqid","Length","BlastEvalue")
+    res <- plyr::join(res, blastResult, type = "full")
     group <- data.frame(FeatureList=c(by(res$sseqid, res$sequence, function(x)paste(x, collapse=","))))
     group$sequence <- row.names(group)
     group <- plyr::join(group, res, type = "full", match="first")
     group <- group[-which(names(group)=="sseqid")]
-    group <- group[,c(which(names(group)!="FeatureList"),2)]
+    # move featureList to last column
+    group <- group[,c(which(names(group)!="FeatureList"),which(names(group)=="FeatureList"))]
+    # move sequenceID to first column
+    group <- group[,c(which(names(group)=="SequenceID"),which(names(group)!="SequenceID"))]
     group$Length <- nchar(group$sequence)
     row.names(group) <- group$sequence
     res <- group[-which(names(group)=="sequence")]
   }
-  res <- res[order(res$pvalue),]
+  res <- res[order(res$Pvalue),]
   return(res)
+}
+
+#' Function to compute mean and sd of normalized counts for each condition
+#'
+#' @param countData table of (normalized) counts per sequence
+#' @param phenoData data frame with sample names as rownames and assigned condition in first column
+#' @keywords count statistics
+#' @export
+#' @examples
+#'
+getConditionCountStats<-function(countData,phenoData){
+
+  pheno <- phenoData
+  #Get Group Means
+  groups = unique(pheno$condition)
+  for(type in groups){
+    cols  = row.names(pheno)[which(pheno$condition==type)]
+    subset= countData[,cols]
+    countData=cbind(countData,rowMeans(subset),data.frame(apply(subset,1,sd)))
+    names(countData)[ncol(countData)-1]=paste("NormCounts",type,"Mean",sep="_")
+    names(countData)[ncol(countData)]=paste("NormCounts",type,"Sd",sep="_")
+  }
+  index=length(groups)*2
+  #Return only Mean & Sd columns
+  return(countData[,c((ncol(countData)-index+1):ncol(countData))])
 }
 
 #' Function to add counts of different feature classes
@@ -116,9 +150,9 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
     res[i] <- stringr::str_count(string=v_features, i)
     sum <- sum + res[[i]]
   }
-  res$"other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
+  res$"Other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
   res <- res[,c(which(names(res)!="FeatureList"),which(names(res)=="FeatureList"))]
-  res <- res[order(res$pvalue),]
+  res <- res[order(res$Pvalue),]
   return(res)
 }
 
