@@ -10,7 +10,7 @@ library(USBseq)
 in_dir <- system.file("extdata", package = "USBseq")
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
-out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_10_12_checkCluster"
+out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_11_16_checkRefactoring"
 classes <- c("piR-mmu","ENSMUST","tRNA","mmu-miR","retro")
 
 # create count table
@@ -36,8 +36,9 @@ blastResult <- runBlast(blast_exec, blast_db, ncores, sigResults, map,out_dir)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-sequences=paste(out_dir,"sig_sequences.fa",sep="/")
-cl.df<-runClustering(cd_hit,sequences,out_dir,0.9,0.9,9,map)
+seq_fasta <- paste(out_dir,"sig_sequences.fa",sep="/")
+write.table(sequencesAsFasta(sigResults,map),seq_fasta,quote = F,row.names = F,col.names = F)
+cl.df<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
 
 # merge results
 summary <- mergeResults(sigResults, blastResult, cl.df, map)

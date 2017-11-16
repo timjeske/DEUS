@@ -131,6 +131,19 @@ writeSummaryFiles <- function(summaryTable, outDir) {
   write.table(sequences_noBlast, paste(out_dir,"SummaryTable_noBlast.35L.fasta",sep="/"),quote=F,row.names=F,col.names=F)
 }
 
+#' Function to get sequences as a vector of fasta IDs and sequences
+#'
+#' @param sigResults resulting table of differential expression analysis with significant sequences as row names
+#' @param map map of sequences to sequence IDs used as IDs in fasta
+#' @keywords fasta
+#' @export
+#' @examples
+#'
+sequencesAsFasta <- function(sigResults, map) {
+  res <- as.vector(rbind(paste(">",map[row.names(sigResults),1],sep=""),row.names(sigResults)))
+  return(res)
+}
+
 #' Function to remove temporary files after pipeline execution
 #'
 #' @param outDir output folder
@@ -143,5 +156,4 @@ deleteTmp <- function(outDir){
   if(file.exists(tmp)){
     file.remove(tmp)
   }
-
 }
