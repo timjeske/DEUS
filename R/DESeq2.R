@@ -9,15 +9,15 @@
 #' @examples
 
 runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
-  dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = design)
+  dds <- DESeq2::DESeqDataSetFromMatrix(countData = countData, colData = phenoData, design = design)
   dds <- dds[rowMeans(counts(dds)) > 1, ]
-  dds <- DESeq(dds, betaPrior=TRUE)
-  res <- results(dds)
+  dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
+  res <- DESeq2::results(dds)
   res <- res[, c(ncol(res)-1, ncol(res), (1:(ncol(res)-2)))]
-  res$"IHWPval"=IHW::adj_pvalues(ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
+  res$"IHWPval"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
 
   # plot sample distance
-  rld <- rlog(dds, blind=FALSE)
+  rld <- DESeq2::rlog(dds, blind=FALSE)
   plotSampleDistanceMap(rld,out_dir)
 
   # plot MA
@@ -25,7 +25,7 @@ runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
   DESeq2::plotMA(res, main = "DESeq2", ylim=c(-4,4))
   dev.off()
 
-  counts_norm<-counts(dds, normalized=TRUE)
+  counts_norm<-DESeq2::counts(dds, normalized=TRUE)
   newList <- list("normCounts" = counts_norm, "deResult" = as.data.frame(res))
   return(newList)
 }
@@ -44,8 +44,8 @@ plotSampleDistanceMap <- function(rld, out_dir) {
   sampleDistMatrix <- as.matrix(sampleDists)
   rownames(sampleDistMatrix) <- colnames(rld)
   colnames(sampleDistMatrix) <- NULL
-  colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
-  pheatmap(sampleDistMatrix,
+  colors <- colorRampPalette( rev(RColorBrewer::brewer.pal(9, "Blues")) )(255)
+  pheatmap::pheatmap(sampleDistMatrix,
            clustering_distance_rows=sampleDists,
            clustering_distance_cols=sampleDists,
            col=colors)

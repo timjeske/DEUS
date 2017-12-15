@@ -8,12 +8,12 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_11_16_checkRefactoring"
+out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_12_15_extendedCondition"
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
-countTable <- createCountTableFromFastQs(in_dir)
+countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 map <- createMap(countTable)
 countDataFilt <- filterLowExp(countTable, phenoInfo)
 write.table(countDataFilt, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
@@ -26,7 +26,7 @@ sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
-countStats <- getCountStats(deResults$normCounts, colData)
+countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
