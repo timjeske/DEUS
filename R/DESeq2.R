@@ -40,7 +40,7 @@ runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
 
 plotSampleDistanceMap <- function(rld, out_dir) {
   pdf(paste(out_dir, "DESeq2_sample_dist.pdf", sep="/"), onefile=FALSE)
-  sampleDists <- dist(t(DESeq2::assay(rld)))
+  sampleDists <- dist(t(SummarizedExperiment::assay(rld)))
   sampleDistMatrix <- as.matrix(sampleDists)
   rownames(sampleDistMatrix) <- colnames(rld)
   colnames(sampleDistMatrix) <- NULL
