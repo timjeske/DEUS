@@ -10,7 +10,7 @@
 
 runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = countData, colData = phenoData, design = design)
-  dds <- dds[rowMeans(counts(dds)) > 1, ]
+  dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
   dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
   res <- DESeq2::results(dds)
   res <- res[, c(ncol(res)-1, ncol(res), (1:(ncol(res)-2)))]
