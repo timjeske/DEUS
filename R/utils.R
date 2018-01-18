@@ -218,7 +218,7 @@ deleteTmp <- function(outDir){
 #' @export
 #' @examples
 
-generateSummaryStats <- function(summary, classes) {
+generateSummaryStats <- function(summary, phenoInfo, classes) {
   tmpa <- summary[,grep('^NormCounts.*Mean$',colnames(summary))]
   tmpb <- as.matrix(table(phenoInfo$condition))
   row.names(tmpb) <- paste("NormCounts_", row.names(tmpb),"_Mean",sep="")

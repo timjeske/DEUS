@@ -50,4 +50,4 @@ writeSummaryFiles(summary,out_dir)
 #Remove tmp files
 deleteTmp(out_dir)
 
-generateSummaryStats(summary, classes)
+generateSummaryStats(summary, phenoInfo, classes)
