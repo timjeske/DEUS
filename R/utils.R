@@ -226,6 +226,9 @@ generateSummaryStats <- function(summary, phenoInfo, classes) {
   fractionNA <- sum(summary$weightedTotalMean[summary$FeatureList=="NA"])/sum(summary$weightedTotalMean)
   write.table(fractionNA,paste(out_dir,"NA_fraction.txt",sep="/"),row.names =F, col.names = F)
 
+  minql <- min(summary[summary$FeatureList!="NA",]$Length, na.rm=T)
+  summary <- summary[summary$Length >= minql,]
+
   for(i in classes) {
     png(paste(out_dir,paste(i,"_length_hits.png",sep=""),sep="/"))
     linearMod <- lm(summary[[i]] ~ summary$Length, data = summary)
