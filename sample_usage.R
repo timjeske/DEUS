@@ -8,7 +8,7 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/other/Mouse_beckers_huypens/smallRNA/Pipeline/2017_12_15_extendedCondition"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_18_summaryTableStats"
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
@@ -50,3 +50,4 @@ writeSummaryFiles(summary,out_dir)
 #Remove tmp files
 deleteTmp(out_dir)
 
+generateSummaryStats(summary, classes)

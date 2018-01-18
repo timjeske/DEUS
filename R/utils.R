@@ -209,3 +209,35 @@ deleteTmp <- function(outDir){
     file.remove(tmp)
   }
 }
+
+#' Function to generate stats on summary
+#'
+#' @param summary
+#' @param classes
+#' @keywords summary statistics
+#' @export
+#' @examples
+
+generateSummaryStats <- function(summary, classes) {
+  tmpa <- summary[,grep('^NormCounts.*Mean$',colnames(summary))]
+  tmpb <- as.matrix(table(phenoInfo$condition))
+  row.names(tmpb) <- paste("NormCounts_", row.names(tmpb),"_Mean",sep="")
+  summary$weightedTotalMean <- rowSums(tmpa*tmpb[,1][match(colnames(tmpa), row.names(tmpb))][col(tmpa)])
+  fractionNA <- sum(summary$weightedTotalMean[summary$FeatureList=="NA"])/sum(summary$weightedTotalMean)
+  write.table(fractionNA,paste(out_dir,"NA_fraction.txt",sep="/"),row.names =F, col.names = F)
+
+  for(i in classes) {
+    png(paste(out_dir,paste(i,"_length_hits.png",sep=""),sep="/"))
+    linearMod <- lm(summary[[i]] ~ summary$Length, data = summary)
+    tmp <- summary(linearMod)
+    rsq <- tmp$adj.r.squared
+    pval <- tmp$coefficients[,"Pr(>|t|)"][2]
+    plot(summary$Length, summary[[i]], ylab="BLAST hits", xlab = "Read length in nt", main=paste(i," (Adj. R-squared: ",format.pval(rsq),", p-val: ",format.pval(pval),")",sep=""))
+    abline(linearMod, col="red")
+    dev.off()
+  }
+
+  png(paste(out_dir,"classes_boxplot.png",sep="/"))
+  boxplot(summary[,classes], ylab="BLAST hits", main="BLAST hits for each sncRNA class")
+  dev.off()
+}
