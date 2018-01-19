@@ -8,21 +8,22 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_18_summaryTableStats"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_19_summaryTableStatsImproved"
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 map <- createMap(countTable)
-countDataFilt <- filterLowExp(countTable, phenoInfo)
+#countDataFilt <- filterLowExp(countTable, phenoInfo)
+countDataFilt <- countTable
 write.table(countDataFilt, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
 design <- ~ condition
 deResults <- runDESeq2(countDataFilt, phenoInfo, design, map, out_dir)
 sigResults <- deResults$deResult
-sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+#sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
@@ -30,7 +31,7 @@ countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
-blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB2.fa"
+blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
 ncores <- 2
 blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
@@ -42,7 +43,7 @@ write.table(sigSeqFasta,seq_fasta,quote = F,row.names = F,col.names = F)
 clustResult<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
 
 # merge results
-classes <- c("piR-mmu","ENSMUST","tRNA","mmu-miR","retro")
+classes <- c("mmu_piR","ENSMUST","tRNA","mmu-miR","retro")
 summary <- mergeResults(sigResults,countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary,out_dir)
@@ -50,4 +51,6 @@ writeSummaryFiles(summary,out_dir)
 #Remove tmp files
 deleteTmp(out_dir)
 
-generateSummaryStats(summary, phenoInfo, classes)
+generateSummaryPlots(summary,classes)
+getNoBlastHitFraction(summary, phenoInfo=phenoInfo)
+getNoBlastHitFraction(summary, countTable=deResults$normCounts)

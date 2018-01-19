@@ -210,7 +210,7 @@ deleteTmp <- function(outDir){
   }
 }
 
-#' Function to generate stats on summary
+#' Function to generate plots for SummaryTable
 #'
 #' @param summary
 #' @param classes
@@ -218,18 +218,14 @@ deleteTmp <- function(outDir){
 #' @export
 #' @examples
 
-generateSummaryStats <- function(summary, phenoInfo, classes) {
-  tmpa <- summary[,grep('^NormCounts.*Mean$',colnames(summary))]
-  tmpb <- as.matrix(table(phenoInfo$condition))
-  row.names(tmpb) <- paste("NormCounts_", row.names(tmpb),"_Mean",sep="")
-  summary$weightedTotalMean <- rowSums(tmpa*tmpb[,1][match(colnames(tmpa), row.names(tmpb))][col(tmpa)])
-  fractionNA <- sum(summary$weightedTotalMean[summary$FeatureList=="NA"])/sum(summary$weightedTotalMean)
-  write.table(fractionNA,paste(out_dir,"NA_fraction.txt",sep="/"),row.names =F, col.names = F)
+generateSummaryPlots <- function(summary, classes) {
 
   minql <- min(summary[summary$FeatureList!="NA",]$Length, na.rm=T)
   summary <- summary[summary$Length >= minql,]
+  summary[summary == 0] <- NA
 
   for(i in classes) {
+    if(all(is.na(summary[[i]]))) next
     png(paste(out_dir,paste(i,"_length_hits.png",sep=""),sep="/"))
     linearMod <- lm(summary[[i]] ~ summary$Length, data = summary)
     tmp <- summary(linearMod)
@@ -243,4 +239,38 @@ generateSummaryStats <- function(summary, phenoInfo, classes) {
   png(paste(out_dir,"classes_boxplot.png",sep="/"))
   boxplot(summary[,classes], ylab="BLAST hits", main="BLAST hits for each sncRNA class")
   dev.off()
+}
+
+#' Function to generate plots for SummaryTable
+#'
+#' @param summary
+#' @param countTable
+#' @param phenoInfo
+#' @keywords summary statistics
+#' @export
+#' @examples
+
+getNoBlastHitFraction <- function(summary, countTable = NULL, phenoInfo = NULL) {
+
+  if(is.null(countTable) && is.null(phenoInfo)) {
+    stop("Fraction with no BLAST hits!")
+  }
+
+  if(is.null(countTable)) {
+    tmpa <- summary[,grep('^NormCounts.*Mean$',colnames(summary))]
+    tmpb <- as.matrix(table(phenoInfo$condition))
+    row.names(tmpb) <- paste("NormCounts_", row.names(tmpb),"_Mean",sep="")
+    summary$weightedTotalMean <- rowSums(tmpa*tmpb[,1][match(colnames(tmpa), row.names(tmpb))][col(tmpa)])
+    fractionNA <- sum(summary$weightedTotalMean[summary$FeatureList=="NA"])/sum(summary$weightedTotalMean)
+    write.table(fractionNA,paste(out_dir,"NA_fraction.txt",sep="/"),row.names =F, col.names = F)
+  }
+
+  if(is.null(phenoInfo)) {
+    select <- row.names(summary)[summary$FeatureList=="NA"]
+    sub <- countTable[as.vector(select),]
+    res <- colSums(sub)/colSums(countTable)
+    res <- as.matrix(res)
+    colnames(res) <- c("NA_fraction")
+    write.table(res,paste(out_dir,"NA_fraction_per_sample.tsv",sep="/"),row.names = T, col.names = T, quote=F, sep="\t")
+  }
 }
