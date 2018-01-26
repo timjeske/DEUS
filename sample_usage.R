@@ -51,7 +51,7 @@ writeSummaryFiles(summary,out_dir)
 #Remove tmp files
 deleteTmp(out_dir)
 
-generateSummaryPlots(summary,classes)
-getNoBlastHitFraction(summary, phenoInfo=phenoInfo)
-getNoBlastHitFraction(summary, countTable=deResults$normCounts)
+generateSummaryPlots(summary,classes, out_dir)
+getNoBlastHitFraction(summary, phenoInfo=phenoInfo, out_dir=out_dir)
+getNoBlastHitFraction(summary, countTable=deResults$normCounts, out_dir=out_dir)
 

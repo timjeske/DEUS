@@ -218,7 +218,7 @@ deleteTmp <- function(outDir){
 #' @export
 #' @examples
 
-generateSummaryPlots <- function(summary, classes) {
+generateSummaryPlots <- function(summary, classes, out_dir) {
 
   minql <- min(summary[summary$FeatureList!="NA",]$Length, na.rm=T)
   summary <- summary[summary$Length >= minql,]
@@ -250,7 +250,7 @@ generateSummaryPlots <- function(summary, classes) {
 #' @export
 #' @examples
 
-getNoBlastHitFraction <- function(summary, countTable = NULL, phenoInfo = NULL) {
+getNoBlastHitFraction <- function(summary, countTable = NULL, phenoInfo = NULL, out_dir) {
 
   if(is.null(countTable) && is.null(phenoInfo)) {
     stop("Fraction with no BLAST hits!")
