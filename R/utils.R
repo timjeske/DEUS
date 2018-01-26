@@ -256,6 +256,9 @@ getNoBlastHitFraction <- function(summary, countTable = NULL, phenoInfo = NULL) 
     stop("Fraction with no BLAST hits!")
   }
 
+  minql <- min(summary[summary$FeatureList!="NA",]$Length, na.rm=T)
+  summary <- summary[summary$Length >= minql,]
+
   if(is.null(countTable)) {
     tmpa <- summary[,grep('^NormCounts.*Mean$',colnames(summary))]
     tmpb <- as.matrix(table(phenoInfo$condition))

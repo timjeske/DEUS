@@ -8,7 +8,7 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_19_summaryTableStatsImproved"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_26_NAfractionCorrected"
 phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
@@ -54,3 +54,4 @@ deleteTmp(out_dir)
 generateSummaryPlots(summary,classes)
 getNoBlastHitFraction(summary, phenoInfo=phenoInfo)
 getNoBlastHitFraction(summary, countTable=deResults$normCounts)
+
