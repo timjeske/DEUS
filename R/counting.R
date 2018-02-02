@@ -16,15 +16,19 @@ createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",phenoInfo=NUL
   fastqs <- file.list[endsWith(file.list,fq_suffix)]
   fastqs <- paste(in_dir,fastqs,sep="/")
 
+  if(!is.null(phenoInfo) && "sample" %in% colnames(phenoInfo)) {
+    phenoInfo$sampleName = rownames(phenoInfo)
+    phenoInfo$baseName = basename(as.character(phenoInfo$sample))
+    fastqs <- paste(in_dir, phenoInfo$baseName, sep="/")
+  }
+
   print(paste("Counting all reads in",fastqs[1]))
   content <- ShortRead::readFastq(fastqs[1])
   counts <- ShortRead::tables(content,n=length(content))
   countTable <- as.data.frame(counts$top)
-
   names(countTable) <- c(basename(fastqs[1]))
+
   if(!is.null(phenoInfo) && "sample" %in% colnames(phenoInfo)) {
-    phenoInfo$sampleName = rownames(phenoInfo)
-    phenoInfo$baseName = basename(as.character(phenoInfo$sample))
     names(countTable) <- c(as.character(phenoInfo$sampleName[basename(fastqs[1])==phenoInfo$baseName]))
   }
 

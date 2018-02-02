@@ -8,22 +8,22 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_01_26_NAfractionCorrected"
-phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_02_02_countTableFromPhenoFile"
+phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 map <- createMap(countTable)
-#countDataFilt <- filterLowExp(countTable, phenoInfo)
-countDataFilt <- countTable
+countDataFilt <- filterLowExp(countTable, phenoInfo)
+#countDataFilt <- countTable
 write.table(countDataFilt, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
 design <- ~ condition
 deResults <- runDESeq2(countDataFilt, phenoInfo, design, map, out_dir)
 sigResults <- deResults$deResult
-#sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
@@ -54,4 +54,3 @@ deleteTmp(out_dir)
 generateSummaryPlots(summary,classes, out_dir)
 getNoBlastHitFraction(summary, phenoInfo=phenoInfo, out_dir=out_dir)
 getNoBlastHitFraction(summary, countTable=deResults$normCounts, out_dir=out_dir)
-
