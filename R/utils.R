@@ -66,17 +66,23 @@ filterLowExp<-function(countData,pheno){
 #' summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
 #' summary <- mergeResults(sigResults, blastResult, clustResult, map)
 
-mergeResults <- function(deResult, countStats=NULL, blastResult=NULL, clustResult=NULL, map) {
+mergeResults <- function(deResult=NULL, countStats=NULL, blastResult=NULL, clustResult=NULL, map) {
 
-  if(is.null(countStats) && is.null(blastResult) && is.null(clustResult)) {
-    stop("mergeResults requires at least countStats, blastResult or clustResult!")
+  if(is.null(deResult) && is.null(countStats) && is.null(blastResult) && is.null(clustResult)) {
+    stop("mergeResults requires at least deResult, countStats, blastResult or clustResult!")
   }
 
-  sigResults <- deResult[c("log2FoldChange","pvalue","IHWPval")]
-  colnames(sigResults) <- c("Log2FoldChange","Pvalue","IHWPvalue")
-  sigResults$SequenceID <- map[row.names(sigResults),1]
-  sigResults$sequence <- row.names(sigResults)
-  res <- sigResults
+  res <- map
+  colnames(res) <- c("SequenceID")
+  res$sequence <- row.names(map)
+
+  if(!is.null(deResult)) {
+    sigResults <- deResult[c("log2FoldChange","pvalue","IHWPval")]
+    colnames(sigResults) <- c("Log2FoldChange","Pvalue","IHWPvalue")
+    sigResults$SequenceID <- map[row.names(sigResults),1]
+    sigResults$sequence <- row.names(sigResults)
+    res <- sigResults
+  }
 
   if(!is.null(countStats)) {
     countStats$sequence <- row.names(countStats)
@@ -103,7 +109,10 @@ mergeResults <- function(deResult, countStats=NULL, blastResult=NULL, clustResul
     row.names(group) <- group$sequence
     res <- group[-which(names(group)=="sequence")]
   }
-  res <- res[order(res$Pvalue),]
+
+  if("Pvalue" %in% colnames(res)) {
+    res <- res[order(res$Pvalue),]
+  }
   return(res)
 }
 
@@ -151,7 +160,10 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
   }
   res$"Other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
   res <- res[,c(which(names(res)!="FeatureList"),which(names(res)=="FeatureList"))]
-  res <- res[order(res$Pvalue),]
+
+  if("Pvalue" %in% colnames(res)) {
+    res <- res[order(res$Pvalue),]
+  }
   return(res)
 }
 
