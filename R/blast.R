@@ -17,9 +17,9 @@
 #' testseq <- c(">seq_1","GCATTGGTGGTTCAGTGGTAGAATTCTCGCC")
 #' blastResult <- runBlast(blast_exec, blast_db, ncores, testseq)
 
-runBlast <- function(blast_exec, blast_db, ncores, sig_sequences, strand = 'plus'){
+runBlast <- function(blast_exec, blast_db, ncores, sig_sequences, strand = 'plus', identity=100) {
   blast.f6 <- c('qseqid', 'qlen', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart' ,'send', 'evalue', 'bitscore')
-  command=paste("-db",blast_db, "-num_threads", ncores , "-perc_identity 100 -strand", strand, "-task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt", sprintf(" '6 %s'",paste(collapse=" ",blast.f6)),sep=" ")
+  command=paste("-db",blast_db, "-num_threads", ncores , "-perc_identity", identity, "-strand", strand, "-task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt", sprintf(" '6 %s'",paste(collapse=" ",blast.f6)),sep=" ")
   blast.out <- system2(blast_exec,command, input=sig_sequences, stdout=TRUE)
   blast.out.df <- `names<-`(read.table(quote="",sep='\t',textConnection(blast.out)),blast.f6)
   return(blast.out.df)

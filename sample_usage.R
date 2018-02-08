@@ -8,7 +8,7 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_02_02_noDEanalysis"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_02_08_varIdentity"
 phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
@@ -33,7 +33,7 @@ sigSeqFasta <- sequencesAsFasta(sigResults,map)
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
 ncores <- 2
-blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta)
+blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 95)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 # run clustering
