@@ -4,7 +4,8 @@
 \alias{runBlast}
 \title{Function to blast small RNA sequences.}
 \usage{
-runBlast(blast_exec, blast_db, ncores, sig_sequences, strand = "plus")
+runBlast(blast_exec, blast_db, ncores, sig_sequences, strand = "plus",
+  identity = 100)
 }
 \arguments{
 \item{blast_exec}{path to your installation of 'blastn'}

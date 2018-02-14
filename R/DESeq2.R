@@ -3,6 +3,7 @@
 #' @param countData raw counts of sequences
 #' @param phenoData data frame with sample names as rownames and assigned condition in first column
 #' @param design design formular for DE analysis
+#' @param map data frame with sequences as rownames and sequence ID in first column
 #' @param out_dir directory for sample distance map and MA plot
 #' @keywords differential expression analysis
 #' @export

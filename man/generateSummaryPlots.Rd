@@ -4,7 +4,7 @@
 \alias{generateSummaryPlots}
 \title{Function to generate plots for SummaryTable}
 \usage{
-generateSummaryPlots(summary, classes)
+generateSummaryPlots(summary, classes, out_dir)
 }
 \description{
 Function to generate plots for SummaryTable

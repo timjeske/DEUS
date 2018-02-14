@@ -4,7 +4,7 @@
 \alias{mergeResults}
 \title{Function to merge DEA, blast result}
 \usage{
-mergeResults(deResult, countStats = NULL, blastResult = NULL,
+mergeResults(deResult = NULL, countStats = NULL, blastResult = NULL,
   clustResult = NULL, map)
 }
 \arguments{

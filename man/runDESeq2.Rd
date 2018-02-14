@@ -13,6 +13,8 @@ runDESeq2(countData, phenoData, design, map, out_dir)
 
 \item{design}{design formular for DE analysis}
 
+\item{map}{data frame with sequences as rownames and sequence ID in first column}
+
 \item{out_dir}{directory for sample distance map and MA plot}
 }
 \description{

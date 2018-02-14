@@ -54,6 +54,7 @@ writeSummaryFiles(summary,out_dir)
 deleteTmp(out_dir)
 
 generateSummaryPlots(summary,classes, out_dir)
-#getNoBlastHitFraction(summary, phenoInfo=phenoInfo, out_dir=out_dir)
-getNoBlastHitFraction(summary, countTable=deResults$normCounts, out_dir=out_dir)
+
+res <- getNoBlastHitFraction(summary, deResults$normCounts)
+write.table(res,paste(out_dir,"NA_fraction_per_sample.tsv",sep="/"),row.names = T, col.names = T, quote=F, sep="\t")
 
