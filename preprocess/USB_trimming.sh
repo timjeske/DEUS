@@ -9,7 +9,7 @@ TRIM_GALORE=$4
 ml=$5
 
 # first round
-for f in $DIR/*{fq}.gz; do
+for f in $DIR/*${fq}.gz; do
 	echo "first round: trim $f ..."
 	$TRIM_GALORE --length 16 -q 0 --trim-n --max_length $ml $f -o $OUT
 done
