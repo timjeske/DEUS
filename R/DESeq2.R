@@ -67,7 +67,7 @@ plotSampleDistanceMap <- function(rld, out_dir) {
 
 plotPCA <- function(rld, phenoData, out_dir) {
   myPhenoData <- phenoData[, !(names(phenoData) %in% c("sample")), drop=FALSE]
-  pdf(paste(out_dir,paste(out_dir,"DESeq2_PCA.pdf",sep=""), sep="/"), onefile=FALSE)
+  pdf(paste(out_dir,"DESeq2_PCA.pdf", sep="/"), onefile=FALSE)
   if(ncol(myPhenoData) > 1) {
     data <- plotPCA(rld, intgroup=colnames(myPhenoData), returnData=TRUE)
     percentVar <- round(100 * attr(data, "percentVar"))
