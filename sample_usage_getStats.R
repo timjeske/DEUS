@@ -26,7 +26,7 @@ blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 95
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 # merge results
-classes <- c("mmu_piR","ENSMUST","tRNA","mmu-miR","retro")
+classes <- c("mmu_piR","tRNA","mmu-miR","retro")
 summary <- mergeResults(blastResult=blastResult,map=map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary,out_dir)
