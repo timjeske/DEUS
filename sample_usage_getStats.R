@@ -39,5 +39,5 @@ writeSummaryFiles(summary,out_dir)
 generateSummaryPlots(summary,classes, out_dir)
 
 res <- getNoBlastHitFraction(summary, normCts)
-write.table(res,paste(out_dir,"NA_fraction_per_sample.tsv",sep="/"),row.names = T, col.names = T, quote=F, sep="\t")
+write.table(res,paste(out_dir,"NA_fraction_per_sample.tsv",sep="/"),row.names = F, col.names = T, quote=F, sep="\t")
 

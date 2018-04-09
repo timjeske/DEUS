@@ -52,7 +52,7 @@ getNoBlastHitFraction <- function(summary, countTable) {
   select <- row.names(summary)[summary$FeatureList=="NA"]
   sub <- countTable[as.vector(select),,drop = FALSE]
   res <- colSums(sub)/colSums(countTable)
-  res <- as.matrix(res)
+  res <- as.data.frame(res)
   colnames(res) <- c("NA_fraction")
   res$Sample <- rownames(res)
   res <- res[,c(which(names(res)=="Sample"),which(names(res)!="Sample"))]
