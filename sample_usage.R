@@ -8,26 +8,25 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_02_15_simpleStats"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_04_09_sample_usage"
 phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
-map <- createMap(countTable)
-#countDataFilt <- filterLowExp(countTable, phenoInfo)
-countDataFilt <- countTable
-write.table(countDataFilt, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
+countTable <- filterLowExp(countTable, phenoInfo)
+write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
 design <- ~ 1
 deResults <- runDESeq2(countDataFilt, phenoInfo, design, map, out_dir)
 sigResults <- deResults$deResult
-#sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+map <- createMap(sigResults)
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
-#countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
+countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
@@ -37,24 +36,16 @@ blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 95
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 # run clustering
-#cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-#seq_fasta <- paste(out_dir,"sig_sequences.fa",sep="/")
-#write.table(sigSeqFasta,seq_fasta,quote = F,row.names = F,col.names = F)
-#clustResult<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
+cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
+seq_fasta <- paste(out_dir,"sig_sequences.fa",sep="/")
+write.table(sigSeqFasta,seq_fasta,quote = F,row.names = F,col.names = F)
+clustResult<-runClustering(cd_hit,seq_fasta,out_dir,0.9,0.9,9,map)
 
 # merge results
 classes <- c("mmu_piR","ENSMUST","tRNA","mmu-miR","retro")
-#summary <- mergeResults(sigResults,countStats, blastResult, clustResult, map)
-map <- map[row.names(sigResults),,drop=F]
-summary <- mergeResults(blastResult=blastResult,map=map)
+summary <- mergeResults(sigResults,countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary,out_dir)
 
-#Remove tmp files
+# remove tmp files
 deleteTmp(out_dir)
-
-generateSummaryPlots(summary,classes, out_dir)
-
-res <- getNoBlastHitFraction(summary, deResults$normCounts)
-write.table(res,paste(out_dir,"NA_fraction_per_sample.tsv",sep="/"),row.names = T, col.names = T, quote=F, sep="\t")
-
