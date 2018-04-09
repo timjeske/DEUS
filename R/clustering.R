@@ -18,7 +18,7 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
 
   # run clustering
   clusters <- paste(out_dir,"CD-HIT.fa",sep="/")
-  command <- paste("-i",sequences,"-c",identityCutoff,"-s",lengthCutoff,"-n",wordlength,"-g 1",optional,"-o",clusters,sep=" ")
+  command <- paste("-i",seq,"-c",identityCutoff,"-s",lengthCutoff,"-n",wordlength,"-g 1",optional,"-o",clusters,sep=" ")
   cluster.out <- system2(cdhit_path,command, stdout=TRUE)
 
   # remove tmp files
