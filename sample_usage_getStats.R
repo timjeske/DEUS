@@ -14,13 +14,14 @@ phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
+countTable <- filterLowExp(countTable, phenoInfo)
 map <- createMap(countTable)
 sigSeqFasta <- sequencesAsFasta(countTable,map)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
-ncores <- 2
+ncores <- 16
 blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 95)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
