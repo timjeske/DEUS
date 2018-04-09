@@ -16,7 +16,12 @@ phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 countTable <- filterLowExp(countTable, phenoInfo)
 map <- createMap(countTable)
-sigSeqFasta <- sequencesAsFasta(countTable,map)
+
+# run DE analysis to normalize count data
+design <- ~ 1
+deResults <- runDESeq2(countDataFilt, phenoInfo, design, map, out_dir)
+sigResults <- deResults$deResult
+sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # run blast
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
