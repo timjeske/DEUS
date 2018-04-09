@@ -18,8 +18,8 @@ countTable <- filterLowExp(countTable, phenoInfo)
 write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
-design <- ~ 1
-deResults <- runDESeq2(countDataFilt, phenoInfo, design, map, out_dir)
+design <- ~ condition
+deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 map <- createMap(sigResults)
