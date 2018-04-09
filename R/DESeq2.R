@@ -78,7 +78,7 @@ plotPCA <- function(rld, phenoData, out_dir) {
       labs(color=colnames(myPhenoData)[1]) +
       labs(shape=colnames(myPhenoData)[2])
   } else {
-    plt <- plotPCA(rld, intgroup=colnames(myPhenoData))
+    plt <- DESeq2::plotPCA(rld, intgroup=colnames(myPhenoData))
   }
   print(plt)
   dev.off()
