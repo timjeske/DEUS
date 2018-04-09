@@ -69,7 +69,7 @@ plotPCA <- function(rld, phenoData, out_dir) {
   myPhenoData <- phenoData[, !(names(phenoData) %in% c("sample")), drop=FALSE]
   pdf(paste(out_dir,"DESeq2_PCA.pdf", sep="/"), onefile=FALSE)
   if(ncol(myPhenoData) > 1) {
-    data <- plotPCA(rld, intgroup=colnames(myPhenoData), returnData=TRUE)
+    data <- DESeq2::plotPCA(rld, intgroup=colnames(myPhenoData), returnData=TRUE)
     percentVar <- round(100 * attr(data, "percentVar"))
     plt <- ggplot(data, aes(PC1, PC2, color=myPhenoData[,1], shape=myPhenoData[,2])) +
       geom_point(size=3) +
