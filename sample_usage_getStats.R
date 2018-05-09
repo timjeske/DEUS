@@ -2,8 +2,6 @@ library(devtools)
 
 # install package
 install_github("timjeske/USBseq", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
-setwd("~")
-#install("USBseq")
 library(USBseq)
 
 # set input and output
@@ -14,7 +12,7 @@ phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
-countTable <- filterLowExp(countTable, phenoInfo)
+write.table(countTable, paste(out_dir, "AllCounts.tsv", sep="/"), col.names = T, quote =F, sep="\t")
 
 # run DE analysis to normalize count data
 design <- ~ 1
