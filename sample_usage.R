@@ -32,7 +32,7 @@ countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
 ncores <- 2
-blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 95)
+blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta, identity = 100)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 # run clustering
