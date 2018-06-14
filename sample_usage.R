@@ -8,7 +8,7 @@ library(USBseq)
 
 # set input and output
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_04_09_sample_usage"
+out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_06_14_FeatureCount"
 phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
