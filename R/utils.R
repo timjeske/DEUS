@@ -144,7 +144,8 @@ getConditionCountStats<-function(countData,phenoData){
 #' Function to add counts of different feature classes
 #'
 #' @param mergedResult summary table including blast results
-#' @param featureClasses list of prefixes of features representing classes to be counted
+#' @param featureClasses List of features representing classes to be counted.
+#' Features can be defined as regular expressions, as described in \link[stringi]{stringi-search-regex}.
 #' @keywords feature counting
 #' @export
 #' @examples

@@ -9,7 +9,8 @@ addCountsOfFeatureClasses(mergedResult, featureClasses)
 \arguments{
 \item{mergedResult}{summary table including blast results}
 
-\item{featureClasses}{list of prefixes of features representing classes to be counted}
+\item{featureClasses}{List of features representing classes to be counted.
+Features can be defined as regular expressions, as described in \link[stringi]{stringi-search-regex}.}
 }
 \description{
 Function to add counts of different feature classes

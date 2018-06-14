@@ -4,7 +4,7 @@
 \alias{processClusters}
 \title{Processes CD-Hit Outfile}
 \usage{
-processClusters(map, out_dir)
+processClusters(map, clusters, out_dir)
 }
 \arguments{
 \item{map}{data frame with sequences as row names and some identifier for each sequence in the first column}

@@ -25,7 +25,7 @@ seqFasta <- sequencesAsFasta(normCts,map)
 blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
 ncores <- 16
-blastResult <- runBlast(blast_exec, blast_db, ncores, seqFasta, identity = 95)
+blastResult <- runBlast(blast_exec, blast_db, ncores, seqFasta, identity = 100)
 write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
 
 # merge results
