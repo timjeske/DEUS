@@ -156,7 +156,7 @@ addCountsOfFeatureClasses<- function(mergedResult, featureClasses) {
   v_features <- strsplit(paste(mergedResult$FeatureList),",")
   sum <- 0
   for(i in featureClasses) {
-    res[i] <- sum(stringr::str_detect(string=v_features, i))
+    res[i] <- sum(stringr::str_detect(string=v_features[[1]], i))
     sum <- sum + res[[i]]
   }
   res$"Other" <- as.numeric(lapply(v_features, function(x) length(x[! x == "NA" ]))) - sum
