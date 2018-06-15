@@ -6,13 +6,23 @@ setwd("~")
 install("USBseq")
 library(USBseq)
 
-# set input and output
+# defaults may be changed
+out_dir <- "~/USBseq/inst/extdata/results"
+blast_ncores <- 2
+
+# leave paths empty if not yet installed, intermediate results will be used for testing purposes
+blast_exec <- "~/software/ncbi-blast-2.6.0+/bin/blastn"
+cd_hit <- "~/software/cdhit/cd-hit-est"
+
+# load data delivered with the package
 in_dir <- system.file("extdata", package = "USBseq")
-out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_06_15_FeatureCount"
-phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
-phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
+phenofile <- system.file("extdata", "condition.tsv", package = "USBseq")
+blast_db <-system.file("extdata", "blastdb/DASHR_subset.fa", package = "USBseq")
+blast_int <- system.file("extdata", "results/Sig_sequences.blastn.tsv", package="USBseq")
+clust_int <- system.file("extdata", "results/clustResult.tsv", package="USBseq")
 
 # create and filter count table, create sequence to sequenceID map
+phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 countTable <- filterLowExp(countTable, phenoInfo)
 write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
@@ -29,18 +39,22 @@ sigSeqFasta <- sequencesAsFasta(sigResults,map)
 countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 
 # run blast
-blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
-blast_db <-"/storageNGS/ngs1/software/ncbi-blast-2.6.0+/blastdb/MouseDB_piRNABank.fa"
-ncores <- 2
-blastResult <- runBlast(blast_exec, blast_db, ncores, sigSeqFasta)
-write.table(blastResult, paste(out_dir, "Sig_sequences.blastn.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=F)
+if(blast_exec == "") {
+  blastResult <- read.table(blast_int, header=T, sep="\t")
+} else {
+  blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
+}
 
 # run clustering
-cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+if(cd_hit == "") {
+  clustResult <- read.table(clust_int, header=T, sep="\t")
+} else {
+  clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+}
 
 # merge results
-classes <- c("mmu_piR","ENSMUST","tRNA","mmu-miR","retro")
-summary <- mergeResults(sigResults,countStats, blastResult, clustResult, map)
+classes <- c("tRNA","[Hh]sa","^U")
+summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
-writeSummaryFiles(summary,out_dir)
+writeSummaryFiles(summary, out_dir)
+
