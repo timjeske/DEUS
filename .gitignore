@@ -3,3 +3,8 @@
 .RData
 .Ruserdata
 inst/doc
+inst/extdata/results/DESeq2*
+inst/extdata/results/Summary*
+inst/extdata/results/AllCounts_filtered.tsv
+inst/extdata/results/CD*
+inst/extdata/results/Clusters/Cluster*
