@@ -1,9 +1,9 @@
 library(devtools)
 
 # install package
-#install_github("timjeske/USBseq", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
-setwd("~")
-install("USBseq")
+install_github("timjeske/USBseq", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
+#setwd("~")
+#install("USBseq")
 library(USBseq)
 
 # defaults may be changed
@@ -11,8 +11,8 @@ out_dir <- "~/USBseq/inst/extdata/results"
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
-blast_exec <- "~/software/ncbi-blast-2.6.0+/bin/blastn"
-cd_hit <- "~/software/cdhit/cd-hit-est"
+blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
+cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
 
 # load data delivered with the package
 in_dir <- system.file("extdata", package = "USBseq")
