@@ -39,17 +39,17 @@ sigSeqFasta <- sequencesAsFasta(sigResults,map)
 countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 
 # run blast
-if(blast_exec == "") {
-  blastResult <- read.table(blast_int, header=T, sep="\t")
-} else {
+if(file.exists(blast_exec)) {
   blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
+} else {
+  blastResult <- read.table(blast_int, header=T, sep="\t")
 }
 
 # run clustering
-if(cd_hit == "") {
-  clustResult <- read.table(clust_int, header=T, sep="\t")
-} else {
+if(file.exists(cd_hit)) {
   clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+} else {
+  clustResult <- read.table(clust_int, header=T, sep="\t")
 }
 
 # merge results
