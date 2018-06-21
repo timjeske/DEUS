@@ -1,7 +1,7 @@
 Package: USBseq
 Type: Package
 Title: Unique Sequence based analysis of small RNA-seq data
-Version: 0.1.0
+Version: 1.0
 Author: Tim Jeske, Maximilian Hastreiter
 Authors@R: c(person("Tim","Jeske", role=c("aut","cre")), person("Maximilian","Hastreiter", role=c("aut","cre")))
 Maintainer: The package maintainer <yourself@somewhere.net>

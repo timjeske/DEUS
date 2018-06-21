@@ -1,6 +1,7 @@
-pandoc: 1.17.2
-pkgdown: 1.0.0
-pkgdown_sha: d43ca38c74827d1d6babc3a80d48cd3a8e8fad8c
+pandoc: 1.12.3.1
+pkgdown: 1.1.0.9000
+pkgdown_sha: 8526f488456da3e10974a9def39a44d2d2b0b07d
 articles:
   USBseq: USBseq.html
+  VollDEPP: VollDEPP.html
 

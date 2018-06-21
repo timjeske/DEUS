@@ -8,8 +8,8 @@
 <title>Unique Sequence based analysis of small RNA-seq data • USBseq</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Unique Sequence based analysis of small RNA-seq data">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="Unique Sequence based analysis of small RNA-seq data">
 <meta property="og:description" content="More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.">
 <meta name="twitter:card" content="summary">
@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">USBseq</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0</span>
       </span>
     </div>
 
@@ -47,6 +47,9 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -72,23 +75,31 @@
     
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<div id="usbseq" class="section level1">
+
+
+
+<div id="deus-an-r-package-for-accurate-small-rna-profiling-based-on-differential-expression-of-unique-sequences" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#usbseq" class="anchor"></a>USBseq</h1></div>
-<p>The goal of USBseq is to …</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install USBseq from github with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"timjeske/USBseq"</span>)</code></pre></div>
-</div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## basic example code</code></pre></div>
-</div>
+<a href="#deus-an-r-package-for-accurate-small-rna-profiling-based-on-differential-expression-of-unique-sequences" class="anchor"></a>DEUS: an R package for accurate small RNA profiling based on differential expression of unique sequences</h1></div>
+<p>Tim Jeske, Peter Huypens ,Laura Stirm, Selina Hoeckele,Christine Wurmser, Anja Böhm, Cora ​Weigert, Harald Staiger, Johannes Beckers, and Maximilian Hastreiter</p>
+<table class="table"><tbody>
+<tr class="odd">
+<td align="left"><img src="../pics/Deus_logo.jpg"></td>
+<td align="left"><img src="../pics/1.png"></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../pics/2.png"></td>
+<td align="left"><img src="../pics/3.png"></td>
+</tr>
+</tbody></table>
+<p>The DEUS R package is a framework for accurate small non-coding RNA (sncRNA) profiling based on differential expression of unique sequences. In comparison to commonly-used mapping-based approaches, DEUS generates read counts on the actual sequence reads. Several advantages of this approach include:</p>
+<ul>
+<li>Reads that do not map or map to multiple features are retained in the analysis and represented in an unprecedented and more concise manner</li>
+<li>Sequence clustering provides unique insight into potential processing and editing steps among members of the same cluster</li>
+<li>No need for a reference genome and, therefore, facilitates sncRNA profiling in virtually any organism</li>
+<li>Easy to use and flexible due to high modularity</li>
+<li>Returns intuitively interpretable results</li>
+</ul>
 </div>
   </div>
 
@@ -105,7 +116,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"timjeske/USBs
 <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>What license is it under?</li>
+<li>GPL (&gt;= 3)</li>
 </ul>
 </div>
 <div class="developers">

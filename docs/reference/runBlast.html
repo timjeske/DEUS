@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -33,6 +35,7 @@
 <meta property="og:description" content="This function takes a vector of sequences in fasta style as input and blasts them using a local blast database.
 The parameters are configured for blasting small RNA sequences with 100% identity over the whole query sequence." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -59,7 +62,7 @@ The parameters are configured for blasting small RNA sequences with 100% identit
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">USBseq</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0</span>
       </span>
     </div>
 
@@ -76,6 +79,21 @@ The parameters are configured for blasting small RNA sequences with 100% identit
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/VollDEPP.html">DEUS: an R package for accurate small RNA profiling based on differential expression of unique sequences</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -111,7 +129,7 @@ The parameters are configured for blasting small RNA sequences with 100% identit
     </div>
 
     <pre class="usage"><span class='fu'>runBlast</span>(<span class='no'>blast_exec</span>, <span class='no'>blast_db</span>, <span class='no'>ncores</span>, <span class='no'>sig_sequences</span>, <span class='kw'>strand</span> <span class='kw'>=</span> <span class='st'>"plus"</span>,
-  <span class='kw'>identity</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
+  <span class='kw'>identity</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>dust</span> <span class='kw'>=</span> <span class='st'>"no"</span>, <span class='kw'>soft_masking</span> <span class='kw'>=</span> <span class='st'>"false"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +154,18 @@ The parameters are configured for blasting small RNA sequences with 100% identit
       <th>strand</th>
       <td><p>query strand(s) to search against database, default = 'plus'</p></td>
     </tr>
+    <tr>
+      <th>identity</th>
+      <td><p>identity cutoff applied for filtering blast results</p></td>
+    </tr>
+    <tr>
+      <th>dust</th>
+      <td><p>specifies whether low complexity filter is applied on query (default=no)</p></td>
+    </tr>
+    <tr>
+      <th>soft_masking</th>
+      <td><p>specifies whether low complexity filter is applied on database (default=no)</p></td>
+    </tr>
     </table>
     
 
@@ -144,7 +174,8 @@ The parameters are configured for blasting small RNA sequences with 100% identit
 <span class='no'>blast_db</span> <span class='kw'>&lt;-</span><span class='st'>"$HOME/blastdb/MouseDB.fa"</span>
 <span class='no'>ncores</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
 <span class='no'>testseq</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"&gt;seq_1"</span>,<span class='st'>"GCATTGGTGGTTCAGTGGTAGAATTCTCGCC"</span>)
-<span class='no'>blastResult</span> <span class='kw'>&lt;-</span> <span class='fu'>runBlast</span>(<span class='no'>blast_exec</span>, <span class='no'>blast_db</span>, <span class='no'>ncores</span>, <span class='no'>testseq</span>)</div><div class='output co'>#&gt; <span class='error'>Error in system2(blast_exec, command, input = sig_sequences, stdout = TRUE): error in running command</span></div></pre>
+<span class='no'>blastResult</span> <span class='kw'>&lt;-</span> <span class='fu'>runBlast</span>(<span class='no'>blast_exec</span>, <span class='no'>blast_db</span>, <span class='no'>ncores</span>, <span class='no'>testseq</span>)</div><div class='output co'>#&gt; Blastn configuration:
+#&gt; [1] "$HOME/software/ncbi-blast-2.6.0+/bin/blastn -db $HOME/blastdb/MouseDB.fa -num_threads 2 -perc_identity 100 -dust no -soft_masking false -strand plus -task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt  '6 qseqid qlen sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"</div><div class='output co'>#&gt; <span class='error'>Error in system2(blast_exec, command, input = sig_sequences, stdout = TRUE): error in running command</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

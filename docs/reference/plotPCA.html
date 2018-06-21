@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function to create sequence-based count tables — createCountTableFromFastQs • USBseq</title>
+<title>Function to plot PCA — plotPCA • USBseq</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Function to create sequence-based count tables — createCountTableFromFastQs" />
+<meta property="og:title" content="Function to plot PCA — plotPCA" />
 
-<meta property="og:description" content="This function creates count tables summarizing counts for each observed read in a set of fastQ files.
-Input files are taken from the given input directory and are selected based on the given fastQ suffix." />
+<meta property="og:description" content="Function to plot PCA" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,50 +115,43 @@ Input files are taken from the given input directory and are selected based on t
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function to create sequence-based count tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/timjeske/USBseq/blob/master/R/counting.R'><code>R/counting.R</code></a></small>
-    <div class="hidden name"><code>createCountTableFromFastQs.Rd</code></div>
+    <h1>Function to plot PCA</h1>
+    <small class="dont-index">Source: <a href='https://github.com/timjeske/USBseq/blob/master/R/DESeq2.R'><code>R/DESeq2.R</code></a></small>
+    <div class="hidden name"><code>plotPCA.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function creates count tables summarizing counts for each observed read in a set of fastQ files.
-Input files are taken from the given input directory and are selected based on the given fastQ suffix.</p>
+    <p>Function to plot PCA</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>createCountTableFromFastQs</span>(<span class='no'>in_dir</span>, <span class='kw'>fq_suffix</span> <span class='kw'>=</span> <span class='st'>".fq.gz"</span>, <span class='kw'>phenoInfo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>plotPCA</span>(<span class='no'>rld</span>, <span class='no'>phenoData</span>, <span class='no'>out_dir</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>in_dir</th>
-      <td><p>input directory containing fastq files to be analyzed</p></td>
+      <th>rld</th>
+      <td><p>regularized log transformed counts</p></td>
     </tr>
     <tr>
-      <th>fq_suffix</th>
-      <td><p>suffix of your fastq files, default is ".fq.gz"</p></td>
+      <th>phenoData</th>
+      <td><p>data frame with sample names as rownames and assigned condition in first column</p></td>
     </tr>
     <tr>
-      <th>phenoInfo</th>
-      <td><p>by default count table headers are the basenames of the input fastq files. If a file is given with sample names in first column and a sample column (=fastq path), the sample names will be used as headers in the count table.</p></td>
+      <th>out_dir</th>
+      <td><p>directory for sample distance map</p></td>
     </tr>
     </table>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>in_dir</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"USBseq"</span>)
-<span class='no'>countTable</span> <span class='kw'>&lt;-</span> <span class='fu'>createCountTableFromFastQs</span>(<span class='no'>in_dir</span>)</div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond1_s1.fwd.fq.gz"
-#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond1_s2.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond1_s3.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond1_s4.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond1_s5.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond2_s1.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond2_s2.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond2_s3.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond2_s4.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div><div class='output co'>#&gt; [1] "Counting all reads in /home/ibis/hastreiter/USBseq/inst/extdata/cond2_s5.fwd.fq.gz"</div><div class='output co'>#&gt; <span class='message'>Joining by: Read</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

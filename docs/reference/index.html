@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Function reference" />
+
 
 
 <!-- mathjax -->
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">USBseq</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0</span>
       </span>
     </div>
 
@@ -72,6 +75,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/VollDEPP.html">DEUS: an R package for accurate small RNA profiling based on differential expression of unique sequences</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -100,6 +118,7 @@
     <table class="ref-index">
 
     <colgroup>
+      
       <col class="alias" />
       <col class="title" />
     </colgroup>
@@ -112,103 +131,109 @@
         </th>
       </tr>
       <tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="addCountsOfFeatureClasses.html">addCountsOfFeatureClasses()</a></code> </p>
         </td>
         <td><p>Function to add counts of different feature classes</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="createCountTableFromFastQs.html">createCountTableFromFastQs()</a></code> </p>
         </td>
         <td><p>Function to create sequence-based count tables</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="createMap.html">createMap()</a></code> </p>
         </td>
         <td><p>Function to create a map for row IDs of a data frame</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="deleteTmp.html">deleteTmp()</a></code> </p>
         </td>
         <td><p>Function to remove temporary files after pipeline execution</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="filterLowExp.html">filterLowExp()</a></code> </p>
         </td>
         <td><p>Function to filter a count table</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="generateSummaryPlots.html">generateSummaryPlots()</a></code> </p>
         </td>
         <td><p>Function to generate plots for SummaryTable</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="getConditionCountStats.html">getConditionCountStats()</a></code> </p>
         </td>
         <td><p>Function to compute mean and sd of normalized counts for each condition</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="getNoBlastHitFraction.html">getNoBlastHitFraction()</a></code> </p>
         </td>
         <td><p>Function to compute fraction of reads without BLAST hit for each sample</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="mergeResults.html">mergeResults()</a></code> </p>
         </td>
         <td><p>Function to merge DEA, blast result</p></td>
       </tr><tr>
-        <!--  -->
+        
+        <td>
+          <p><code><a href="plotPCA.html">plotPCA()</a></code> </p>
+        </td>
+        <td><p>Function to plot PCA</p></td>
+      </tr><tr>
+        
         <td>
           <p><code><a href="plotSampleDistanceMap.html">plotSampleDistanceMap()</a></code> </p>
         </td>
         <td><p>Function to plot sample distance map</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="printCluster.html">printCluster()</a></code> </p>
         </td>
         <td><p>Helper function for generating individual cluster fastas, not meant for external use</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="processClusters.html">processClusters()</a></code> </p>
         </td>
         <td><p>Processes CD-Hit Outfile</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="runBlast.html">runBlast()</a></code> </p>
         </td>
         <td><p>Function to blast small RNA sequences.</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="runClustering.html">runClustering()</a></code> </p>
         </td>
         <td><p>Function to execute CD-HIT Clustering</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="runDESeq2.html">runDESeq2()</a></code> </p>
         </td>
         <td><p>Function to run differential expression analysis based on DESeq2</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="sequencesAsFasta.html">sequencesAsFasta()</a></code> </p>
         </td>
         <td><p>Function to get sequences as a vector of fasta IDs and sequences</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="writeSummaryFiles.html">writeSummaryFiles()</a></code> </p>
         </td>
