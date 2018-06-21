@@ -1,13 +1,13 @@
 library(devtools)
 
 # install package
-install_github("timjeske/USBseq", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
+install_github("timjeske/DEUS", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
 #setwd("~")
 #install("USBseq")
-library(USBseq)
+library(DEUS)
 
 # defaults may be changed
-out_dir <- "~/USBseq/inst/extdata/results"
+out_dir <- "~/DEUS/inst/extdata/results"
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes

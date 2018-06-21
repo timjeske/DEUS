@@ -1,6 +1,6 @@
-Package: USBseq
+Package: DEUS
 Type: Package
-Title: Unique Sequence based analysis of small RNA-seq data
+Title: Differential expression of unique sequences
 Version: 1.0
 Author: Tim Jeske, Maximilian Hastreiter
 Authors@R: c(person("Tim","Jeske", role=c("aut","cre")), person("Maximilian","Hastreiter", role=c("aut","cre")))
@@ -21,5 +21,5 @@ RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://github.com/timjeske/USBseq
-BugReports: https://github.com/timjeske/USBseq/issues
+URL: https://github.com/timjeske/DEUS
+BugReports: https://github.com/timjeske/DEUS/issues
