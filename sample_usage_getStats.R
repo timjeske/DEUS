@@ -1,13 +1,13 @@
 library(devtools)
 
 # install package
-install_github("timjeske/USBseq", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
-library(USBseq)
+install_github("timjeske/DEUS", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
+library(DEUS)
 
 # set input and output
-in_dir <- system.file("extdata", package = "USBseq")
+in_dir <- system.file("extdata", package = "DEUS")
 out_dir <- "/storageNGS/ngs4/projects/sncRNA_USB/pipeline/2018_04_09_sample_usage_getStats"
-phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
+phenofile <- system.file("extdata", "condition_test.tsv", package = "DEUS")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 
 # create and filter count table, create sequence to sequenceID map

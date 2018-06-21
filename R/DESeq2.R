@@ -1,18 +1,18 @@
-#*  Copyright (C) 2018 the USB contributors.
-#*  Website: https://github.com/timjeske/USBseq
-#*  
+#*  Copyright (C) 2018 the DEUS contributors.
+#*  Website: https://github.com/timjeske/DEUS
+#*
 #*  This file is part of the KNIME4NGS KNIME extension.
-#*  
-#*  The USBseq R package is free software: you can redistribute it and/or modify
+#*
+#*  The DEUS R package is free software: you can redistribute it and/or modify
 #*  it under the terms of the GNU General Public License as published by
 #*  the Free Software Foundation, either version 3 of the License, or
 #*  (at your option) any later version.
-#*  
+#*
 #*  This program is distributed in the hope that it will be useful,
 #*  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #*  GNU General Public License for more details.
-#*  
+#*
 #*  You should have received a copy of the GNU General Public License
 #*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,9 +27,9 @@
 #' @keywords differential expression analysis
 #' @export
 #' @examples
-#' in_dir <- system.file("extdata", package = "USBseq")
+#' in_dir <- system.file("extdata", package = "DEUS")
 #' out_dir <- "$HOME/out"
-#' phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
+#' phenofile <- system.file("extdata", "condition_test.tsv", package = "DEUS")
 #' phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 #' countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 #' countTable <- filterLowExp(countTable, phenoInfo)

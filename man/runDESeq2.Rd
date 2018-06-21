@@ -21,9 +21,9 @@ runDESeq2(countData, phenoData, design, map, out_dir)
 Function to run differential expression analysis based on DESeq2
 }
 \examples{
-in_dir <- system.file("extdata", package = "USBseq")
+in_dir <- system.file("extdata", package = "DEUS")
 out_dir <- "$HOME/out"
-phenofile <- system.file("extdata", "condition_test.tsv", package = "USBseq")
+phenofile <- system.file("extdata", "condition_test.tsv", package = "DEUS")
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 countTable <- filterLowExp(countTable, phenoInfo)

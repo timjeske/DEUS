@@ -25,7 +25,7 @@ runClustering(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff,
 \item{optional}{Optional execution parameters}
 }
 \description{
-Sequentially, each sequency is either assinged to an existing cluster or is classified as a new 
+Sequentially, each sequency is either assinged to an existing cluster or is classified as a new
 cluster representative if no matching cluster can be found.
 }
 \examples{

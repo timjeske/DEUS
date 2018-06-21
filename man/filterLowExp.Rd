@@ -13,13 +13,13 @@ filterLowExp(countData, pheno)
 }
 \description{
 This function pre-filters a count table of sequences using additional information on sample conditions.
-Filtering is especially useful in context of the USBseq package because sequence based count tables are generally very large.
+Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
 Sequences are kept if both groups have an average sequence count of at least 10 or if one of both group has zero counts for all samples.
 }
 \examples{
-in_dir <- system.file("extdata", package = "USBseq")
+in_dir <- system.file("extdata", package = "DEUS")
 countTable <- createCountTableFromFastQs(in_dir)
-phenoInfo <- read.table(system.file("extdata", "condition.tsv", package = "USBseq"), header=T, row.names=1)
+phenoInfo <- read.table(system.file("extdata", "condition.tsv", package = "DEUS"), header=T, row.names=1)
 countTableFiltered <- filterLowExp(countTable, phenoInfo)
 }
 \keyword{filtering}

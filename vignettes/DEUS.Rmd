@@ -18,7 +18,7 @@ You can install DEUS from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("timjeske/USBseq")
+devtools::install_github("timjeske/DEUS")
 ```
 
 ## Example

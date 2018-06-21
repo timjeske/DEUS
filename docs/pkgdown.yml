@@ -1,7 +1,6 @@
-pandoc: 1.12.3.1
+pandoc: 1.17.2
 pkgdown: 1.1.0.9000
-pkgdown_sha: 8526f488456da3e10974a9def39a44d2d2b0b07d
+pkgdown_sha: b4c418c09daa4398fe70cea3b3416fbbdd1c78bf
 articles:
-  USBseq: USBseq.html
-  VollDEPP: VollDEPP.html
+  DEUS: DEUS.html
 
