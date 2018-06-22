@@ -21,58 +21,18 @@ You can install DEUS from github with:
 devtools::install_github("timjeske/DEUS")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-## basic example code
-```
-
 ### Prerequisites
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+- [CD-Hit](http://weizhongli-lab.org/cd-hit/) (cd-hit-est binary)
+- [BLAST](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) (blastn binary)
+- Custom BLAST database used for annotation step
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
 
-## Vignette Info
+### Preparing a BLAST database
+During the annotation step, a BLAST database is used to determine possible biological sources of each unique sequence. Depending on the use-case, two options are available how an appropriate database can be obtained:
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+1. Use existing databases available at e.g. [NCBI](ftp://ftp.ncbi.nlm.nih.gov/blast/db/). Database sets may also be retrieved automatically with update_blastdb.pl, which is part of the BLAST+ suite.
+2. Build a custom database using BLAST makeblastdb and some fasta sequences:
 
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows
-
-      thfhfh
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+      cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa > HumanDB.fa
+      makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids
