@@ -34,5 +34,25 @@ During the annotation step, a BLAST database is used to determine possible biolo
 1. Use existing databases available at e.g. [NCBI](ftp://ftp.ncbi.nlm.nih.gov/blast/db/). Database sets may also be retrieved automatically with update_blastdb.pl, which is part of the BLAST+ suite.
 2. Build a custom database using BLAST makeblastdb and some fasta sequences:
 
-      cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa > HumanDB.fa
-      makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids
+	```{r, eval=FALSE}
+	cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa > HumanDB.fa
+	makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids
+	```
+
+### Preparing a condition file
+In order to execute the differential expression analysis, a file specifying different conditions is necessary. 
+Each condition file has to contain **sample names**, the respective **fastq files** as well as the matching **condition**. The file should be in **TSV format** (Tab-Separated Values).
+```{r, eval=FALSE}
+sampleName      sample  condition
+cond1_s1        cond1_s1.fwd.fq.gz      cond1
+cond1_s2        cond1_s2.fwd.fq.gz      cond1
+cond2_s1        cond2_s1.fwd.fq.gz      cond2
+cond2_s2        cond2_s2.fwd.fq.gz      cond2
+```
+
+
+### Run example 
+To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses (See [here](SampleUsage.html))
+	
+	Rscript sample_usage.R
+

@@ -1,5 +1,7 @@
-pandoc: 1.12.3.1
+pandoc: 1.16.0.2
 pkgdown: 1.1.0.9000
-pkgdown_sha: b4c418c09daa4398fe70cea3b3416fbbdd1c78bf
-articles: []
+pkgdown_sha: f317e4942d4cbadb377caed2ae0484b08d0f8d03
+articles:
+  DEUS: DEUS.html
+  SampleUsage: SampleUsage.html
 

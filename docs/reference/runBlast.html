@@ -80,6 +80,18 @@ The parameters are configured for blasting small RNA sequences with 100% identit
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/SampleUsage.html">SampleUsage</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -163,7 +175,7 @@ The parameters are configured for blasting small RNA sequences with 100% identit
 <span class='no'>ncores</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
 <span class='no'>testseq</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"&gt;seq_1"</span>,<span class='st'>"GCATTGGTGGTTCAGTGGTAGAATTCTCGCC"</span>)
 <span class='no'>blastResult</span> <span class='kw'>&lt;-</span> <span class='fu'>runBlast</span>(<span class='no'>blast_exec</span>, <span class='no'>blast_db</span>, <span class='no'>ncores</span>, <span class='no'>testseq</span>)</div><div class='output co'>#&gt; Blastn configuration:
-#&gt; [1] "$HOME/software/ncbi-blast-2.6.0+/bin/blastn -db $HOME/blastdb/MouseDB.fa -num_threads 2 -perc_identity 100 -dust no -soft_masking false -strand plus -task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt  '6 qseqid qlen sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"</div><div class='output co'>#&gt; <span class='error'>Error in system2(blast_exec, command, input = sig_sequences, stdout = TRUE): error in running command</span></div></pre>
+#&gt; [1] "$HOME/software/ncbi-blast-2.6.0+/bin/blastn -db $HOME/blastdb/MouseDB.fa -num_threads 2 -perc_identity 100 -dust no -soft_masking false -strand plus -task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt  '6 qseqid qlen sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"</div><div class='output co'>#&gt; <span class='error'>Error in system2(blast_exec, command, input = sig_sequences, stdout = TRUE): Fehler bei der Ausführung des Kommandos</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

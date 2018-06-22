@@ -1,0 +1,74 @@
+---
+title: "SampleUsage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sample Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### Sample Usage
+
+Install package
+
+```{r, eval=FALSE}
+library(devtools)
+
+install_github("timjeske/DEUS")
+library(DEUS)
+
+```
+
+Set parameters
+```{r, eval=FALSE}
+out_dir <- "data/results"
+blast_ncores <- 2
+
+blast_exec <- "/software/blast/bin/blastn"
+cd_hit <- "/software/cdhit/cd-hit-est"
+
+# load data delivered with the package
+in_dir <- "/data/fastq-files/"
+phenofile <- "/data/condition.tsv"
+blast_db <- "/data/My_Blast_DB.fa"
+```
+
+create and filter count table, create sequence to sequenceID map
+```{r, eval=FALSE}
+phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
+countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
+countTable <- filterLowExp(countTable, phenoInfo)
+write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
+
+```
+
+Run differential expression analysis
+```{r, eval=FALSE}
+design <- ~ condition
+deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
+sigResults <- deResults$deResult
+sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
+map <- createMap(sigResults)
+sigSeqFasta <- sequencesAsFasta(sigResults,map)
+
+# get count stats
+countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
+```
+
+Run blast
+```{r, eval=FALSE}
+  blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
+```
+Run clustering
+```{r, eval=FALSE}
+  clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+```
+
+Merge results
+```{r, eval=FALSE}
+classes <- c("tRNA","[Hh]sa","^U")
+summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
+summary <- addCountsOfFeatureClasses(summary, classes)
+writeSummaryFiles(summary, out_dir)
+
+```

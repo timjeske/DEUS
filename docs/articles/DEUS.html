@@ -47,6 +47,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/SampleUsage.html">SampleUsage</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -81,8 +93,8 @@
     
     
 <p>You can install DEUS from github with:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"timjeske/DEUS"</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+devtools::<span class="kw">install_github</span>(<span class="st">"timjeske/DEUS"</span>)</code></pre></div>
 <div id="prerequisites" class="section level3">
 <h3 class="hasAnchor">
 <a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
@@ -102,9 +114,26 @@ devtools::<span class="kw">install_github</span>(<span class="st">"timjeske/DEUS
 <li>Use existing databases available at e.g. <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db/">NCBI</a>. Database sets may also be retrieved automatically with update_blastdb.pl, which is part of the BLAST+ suite.</li>
 <li>
 <p>Build a custom database using BLAST makeblastdb and some fasta sequences:</p>
-<p>cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa Homo_sapiens.GRCh37.75.ncrna.fa &gt; HumanDB.fa makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cat DASHR.fa Homo_sapiens.GRCh37<span class="fl">.75</span>.cds.all.fa  Homo_sapiens.GRCh37<span class="fl">.75</span>.ncrna.fa &gt;<span class="st"> </span>HumanDB.fa
+makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids</code></pre></div>
 </li>
 </ol>
+</div>
+<div id="preparing-a-condition-file" class="section level3">
+<h3 class="hasAnchor">
+<a href="#preparing-a-condition-file" class="anchor"></a>Preparing a condition file</h3>
+<p>In order to execute the differential expression analysis, a file specifying different conditions is necessary. Each condition file has to contain <strong>sample names</strong>, the respective <strong>fastq files</strong> as well as the matching <strong>condition</strong>. The file should be in <strong>TSV format</strong> (Tab-Separated Values).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sampleName      sample  condition
+cond1_s1        cond1_s1.fwd.fq.gz      cond1
+cond1_s2        cond1_s2.fwd.fq.gz      cond1
+cond2_s1        cond2_s1.fwd.fq.gz      cond2
+cond2_s2        cond2_s2.fwd.fq.gz      cond2</code></pre></div>
+</div>
+<div id="run-example" class="section level3">
+<h3 class="hasAnchor">
+<a href="#run-example" class="anchor"></a>Run example</h3>
+<p>To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses (See <a href="SampleUsage.html">here</a>)</p>
+<pre><code>Rscript sample_usage.R</code></pre>
 </div>
   </div>
 
