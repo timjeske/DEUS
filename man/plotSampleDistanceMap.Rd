@@ -2,18 +2,18 @@
 % Please edit documentation in R/DESeq2.R
 \name{plotSampleDistanceMap}
 \alias{plotSampleDistanceMap}
-\title{Function to plot sample distance map}
+\title{Plot sample distance heatmap}
 \usage{
 plotSampleDistanceMap(rld, out_dir)
 }
 \arguments{
-\item{rld}{regularized log transformed counts}
+\item{rld}{Count table after 'regularized log transformation' by \link[DESeq2]{rlog}}
 
-\item{out_dir}{directory for sample distance map}
+\item{out_dir}{Directory for PDF file including the sample distance heatmap}
+}
+\value{
+DESeq2_sample_dist.pdf in output directory
 }
 \description{
-Function to plot sample distance map
+This function is internally called by \link[DEUS]{runDESeq2}
 }
-\keyword{distance}
-\keyword{map}
-\keyword{sample}

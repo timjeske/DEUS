@@ -31,7 +31,7 @@
 #' @export
 
 runDESeq2 <- function(count_table, pheno_info, design, out_dir=NULL) {
-  dds <- DESeq2::DESeqDataSetFromMatrix(count_table = count_table, colData = pheno_info, design = design)
+  dds <- DESeq2::DESeqDataSetFromMatrix(countData = count_table, colData = pheno_info, design = design)
   dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
   dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
   res <- DESeq2::results(dds)
@@ -57,11 +57,13 @@ runDESeq2 <- function(count_table, pheno_info, design, out_dir=NULL) {
   return(newList)
 }
 
-#' Function to plot sample distance map
+#' Plot sample distance heatmap
 #'
-#' @param rld regularized log transformed counts
-#' @param out_dir directory for sample distance map
-#' @keywords sample distance map
+#' This function is internally called by \link[DEUS]{runDESeq2}
+#'
+#' @param rld Count table after 'regularized log transformation' by \link[DESeq2]{rlog}
+#' @param out_dir Directory for PDF file including the sample distance heatmap
+#' @return DESeq2_sample_dist.pdf in output directory
 #' @export
 
 plotSampleDistanceMap <- function(rld, out_dir) {
@@ -78,12 +80,15 @@ plotSampleDistanceMap <- function(rld, out_dir) {
   dev.off()
 }
 
-#' Function to plot PCA
+#' Plot result of PCA
 #'
-#' @param rld regularized log transformed counts
-#' @param pheno_info data frame with sample names as rownames and assigned condition in first column
-#' @param out_dir directory for sample distance map
-#' @keywords sample distance map
+#' This function is internally called by \link[DEUS]{runDESeq2}
+#'
+#' @param rld Count table after 'regularized log transformation' by \link[DESeq2]{rlog}
+#' @param pheno_info A data frame with sample identifiers as row names including maximal two columns defining (sub-)conditions.
+#' The sample identifiers must be identical to those in the rld table.
+#' @param out_dir Directory for PDF file including the PCA plot
+#' @return DESeq2_PCA.pdf in output directory
 #' @export
 
 plotPCA <- function(rld, pheno_info, out_dir) {

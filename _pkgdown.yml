@@ -34,8 +34,8 @@ reference:
     - getNoBlastHitFraction
   - title: Internal functions
     contents:
+    - plotSampleDistanceMap
+    - plotPCA
     - processClusters
     - printCluster
-    - plotPCA
-    - plotSampleDistanceMap
     - deleteTmp

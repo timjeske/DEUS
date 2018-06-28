@@ -2,20 +2,21 @@
 % Please edit documentation in R/DESeq2.R
 \name{plotPCA}
 \alias{plotPCA}
-\title{Function to plot PCA}
+\title{Plot result of PCA}
 \usage{
 plotPCA(rld, pheno_info, out_dir)
 }
 \arguments{
-\item{rld}{regularized log transformed counts}
+\item{rld}{Count table after 'regularized log transformation' by \link[DESeq2]{rlog}}
 
-\item{pheno_info}{data frame with sample names as rownames and assigned condition in first column}
+\item{pheno_info}{A data frame with sample identifiers as row names including maximal two columns defining (sub-)conditions.
+The sample identifiers must be identical to those in the rld table.}
 
-\item{out_dir}{directory for sample distance map}
+\item{out_dir}{Directory for PDF file including the PCA plot}
+}
+\value{
+DESeq2_PCA.pdf in output directory
 }
 \description{
-Function to plot PCA
+This function is internally called by \link[DEUS]{runDESeq2}
 }
-\keyword{distance}
-\keyword{map}
-\keyword{sample}
