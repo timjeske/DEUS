@@ -4,12 +4,12 @@
 \alias{plotPCA}
 \title{Function to plot PCA}
 \usage{
-plotPCA(rld, phenoData, out_dir)
+plotPCA(rld, pheno_info, out_dir)
 }
 \arguments{
 \item{rld}{regularized log transformed counts}
 
-\item{phenoData}{data frame with sample names as rownames and assigned condition in first column}
+\item{pheno_info}{data frame with sample names as rownames and assigned condition in first column}
 
 \item{out_dir}{directory for sample distance map}
 }

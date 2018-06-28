@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Filter a count table — filterLowExp" />
 
-<meta property="og:description" content="This function pre-filters a table of (sequence) counts using additional information on sample conditions.
+<meta property="og:description" content="This function filters a table of (sequence) counts using additional information on sample conditions.
 Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
 Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both group has zero counts for all samples." />
 <meta name="twitter:card" content="summary" />
@@ -100,13 +100,13 @@ Sequences are kept if both groups have a default minimum average sequence count 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Filter a count table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/timjeske/DEUS/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/timjeske/DEUS/blob/master/R/counting.R'><code>R/counting.R</code></a></small>
     <div class="hidden name"><code>filterLowExp.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function pre-filters a table of (sequence) counts using additional information on sample conditions.
+    <p>This function filters a table of (sequence) counts using additional information on sample conditions.
 Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
 Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both group has zero counts for all samples.</p>
     
@@ -132,13 +132,19 @@ The sample identifiers must be identical to those in the count_table.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The input count table with all sequences removed that fail the filter critera</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

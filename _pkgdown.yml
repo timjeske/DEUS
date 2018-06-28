@@ -19,10 +19,10 @@ reference:
     contents:
     - createCountTableFromFastQs
     - filterLowExp
+    - runDESeq2
+    - getConditionCountStats
     - createMap
     - sequencesAsFasta
-    - getConditionCountStats
-    - runDESeq2
     - runBlast
     - runClustering
     - addCountsOfFeatureClasses

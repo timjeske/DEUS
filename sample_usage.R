@@ -23,13 +23,13 @@ clust_int <- system.file("extdata", "results/clustResult.tsv", package="DEUS")
 
 # create and filter count table, create sequence to sequenceID map
 pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
-countTable <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
-countTable <- filterLowExp(countTable, pheno_info)
-write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
+count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
+count_table <- filterLowExp(count_table, pheno_info)
+write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
 design <- ~ condition
-deResults <- runDESeq2(countTable, pheno_info, design, map, out_dir)
+deResults <- runDESeq2(count_table, pheno_info, design, out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 map <- createMap(sigResults)

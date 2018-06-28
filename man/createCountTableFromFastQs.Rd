@@ -15,6 +15,9 @@ createCountTableFromFastQs(in_dir, fq_suffix = ".fq.gz", pheno_info = NULL)
 The sample names will be used as headers in the count table.
 If not given the file names of the fastQ files count table will be the headers of the count table.}
 }
+\value{
+A data frame with unique sequences as row names and the correspoding number of occurrences for each sample
+}
 \description{
 This function creates count tables summarizing counts for each observed sequence in a set of fastQ files.
 Input files are taken from the given input directory and are selected based on the given fastQ suffix.
