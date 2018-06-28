@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{writeSummaryFiles}
 \alias{writeSummaryFiles}
-\title{Function to write summary tables and fasta files for DEUS result}
+\title{TODO Function to write summary tables and fasta files for DEUS result}
 \usage{
 writeSummaryFiles(summaryTable, outDir)
 }
@@ -12,6 +12,6 @@ writeSummaryFiles(summaryTable, outDir)
 \item{outDir}{directory for summary files (tsv tables and fasta files)}
 }
 \description{
-Function to write summary tables and fasta files for DEUS result
+TODO Function to write summary tables and fasta files for DEUS result
 }
 \keyword{summary}

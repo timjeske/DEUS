@@ -18,7 +18,7 @@
 
 
 
-#' Function to execute CD-HIT Clustering
+#' TODO Function to execute CD-HIT Clustering
 #'
 #' Sequentially, each sequency is either assinged to an existing cluster or is classified as a new
 #' cluster representative if no matching cluster can be found.
@@ -55,7 +55,7 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
 }
 
 
-#' Processes CD-Hit Outfile
+#' TODO Processes CD-Hit Outfile
 #'
 #' @param map data frame with sequences as row names and some identifier for each sequence in the first column
 #' @param out_dir Output folder
@@ -90,7 +90,7 @@ processClusters <- function(map, clusters, out_dir) {
 }
 
 
-#' Helper function for generating individual cluster fastas, not meant for external use
+#' TODO Helper function for generating individual cluster fastas, not meant for external use
 #'
 #' @param data Subset of overall data provided within the processClusters function
 #' @param cl.dir Cluster output folder

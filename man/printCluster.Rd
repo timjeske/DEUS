@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{printCluster}
 \alias{printCluster}
-\title{Helper function for generating individual cluster fastas, not meant for external use}
+\title{TODO Helper function for generating individual cluster fastas, not meant for external use}
 \usage{
 printCluster(data, cl.dir)
 }
@@ -12,6 +12,6 @@ printCluster(data, cl.dir)
 \item{cl.dir}{Cluster output folder}
 }
 \description{
-Helper function for generating individual cluster fastas, not meant for external use
+TODO Helper function for generating individual cluster fastas, not meant for external use
 }
 \keyword{clustering}

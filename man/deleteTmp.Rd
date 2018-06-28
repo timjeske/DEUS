@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{deleteTmp}
 \alias{deleteTmp}
-\title{Function to remove temporary files after pipeline execution}
+\title{TODO Function to remove temporary files after pipeline execution}
 \usage{
 deleteTmp(outDir)
 }
@@ -10,6 +10,5 @@ deleteTmp(outDir)
 \item{outDir}{output folder}
 }
 \description{
-Function to remove temporary files after pipeline execution
+TODO Function to remove temporary files after pipeline execution
 }
-\keyword{internal}

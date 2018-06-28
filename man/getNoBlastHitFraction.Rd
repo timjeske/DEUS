@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{getNoBlastHitFraction}
 \alias{getNoBlastHitFraction}
-\title{Function to compute fraction of reads without BLAST hit for each sample}
+\title{TODO Function to compute fraction of reads without BLAST hit for each sample}
 \usage{
 getNoBlastHitFraction(summary, countTable)
 }
@@ -12,7 +12,7 @@ getNoBlastHitFraction(summary, countTable)
 \item{countTable}{table of (normalized) counts per sequence per sample}
 }
 \description{
-Function to compute fraction of reads without BLAST hit for each sample
+TODO Function to compute fraction of reads without BLAST hit for each sample
 }
 \keyword{statistics}
 \keyword{summary}

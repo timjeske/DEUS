@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{mergeResults}
 \alias{mergeResults}
-\title{Function to merge DEA, blast result}
+\title{TODO Function to merge DEA, blast result}
 \usage{
 mergeResults(deResult = NULL, countStats = NULL, blastResult = NULL,
   clustResult = NULL, map)
@@ -19,7 +19,7 @@ mergeResults(deResult = NULL, countStats = NULL, blastResult = NULL,
 \item{map}{data frame with sequences as row names and sequence IDs in first column}
 }
 \description{
-Function to merge DEA, blast result
+TODO Function to merge DEA, blast result
 }
 \keyword{generating}
 \keyword{summary}

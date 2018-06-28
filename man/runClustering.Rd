@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{runClustering}
 \alias{runClustering}
-\title{Function to execute CD-HIT Clustering}
+\title{TODO Function to execute CD-HIT Clustering}
 \usage{
 runClustering(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff,
   wordlength, map, optional = "")

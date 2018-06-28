@@ -23,5 +23,6 @@ Returns a list consisting of 'normCounts' and the 'deResult'.
 See \link[DESeq2]{results} and \link[IHW]{ihw} for further documentation on the columns.
 }
 \description{
-Run differential expression analysis based on DESeq2
+The function provides a reference implementation of differential expression analysis using \link[DESeq2]{DESeq}.
+It is possible to replace this function by any other method generating at least the log2 fold change, a p-value and an IHW p-value for each unique sequence to be compatible with downstream functions.
 }

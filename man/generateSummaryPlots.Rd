@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{generateSummaryPlots}
 \alias{generateSummaryPlots}
-\title{Function to generate plots for SummaryTable}
+\title{TODO Function to generate plots for SummaryTable}
 \usage{
 generateSummaryPlots(summary, classes, out_dir)
 }

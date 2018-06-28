@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{processClusters}
 \alias{processClusters}
-\title{Processes CD-Hit Outfile}
+\title{TODO Processes CD-Hit Outfile}
 \usage{
 processClusters(map, clusters, out_dir)
 }
@@ -12,6 +12,6 @@ processClusters(map, clusters, out_dir)
 \item{out_dir}{Output folder}
 }
 \description{
-Processes CD-Hit Outfile
+TODO Processes CD-Hit Outfile
 }
 \keyword{clustering}
