@@ -2,24 +2,18 @@
 % Please edit documentation in R/counting.R
 \name{createCountTableFromFastQs}
 \alias{createCountTableFromFastQs}
-\title{Function to create sequence-based count tables}
+\title{Create sequence-based count tables}
 \usage{
-createCountTableFromFastQs(in_dir, fq_suffix = ".fq.gz", phenoInfo = NULL)
+createCountTableFromFastQs(in_dir, fq_suffix = ".fq.gz", pheno_info = NULL)
 }
 \arguments{
-\item{in_dir}{input directory containing fastq files to be analyzed}
+\item{in_dir}{Input directory containing fastq files to be analyzed}
 
-\item{fq_suffix}{suffix of your fastq files, default is ".fq.gz"}
+\item{fq_suffix}{Suffix of your fastq files, default is ".fq.gz"}
 
-\item{phenoInfo}{by default count table headers are the basenames of the input fastq files. If a file is given with sample names in first column and a sample column (=fastq path), the sample names will be used as headers in the count table.}
+\item{pheno_info}{A data frame with sample names in column 'sampleName' and file names in column 'sample'. The sample names will be used as headers in the count table. If not given count table headers will be the file names of the input fastQ files.}
 }
 \description{
-This function creates count tables summarizing counts for each observed read in a set of fastQ files.
+This function creates count tables summarizing counts for each observed sequence in a set of fastQ files.
 Input files are taken from the given input directory and are selected based on the given fastQ suffix.
 }
-\examples{
-in_dir <- system.file("extdata", package = "DEUS")
-countTable <- createCountTableFromFastQs(in_dir)
-}
-\keyword{counting}
-\keyword{read}

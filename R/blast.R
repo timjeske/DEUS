@@ -33,12 +33,6 @@
 #' @param soft_masking specifies whether low complexity filter is applied on database (default=no)
 #' @keywords blastn
 #' @export
-#' @examples
-#' blast_exec <- "$HOME/software/ncbi-blast-2.6.0+/bin/blastn"
-#' blast_db <-"$HOME/blastdb/MouseDB.fa"
-#' ncores <- 2
-#' testseq <- c(">seq_1","GCATTGGTGGTTCAGTGGTAGAATTCTCGCC")
-#' blastResult <- runBlast(blast_exec, blast_db, ncores, testseq)
 
 runBlast <- function(blast_exec, blast_db, ncores, sig_sequences, strand = 'plus', identity=100, dust='no', soft_masking='false') {
   blast.f6 <- c('qseqid', 'qlen', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart' ,'send', 'evalue', 'bitscore')

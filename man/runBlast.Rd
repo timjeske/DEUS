@@ -28,11 +28,4 @@ runBlast(blast_exec, blast_db, ncores, sig_sequences, strand = "plus",
 This function takes a vector of sequences in fasta style as input and blasts them using a local blast database.
 The parameters are configured for blasting small RNA sequences with 100\% identity over the whole query sequence.
 }
-\examples{
-blast_exec <- "$HOME/software/ncbi-blast-2.6.0+/bin/blastn"
-blast_db <-"$HOME/blastdb/MouseDB.fa"
-ncores <- 2
-testseq <- c(">seq_1","GCATTGGTGGTTCAGTGGTAGAATTCTCGCC")
-blastResult <- runBlast(blast_exec, blast_db, ncores, testseq)
-}
 \keyword{blastn}

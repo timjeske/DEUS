@@ -28,10 +28,4 @@ runClustering(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff,
 Sequentially, each sequency is either assinged to an existing cluster or is classified as a new
 cluster representative if no matching cluster can be found.
 }
-\examples{
-map <- createMap(sigResults)
-sigSeqFasta <- sequencesAsFasta(sigResults,map)
-cd_hit <- "$HOME/software/cdhit/cd-hit-est"
-clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
-}
 \keyword{clustering}

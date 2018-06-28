@@ -26,15 +26,6 @@
 #' @param out_dir directory for sample distance map and MA plot
 #' @keywords differential expression analysis
 #' @export
-#' @examples
-#' in_dir <- system.file("extdata", package = "DEUS")
-#' out_dir <- "$HOME/out"
-#' phenofile <- system.file("extdata", "condition_test.tsv", package = "DEUS")
-#' phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
-#' countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
-#' countTable <- filterLowExp(countTable, phenoInfo)
-#' design <- ~ condition
-#' deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
 
 runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = countData, colData = phenoData, design = design)
@@ -67,7 +58,6 @@ runDESeq2 <- function(countData, phenoData, design, map, out_dir) {
 #' @param out_dir directory for sample distance map
 #' @keywords sample distance map
 #' @export
-#' @examples
 
 plotSampleDistanceMap <- function(rld, out_dir) {
   pdf(paste(out_dir, "DESeq2_sample_dist.pdf", sep="/"), onefile=FALSE)
@@ -90,7 +80,6 @@ plotSampleDistanceMap <- function(rld, out_dir) {
 #' @param out_dir directory for sample distance map
 #' @keywords sample distance map
 #' @export
-#' @examples
 
 plotPCA <- function(rld, phenoData, out_dir) {
   myPhenoData <- phenoData[, !(names(phenoData) %in% c("sample")), drop=FALSE]

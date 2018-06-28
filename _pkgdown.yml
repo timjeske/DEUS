@@ -1,0 +1,41 @@
+title: DEUS
+url: http://timjeske.github.io/DEUS/
+
+navbar:
+  type: inverse
+  left:
+    - text: "Get started"
+      href: articles/DEUS.html
+    - text: "Run DEUS"
+      href: articles/SampleUsage.html
+    - text: "R functions"
+      href: reference/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/timjeske/DEUS
+
+reference:
+  - title: Main functions
+    contents:
+    - createCountTableFromFastQs
+    - filterLowExp
+    - createMap
+    - sequencesAsFasta
+    - getConditionCountStats
+    - runDESeq2
+    - runBlast
+    - runClustering
+    - addCountsOfFeatureClasses
+    - mergeResults
+    - generateSummaryPlots
+    - writeSummaryFiles
+  - title: Helper functions
+    contents:
+    - getNoBlastHitFraction
+  - title: Internal functions
+    contents:
+    - processClusters
+    - printCluster
+    - plotPCA
+    - plotSampleDistanceMap
+    - deleteTmp

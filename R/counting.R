@@ -17,28 +17,24 @@
 #*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#' Function to create sequence-based count tables
+#' Create sequence-based count tables
 #'
-#' This function creates count tables summarizing counts for each observed read in a set of fastQ files.
+#' This function creates count tables summarizing counts for each observed sequence in a set of fastQ files.
 #' Input files are taken from the given input directory and are selected based on the given fastQ suffix.
-#' @param in_dir input directory containing fastq files to be analyzed
-#' @param fq_suffix suffix of your fastq files, default is ".fq.gz"
-#' @param phenoInfo by default count table headers are the basenames of the input fastq files. If a file is given with sample names in first column and a sample column (=fastq path), the sample names will be used as headers in the count table.
-#' @keywords read counting
+#' @param in_dir Input directory containing fastq files to be analyzed
+#' @param fq_suffix Suffix of your fastq files, default is ".fq.gz"
+#' @param pheno_info A data frame with sample names in column 'sampleName' and file names in column 'sample'. The sample names will be used as headers in the count table. If not given count table headers will be the file names of the input fastQ files.
 #' @export
-#' @examples
-#' in_dir <- system.file("extdata", package = "DEUS")
-#' countTable <- createCountTableFromFastQs(in_dir)
 
-createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",phenoInfo=NULL) {
+createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",pheno_info=NULL) {
   file.list <- list.files(in_dir)
   fastqs <- file.list[endsWith(file.list,fq_suffix)]
   fastqs <- paste(in_dir,fastqs,sep="/")
 
-  if(!is.null(phenoInfo) && "sample" %in% colnames(phenoInfo)) {
-    phenoInfo$sampleName = rownames(phenoInfo)
-    phenoInfo$baseName = basename(as.character(phenoInfo$sample))
-    fastqs <- paste(in_dir, phenoInfo$baseName, sep="/")
+  if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+    pheno_info$sampleName = rownames(pheno_info)
+    pheno_info$baseName = basename(as.character(pheno_info$sample))
+    fastqs <- paste(in_dir, pheno_info$baseName, sep="/")
   }
 
   print(paste("Counting all reads in",fastqs[1]))
@@ -47,8 +43,8 @@ createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",phenoInfo=NUL
   countTable <- as.data.frame(counts$top)
   names(countTable) <- c(basename(fastqs[1]))
 
-  if(!is.null(phenoInfo) && "sample" %in% colnames(phenoInfo)) {
-    names(countTable) <- c(as.character(phenoInfo$sampleName[basename(fastqs[1])==phenoInfo$baseName]))
+  if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+    names(countTable) <- c(as.character(pheno_info$sampleName[basename(fastqs[1])==pheno_info$baseName]))
   }
 
   countTable$Read <- row.names(countTable)
@@ -59,8 +55,8 @@ createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",phenoInfo=NUL
     counts <- ShortRead::tables(content,n=length(content))
     counts <- as.data.frame(counts$top)
     names(counts) <- c(basename(f))
-    if(!is.null(phenoInfo) && "sample" %in% colnames(phenoInfo)) {
-      names(counts) <- c(as.character(phenoInfo$sampleName[basename(f)==phenoInfo$baseName]))
+    if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+      names(counts) <- c(as.character(pheno_info$sampleName[basename(f)==pheno_info$baseName]))
     }
     counts$Read <- row.names(counts)
     countTable <- plyr::join(countTable, counts, type="full")

@@ -22,21 +22,21 @@ blast_int <- system.file("extdata", "results/Sig_sequences.blastn.tsv", package=
 clust_int <- system.file("extdata", "results/clustResult.tsv", package="DEUS")
 
 # create and filter count table, create sequence to sequenceID map
-phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
-countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
-countTable <- filterLowExp(countTable, phenoInfo)
+pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
+countTable <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
+countTable <- filterLowExp(countTable, pheno_info)
 write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
 design <- ~ condition
-deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
+deResults <- runDESeq2(countTable, pheno_info, design, map, out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 map <- createMap(sigResults)
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
-countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
+countStats <- getConditionCountStats(deResults$normCounts, pheno_info)
 
 # run blast
 if(file.exists(blast_exec)) {

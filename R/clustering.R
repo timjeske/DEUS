@@ -33,11 +33,6 @@
 #' @param optional Optional execution parameters
 #' @keywords clustering
 #' @export
-#' @examples
-#' map <- createMap(sigResults)
-#' sigSeqFasta <- sequencesAsFasta(sigResults,map)
-#' cd_hit <- "$HOME/software/cdhit/cd-hit-est"
-#' clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
 
 runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, lengthCutoff, wordlength, map, optional="") {
   # tmp fasta file
@@ -65,8 +60,7 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
 #' @param map data frame with sequences as row names and some identifier for each sequence in the first column
 #' @param out_dir Output folder
 #' @keywords clustering
-#' @export
-#' @examples
+
 processClusters <- function(map, clusters, out_dir) {
   cl.dir <- paste(out_dir, "Clusters",sep="/")
   dir.create(cl.dir, showWarnings = FALSE)
@@ -101,8 +95,7 @@ processClusters <- function(map, clusters, out_dir) {
 #' @param data Subset of overall data provided within the processClusters function
 #' @param cl.dir Cluster output folder
 #' @keywords clustering
-#' @export
-#' @examples
+
 printCluster<-function(data,cl.dir){
   cl_id<-data[1,2]
   outfile <- paste(cl.dir,"/Cluster",cl_id,".fa",sep="")

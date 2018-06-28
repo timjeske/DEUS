@@ -27,7 +27,6 @@
 #' @param out_dir directory for plots (boxplot and another one for each class)
 #' @keywords summary statistics
 #' @export
-#' @examples
 
 generateSummaryPlots <- function(summary, classes, out_dir) {
 
@@ -59,7 +58,6 @@ generateSummaryPlots <- function(summary, classes, out_dir) {
 #' @param countTable table of (normalized) counts per sequence per sample
 #' @keywords summary statistics
 #' @export
-#' @examples
 
 getNoBlastHitFraction <- function(summary, countTable) {
 

@@ -13,10 +13,5 @@ createMap(countTable)
 This function creates a map for row IDs of its input data frame.
 In context of the DEUS package the sequence IDs can be used as alternate short identifiers for each unique sequence.
 }
-\examples{
-in_dir <- system.file("extdata", package = "DEUS")
-countTable <- createCountTableFromFastQs(in_dir)
-map <- createMap(countTable)
-}
 \keyword{IDs}
 \keyword{sequence}

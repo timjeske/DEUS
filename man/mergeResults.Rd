@@ -21,11 +21,6 @@ mergeResults(deResult = NULL, countStats = NULL, blastResult = NULL,
 \description{
 Function to merge DEA, blast result
 }
-\examples{
-summary_blast <- mergeResults(sigResults,blastResult=blastResult,map=map)
-summary_clust <- mergeResults(sigResults,clustResult=clustResult,map=map)
-summary <- mergeResults(sigResults, blastResult, clustResult, map)
-}
 \keyword{generating}
 \keyword{summary}
 \keyword{tables}
