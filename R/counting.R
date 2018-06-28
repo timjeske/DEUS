@@ -21,9 +21,11 @@
 #'
 #' This function creates count tables summarizing counts for each observed sequence in a set of fastQ files.
 #' Input files are taken from the given input directory and are selected based on the given fastQ suffix.
-#' @param in_dir Input directory containing fastq files to be analyzed
+#' @param in_dir Input directory containing fastQ files to be analyzed
 #' @param fq_suffix Suffix of your fastq files, default is ".fq.gz"
-#' @param pheno_info A data frame with sample names in column 'sampleName' and file names in column 'sample'. The sample names will be used as headers in the count table. If not given count table headers will be the file names of the input fastQ files.
+#' @param pheno_info A data frame with sample names as row names and file names in column 'sample'.
+#' The sample names will be used as headers in the count table.
+#' If not given the file names of the fastQ files count table will be the headers of the count table.
 #' @export
 
 createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",pheno_info=NULL) {

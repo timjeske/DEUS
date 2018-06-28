@@ -117,7 +117,7 @@ Input files are taken from the given input directory and are selected based on t
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>in_dir</th>
-      <td><p>Input directory containing fastq files to be analyzed</p></td>
+      <td><p>Input directory containing fastQ files to be analyzed</p></td>
     </tr>
     <tr>
       <th>fq_suffix</th>
@@ -125,7 +125,9 @@ Input files are taken from the given input directory and are selected based on t
     </tr>
     <tr>
       <th>pheno_info</th>
-      <td><p>A data frame with sample names in column 'sampleName' and file names in column 'sample'. The sample names will be used as headers in the count table. If not given count table headers will be the file names of the input fastQ files.</p></td>
+      <td><p>A data frame with sample names as row names and file names in column 'sample'.
+The sample names will be used as headers in the count table.
+If not given the file names of the fastQ files count table will be the headers of the count table.</p></td>
     </tr>
     </table>
     
