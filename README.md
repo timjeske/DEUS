@@ -1,4 +1,4 @@
-<img src="../pics/DEUS_logo_v2.png" alt="DEUS logo" width="300px" /> 
+<img src="./pics/DEUS_logo_v2.png" alt="DEUS logo" width="300px" /> 
 
 # An R package for accurate small RNA profiling based on differential expression of unique sequences 
 
