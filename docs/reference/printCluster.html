@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TODO Helper function for generating individual cluster fastas, not meant for external use — printCluster • DEUS</title>
+<title>Print FASTA file for cluster of sequences — printCluster • DEUS</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="TODO Helper function for generating individual cluster fastas, not meant for external use — printCluster" />
+<meta property="og:title" content="Print FASTA file for cluster of sequences — printCluster" />
 
-<meta property="og:description" content="TODO Helper function for generating individual cluster fastas, not meant for external use" />
+<meta property="og:description" content="This function is internally called by processClusters" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,31 +97,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>TODO Helper function for generating individual cluster fastas, not meant for external use</h1>
+    <h1>Print FASTA file for cluster of sequences</h1>
     <small class="dont-index">Source: <a href='https://github.com/timjeske/DEUS/blob/master/R/clustering.R'><code>R/clustering.R</code></a></small>
     <div class="hidden name"><code>printCluster.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>TODO Helper function for generating individual cluster fastas, not meant for external use</p>
+    <p>This function is internally called by <a href='processClusters.html'>processClusters</a></p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>printCluster</span>(<span class='no'>data</span>, <span class='no'>cl.dir</span>)</pre>
+    <pre class="usage"><span class='fu'>printCluster</span>(<span class='no'>data</span>, <span class='no'>cl_dir</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>Subset of overall data provided within the processClusters function</p></td>
+      <td><p>Subset of overall data provided within the <a href='processClusters.html'>processClusters</a> function</p></td>
     </tr>
     <tr>
-      <th>cl.dir</th>
-      <td><p>Cluster output folder</p></td>
+      <th>cl_dir</th>
+      <td><p>Directory of CD-HIT result file and where generated files will be saved</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A FASTA file in the Clusters folder in cl_dir representing the sequences of a cluster.</p>
     
 
   </div>
@@ -129,7 +133,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

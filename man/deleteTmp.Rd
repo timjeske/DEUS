@@ -2,13 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{deleteTmp}
 \alias{deleteTmp}
-\title{TODO Function to remove temporary files after pipeline execution}
+\title{Remove temporary FASTA file required for clustering}
 \usage{
-deleteTmp(outDir)
+deleteTmp(out_dir)
 }
 \arguments{
-\item{outDir}{output folder}
+\item{out_dir}{Directory where output files of clustering are saved}
+}
+\value{
+Deletes the file sig_sequences.fa
 }
 \description{
-TODO Function to remove temporary files after pipeline execution
+This function is internally called by \link[DEUS]{runClustering}
 }

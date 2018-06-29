@@ -2,16 +2,18 @@
 % Please edit documentation in R/clustering.R
 \name{printCluster}
 \alias{printCluster}
-\title{TODO Helper function for generating individual cluster fastas, not meant for external use}
+\title{Print FASTA file for cluster of sequences}
 \usage{
-printCluster(data, cl.dir)
+printCluster(data, cl_dir)
 }
 \arguments{
-\item{data}{Subset of overall data provided within the processClusters function}
+\item{data}{Subset of overall data provided within the \link[DEUS]{processClusters} function}
 
-\item{cl.dir}{Cluster output folder}
+\item{cl_dir}{Directory of CD-HIT result file and where generated files will be saved}
+}
+\value{
+A FASTA file in the Clusters folder in cl_dir representing the sequences of a cluster.
 }
 \description{
-TODO Helper function for generating individual cluster fastas, not meant for external use
+This function is internally called by \link[DEUS]{processClusters}
 }
-\keyword{clustering}

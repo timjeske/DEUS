@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TODO Function to remove temporary files after pipeline execution — deleteTmp • DEUS</title>
+<title>Remove temporary FASTA file required for clustering — deleteTmp • DEUS</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="TODO Function to remove temporary files after pipeline execution — deleteTmp" />
+<meta property="og:title" content="Remove temporary FASTA file required for clustering — deleteTmp" />
 
-<meta property="og:description" content="TODO Function to remove temporary files after pipeline execution" />
+<meta property="og:description" content="This function is internally called by runClustering" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,27 +97,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>TODO Function to remove temporary files after pipeline execution</h1>
+    <h1>Remove temporary FASTA file required for clustering</h1>
     <small class="dont-index">Source: <a href='https://github.com/timjeske/DEUS/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>deleteTmp.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>TODO Function to remove temporary files after pipeline execution</p>
+    <p>This function is internally called by <a href='runClustering.html'>runClustering</a></p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>deleteTmp</span>(<span class='no'>outDir</span>)</pre>
+    <pre class="usage"><span class='fu'>deleteTmp</span>(<span class='no'>out_dir</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outDir</th>
-      <td><p>output folder</p></td>
+      <th>out_dir</th>
+      <td><p>Directory where output files of clustering are saved</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Deletes the file sig_sequences.fa</p>
     
 
   </div>
@@ -125,7 +129,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

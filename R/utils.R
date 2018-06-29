@@ -186,12 +186,15 @@ sequencesAsFasta <- function(de_result, map) {
   return(res)
 }
 
-#' TODO Function to remove temporary files after pipeline execution
+#' Remove temporary FASTA file required for clustering
 #'
-#' @param outDir output folder
+#' This function is internally called by \link[DEUS]{runClustering}
+#'
+#' @param out_dir Directory where output files of clustering are saved
+#' @return Deletes the file sig_sequences.fa
 #' @export
 
-deleteTmp <- function(outDir){
+deleteTmp <- function(out_dir){
   tmp <- paste(out_dir,"sig_sequences.fa",sep="/")
   if(file.exists(tmp)){
     file.remove(tmp)
