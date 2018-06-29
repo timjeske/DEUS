@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{addCountsOfFeatureClasses}
 \alias{addCountsOfFeatureClasses}
-\title{TODO Function to add counts of different feature classes}
+\title{TODO Count occurrences of feature classes given by the user}
 \usage{
 addCountsOfFeatureClasses(mergedResult, featureClasses)
 }
@@ -13,7 +13,7 @@ addCountsOfFeatureClasses(mergedResult, featureClasses)
 Features can be defined as regular expressions, as described in \link[stringi]{stringi-search-regex}.}
 }
 \description{
-TODO Function to add counts of different feature classes
+TODO Count occurrences of feature classes given by the user
 }
 \keyword{counting}
 \keyword{feature}

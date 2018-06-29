@@ -25,12 +25,9 @@ reference:
     - sequencesAsFasta
     - runBlast
     - runClustering
-    - addCountsOfFeatureClasses
     - mergeResults
-    - generateSummaryPlots
+    - addCountsOfFeatureClasses
     - writeSummaryFiles
-  - title: Helper functions
-    contents:
     - getNoBlastHitFraction
   - title: Internal functions
     contents:

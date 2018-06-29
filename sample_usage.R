@@ -58,3 +58,6 @@ summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary, out_dir)
 
+# compute NA fraction
+notAnnotated <- getNoBlastHitFraction(summary, deResults$normCounts)
+print(notAnnotated)
