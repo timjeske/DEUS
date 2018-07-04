@@ -95,28 +95,28 @@ phenofile &lt;-<span class="st"> "/data/condition.tsv"</span>
 blast_db &lt;-<span class="st"> "/data/My_Blast_DB.fa"</span></code></pre></div>
 <p>create and filter count table, create sequence to sequenceID map</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phenoInfo &lt;-<span class="st"> </span><span class="kw">read.table</span>(phenofile, <span class="dt">header=</span>T, <span class="dt">row.names=</span><span class="dv">1</span>, <span class="dt">check.names=</span><span class="ot">FALSE</span>)
-countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">phenoInfo=</span>phenoInfo)
-countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filterLowExp.html">filterLowExp</a></span>(countTable, phenoInfo)
+countTable &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/createCountTableFromFastQs">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">phenoInfo=</span>phenoInfo)
+countTable &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/filterLowExp">filterLowExp</a></span>(countTable, phenoInfo)
 <span class="kw">write.table</span>(countTable, <span class="kw">paste</span>(out_dir,<span class="st">"AllCounts_filtered.tsv"</span>,<span class="dt">sep=</span><span class="st">"/"</span>), <span class="dt">col.names=</span>T, <span class="dt">quote=</span>F, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">row.names=</span>T)</code></pre></div>
 <p>Run differential expression analysis</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
-deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
+deResults &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runDESeq2">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
 sigResults &lt;-<span class="st"> </span>deResults$deResult
 sigResults &lt;-<span class="st"> </span>sigResults[!<span class="kw">is.na</span>(sigResults$IHWPval) &amp;<span class="st"> </span>sigResults$IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>,]
-map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createMap.html">createMap</a></span>(sigResults)
-sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
+map &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/createMap">createMap</a></span>(sigResults)
+sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/sequencesAsFasta">sequencesAsFasta</a></span>(sigResults,map)
 
 <span class="co"># get count stats</span>
-countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
+countStats &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/getConditionCountStats">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
 <p>Run blast</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runBlast">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
 <p>Run clustering</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult&lt;-<span class="kw"><a href="../reference/runClustering.html">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult&lt;-<span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runClustering">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
 <p>Merge results</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">classes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"tRNA"</span>,<span class="st">"[Hh]sa"</span>,<span class="st">"^U"</span>)
-summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeResults.html">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
-summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a></span>(summary, classes)
-<span class="kw"><a href="../reference/writeSummaryFiles.html">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
+summary &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/mergeResults">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
+summary &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/addCountsOfFeatureClasses">addCountsOfFeatureClasses</a></span>(summary, classes)
+<span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/writeSummaryFiles">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
 </div>
   </div>
 
