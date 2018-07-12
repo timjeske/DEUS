@@ -19,7 +19,7 @@ Before applying DEUS we strongly recommend to trim your input FASTQ files.
 /software/trim_galore_v0.x.x/trim_galore -q 20 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 $in_file -o $out_dir
 ```
 
-### Installing the R package
+### Installing DEUS
 
 ```{r, eval=FALSE}
 if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
@@ -52,7 +52,7 @@ cd_hit <- "/software/cdhit/cd-hit-est"
 
 ### Counting unique sequences
 
-To create the count table for differential expression analysis, `createCountTableFromFastQs` counts all unique sequences in each FASTQ file given in your `phenofile`. To remove low expressed sequences and reduce the size of the count table `filterLowExp` is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.
+To create the count table for differential expression analysis, [createCountTableFromFastQs](../reference/createCountTableFromFastQs.html) counts all unique sequences in each FASTQ file given in your `phenofile`. To remove low expressed sequences and reduce the size of the count table [filterLowExp](../reference/filterLowExp.html) is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.
 ```{r, eval=FALSE}
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
@@ -62,31 +62,41 @@ write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.nam
 
 ### Running differential expression analysis
 
-In order to identify significantly differentially expressed sequences, [runDESeq2](../reference/runDESeq2.html) is applied.
+Differential expression analysis is done by calling the function [runDESeq2](../reference/runDESeq2.html). 
+After filtering for significant sequences, a map is created by [createMap](../reference/createMap.html) which assigns a unique identifier to each sequence.
+The results of [runDESeq2](../reference/runDESeq2.html) are additionally used as input for [getConditionCountStats](../reference/getConditionCountStats.html) to compute the mean and the standard deviation of the normalized counts for each analyzed conditions.
 
-Run differential expression analysis and create sequence to sequenceID map
 ```{r, eval=FALSE}
 design <- ~ condition
 deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 map <- createMap(sigResults)
-sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
 countStats <- getConditionCountStats(deResults$normCounts, phenoInfo)
 ```
 
-Run blast
+### Running BLAST
+
+To annotate significant sequences they need to transformed to a vector of sequences in FASTA style by using [sequencesAsFasta](../reference/sequencesAsFasta.html). Afterwards BLAST is executed by [runBlast](../reference/runBlast.html).
 ```{r, eval=FALSE}
-  blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
-```
-Run clustering
-```{r, eval=FALSE}
-  clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+sigSeqFasta <- sequencesAsFasta(sigResults,map)
+blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
 ```
 
-Merge results
+### Run clustering
+
+The CD-Hit algorithm is executed via [runClustering](../reference/runClustering.html).
+```{r, eval=FALSE}
+  clustResult <- runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+```
+
+### Merging the results
+
+Finally, the group-wise mean and standard deviation of the normalized counts, the results of DEA, BLASTing and clustering are merged together by [mergeResults](../reference/mergeResults.html).
+Additionally, [addCountsOfFeatureClasses](../reference/addCountsOfFeatureClasses.html) is used to count the number of BLAST hits grouped by user defined feature classes.
+Summary files are then written to the `out_dir` by [writeSummaryFiles](../reference/writeSummaryFiles.html).
 ```{r, eval=FALSE}
 classes <- c("tRNA","[Hh]sa","^U")
 summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)

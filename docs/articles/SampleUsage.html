@@ -83,9 +83,9 @@
 <span class="co"># quality trimming (use dummy adapter to suppress adapter trimming)</span>
 <span class="kw">/software/trim_galore_v0.x.x/trim_galore</span> -q 20 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 <span class="ot">$in_file</span> -o <span class="ot">$out_dir</span></code></pre></div>
 </div>
-<div id="installing-the-r-package" class="section level3">
+<div id="installing-deus" class="section level3">
 <h3 class="hasAnchor">
-<a href="#installing-the-r-package" class="anchor"></a>Installing the R package</h3>
+<a href="#installing-deus" class="anchor"></a>Installing DEUS</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw">require</span>(<span class="st">"devtools"</span>)) <span class="kw">install.packages</span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
 devtools::<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
 <span class="kw">library</span>(DEUS)</code></pre></div>
@@ -108,7 +108,7 @@ cd_hit &lt;-<span class="st"> "/software/cdhit/cd-hit-est"</span></code></pre></
 <div id="counting-unique-sequences" class="section level3">
 <h3 class="hasAnchor">
 <a href="#counting-unique-sequences" class="anchor"></a>Counting unique sequences</h3>
-<p>To create the count table for differential expression analysis, <code>createCountTableFromFastQs</code> counts all unique sequences in each FASTQ file given in your <code>phenofile</code>. To remove low expressed sequences and reduce the size of the count table <code>filterLowExp</code> is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.</p>
+<p>To create the count table for differential expression analysis, <a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a> counts all unique sequences in each FASTQ file given in your <code>phenofile</code>. To remove low expressed sequences and reduce the size of the count table <a href="../reference/filterLowExp.html">filterLowExp</a> is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phenoInfo &lt;-<span class="st"> </span><span class="kw">read.table</span>(phenofile, <span class="dt">header=</span>T, <span class="dt">row.names=</span><span class="dv">1</span>, <span class="dt">check.names=</span><span class="ot">FALSE</span>)
 countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">phenoInfo=</span>phenoInfo)
 countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filterLowExp.html">filterLowExp</a></span>(countTable, phenoInfo)
@@ -117,22 +117,33 @@ countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div id="running-differential-expression-analysis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#running-differential-expression-analysis" class="anchor"></a>Running differential expression analysis</h3>
-<p>In order to identify significantly differentially expressed sequences, <a href="../reference/runDESeq2.html">runDESeq2</a> is applied.</p>
-<p>Run differential expression analysis and create sequence to sequenceID map</p>
+<p>Differential expression analysis is done by calling the function <a href="../reference/runDESeq2.html">runDESeq2</a>. After filtering for significant sequences, a map is created by <a href="../reference/createMap.html">createMap</a> which assigns a unique identifier to each sequence. The results of <a href="../reference/runDESeq2.html">runDESeq2</a> are additionally used as input for <a href="../reference/getConditionCountStats.html">getConditionCountStats</a> to compute the mean and the standard deviation of the normalized counts for each analyzed conditions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
 deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
 sigResults &lt;-<span class="st"> </span>deResults$deResult
 sigResults &lt;-<span class="st"> </span>sigResults[!<span class="kw">is.na</span>(sigResults$IHWPval) &amp;<span class="st"> </span>sigResults$IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>,]
 map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createMap.html">createMap</a></span>(sigResults)
-sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
 
 <span class="co"># get count stats</span>
 countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
-<p>Run blast</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
-<p>Run clustering</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult&lt;-<span class="kw"><a href="../reference/runClustering.html">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
-<p>Merge results</p>
+</div>
+<div id="running-blast" class="section level3">
+<h3 class="hasAnchor">
+<a href="#running-blast" class="anchor"></a>Running BLAST</h3>
+<p>To annotate significant sequences they need to transformed to a vector of sequences in FASTA style by using <a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a>. Afterwards BLAST is executed by <a href="../reference/runBlast.html">runBlast</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
+blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
+</div>
+<div id="run-clustering" class="section level3">
+<h3 class="hasAnchor">
+<a href="#run-clustering" class="anchor"></a>Run clustering</h3>
+<p>The CD-Hit algorithm is executed via <a href="../reference/runClustering.html">runClustering</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runClustering.html">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
+</div>
+<div id="merging-the-results" class="section level3">
+<h3 class="hasAnchor">
+<a href="#merging-the-results" class="anchor"></a>Merging the results</h3>
+<p>Finally, the group-wise mean and standard deviation of the normalized counts, the results of DEA, BLASTing and clustering are merged together by <a href="../reference/mergeResults.html">mergeResults</a>. Additionally, <a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a> is used to count the number of BLAST hits grouped by user defined feature classes. Summary files are then written to the <code>out_dir</code> by <a href="../reference/writeSummaryFiles.html">writeSummaryFiles</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">classes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"tRNA"</span>,<span class="st">"[Hh]sa"</span>,<span class="st">"^U"</span>)
 summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeResults.html">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
 summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a></span>(summary, classes)
