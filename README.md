@@ -2,7 +2,7 @@
 
 # An R package for accurate small RNA profiling based on differential expression of unique sequences 
 
-Tim Jeske, Peter Huypens, Laura Stirm, Selina Hoeckele, Christine Wurmser, Anja Böhm, Cora Weigert, Harald Staiger, Johannes Beckers, and Maximilian Hastreiter
+Tim Jeske, Peter Huypens, Laura Stirm, Selina Höckele, Christine Wurmser, Anja Böhm, Cora Weigert, Harald Staiger, Johannes Beckers, and Maximilian Hastreiter
 
 The DEUS R package is a framework for accurate small non-coding RNA (sncRNA) profiling based on differential expression of unique sequences. In comparison to commonly-used 
 mapping-based approaches, DEUS generates read counts on the actual sequence reads. Several advantages of this approach include:

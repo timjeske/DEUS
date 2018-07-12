@@ -14,10 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-You can install DEUS from github with:
+You can install DEUS from GitHub with:
 
-```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
+```{r gh-installation, eval=FALSE}
+if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
 devtools::install_github("timjeske/DEUS")
 ```
 
@@ -31,18 +31,18 @@ devtools::install_github("timjeske/DEUS")
 ### Preparing a BLAST database
 During the annotation step, a BLAST database is used to determine possible biological sources of each unique sequence. Depending on the use-case, two options are available how an appropriate database can be obtained:
 
-1. Use existing databases available at e.g. [NCBI](ftp://ftp.ncbi.nlm.nih.gov/blast/db/). Database sets may also be retrieved automatically with update_blastdb.pl, which is part of the BLAST+ suite.
-2. Build a custom database using BLAST makeblastdb and some fasta sequences:
+1. Use existing databases available at e.g. [NCBI](ftp://ftp.ncbi.nlm.nih.gov/blast/db/). Database sets may also be retrieved automatically with `update_blastdb.pl`, which is part of the BLAST+ suite.
+2. Build a custom database using BLAST `makeblastdb` and some fasta sequences:
 
-	```{r, eval=FALSE}
-	cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa > HumanDB.fa
-	makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids
-	```
+```bash
+cat DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa > HumanDB.fa
+makeblastdb -in HumanDB.fa -dbtype nucl -parse_seqids
+```
 
 ### Preparing a condition file
 In order to execute the differential expression analysis, a file specifying different conditions is necessary. 
-Each condition file has to contain **sample names**, the respective **fastq files** as well as the matching **condition**. The file should be in **TSV format** (Tab-Separated Values).
-```{r, eval=FALSE}
+Each condition file has to contain **sample names**, the respective **FASTQ files** as well as the matching **condition**. The file should be in **TSV format** (Tab-Separated Values).
+```
 sampleName      sample  condition
 cond1_s1        cond1_s1.fwd.fq.gz      cond1
 cond1_s2        cond1_s2.fwd.fq.gz      cond1
@@ -52,7 +52,10 @@ cond2_s2        cond2_s2.fwd.fq.gz      cond2
 
 
 ### Run example 
-To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses (See [here](SampleUsage.html))
+To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses. 
+You can find the test script in the [DEUS GitHub repository](https://github.com/timjeske/DEUS/blob/master/sample_usage.R).
+The individual steps are explained in [Run DEUS](SampleUsage.html).
 	
-	Rscript sample_usage.R
-
+```r
+Rscript sample_usage.R
+```

@@ -1,7 +1,25 @@
-library(devtools)
+#*  Copyright (C) 2018 the DEUS contributors.
+#*  Website: https://github.com/timjeske/DEUS
+#*
+#*  This file is part of the DEUS R package.
+#*
+#*  The DEUS R package is free software: you can redistribute it and/or modify
+#*  it under the terms of the GNU General Public License as published by
+#*  the Free Software Foundation, either version 3 of the License, or
+#*  (at your option) any later version.
+#*
+#*  This program is distributed in the hope that it will be useful,
+#*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#*  GNU General Public License for more details.
+#*
+#*  You should have received a copy of the GNU General Public License
+#*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
 
 # install package
-install_github("timjeske/DEUS", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
+devtools::install_github("timjeske/DEUS", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
 #setwd("~")
 #install("DEUS")
 library(DEUS)

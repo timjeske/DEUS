@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SampleUsage • DEUS</title>
+<title>Run DEUS • DEUS</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="SampleUsage">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Run DEUS">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -64,7 +64,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>SampleUsage</h1>
+      <h1>Run DEUS</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/timjeske/DEUS/blob/master/vignettes/SampleUsage.Rmd"><code>vignettes/SampleUsage.Rmd</code></a></small>
@@ -74,49 +74,69 @@
 
     
     
-<div id="sample-usage" class="section level3">
+<div id="optional-preprocessing-of-fastq-files" class="section level3">
 <h3 class="hasAnchor">
-<a href="#sample-usage" class="anchor"></a>Sample Usage</h3>
-<p>Install package</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-
-<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
+<a href="#optional-preprocessing-of-fastq-files" class="anchor"></a>(Optional) preprocessing of FASTQ files</h3>
+<p>Before applying DEUS we strongly recommend to trim your input FASTQ files. <a href="https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/">Trim Galore</a> can be used to do adapter and quality trimming. The <code>--max_length</code> parameter should be set to (read length - 1) to remove non-small RNA sequences.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># remove adapters (automatically recognized by Trim Galore)</span>
+<span class="kw">/software/trim_galore_v0.x.x/trim_galore</span> -q 0 --length 16 --max_length 49 <span class="ot">$in_file</span> -o <span class="ot">$out_dir</span>
+<span class="co"># quality trimming (use dummy adapter to suppress adapter trimming)</span>
+<span class="kw">/software/trim_galore_v0.x.x/trim_galore</span> -q 20 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 <span class="ot">$in_file</span> -o <span class="ot">$out_dir</span></code></pre></div>
+</div>
+<div id="installing-the-r-package" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installing-the-r-package" class="anchor"></a>Installing the R package</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw">require</span>(<span class="st">"devtools"</span>)) <span class="kw">install.packages</span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
+devtools::<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
 <span class="kw">library</span>(DEUS)</code></pre></div>
-<p>Set parameters</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out_dir &lt;-<span class="st"> "data/results"</span>
-blast_ncores &lt;-<span class="st"> </span><span class="dv">2</span>
+</div>
+<div id="setting-parameters" class="section level3">
+<h3 class="hasAnchor">
+<a href="#setting-parameters" class="anchor"></a>Setting parameters</h3>
+<p>Before running the individual steps of the DEUS pipeline it is helpful to set all required parameters. The <code>in_dir</code> is the folder where the (trimmed) FASTQ files are stored. The <code>phenofile</code> is the condition file for differential expression analysis (DEA) (<a href="DEUS.html#preparing-a-condition-file">examplary condition file</a>). The <code>out_dir</code> is the folder where DEA plots, clustering and summary output files will be stored. To use BLAST, it is necessary to set the <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/">BLAST binary</a>, your <a href="DEUS.html#preparing-a-blast-database">BLAST database</a> and the number of threads to be used. To cluster resulting sequencing, the <a href="http://weizhongli-lab.org/cd-hit/">cd-hit-est</a> binary is reuqired.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">in_dir &lt;-<span class="st"> "/data/fastq-files/"</span>
+phenofile &lt;-<span class="st"> "/data/condition.tsv"</span>
+
+out_dir &lt;-<span class="st"> "data/results"</span>
 
 blast_exec &lt;-<span class="st"> "/software/blast/bin/blastn"</span>
-cd_hit &lt;-<span class="st"> "/software/cdhit/cd-hit-est"</span>
+blast_db &lt;-<span class="st"> "/data/My_Blast_DB.fa"</span>
+blast_ncores &lt;-<span class="st"> </span><span class="dv">2</span>
 
-<span class="co"># load data delivered with the package</span>
-in_dir &lt;-<span class="st"> "/data/fastq-files/"</span>
-phenofile &lt;-<span class="st"> "/data/condition.tsv"</span>
-blast_db &lt;-<span class="st"> "/data/My_Blast_DB.fa"</span></code></pre></div>
-<p>create and filter count table, create sequence to sequenceID map</p>
+cd_hit &lt;-<span class="st"> "/software/cdhit/cd-hit-est"</span></code></pre></div>
+</div>
+<div id="counting-unique-sequences" class="section level3">
+<h3 class="hasAnchor">
+<a href="#counting-unique-sequences" class="anchor"></a>Counting unique sequences</h3>
+<p>To create the count table for differential expression analysis, <code>createCountTableFromFastQs</code> counts all unique sequences in each FASTQ file given in your <code>phenofile</code>. To remove low expressed sequences and reduce the size of the count table <code>filterLowExp</code> is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phenoInfo &lt;-<span class="st"> </span><span class="kw">read.table</span>(phenofile, <span class="dt">header=</span>T, <span class="dt">row.names=</span><span class="dv">1</span>, <span class="dt">check.names=</span><span class="ot">FALSE</span>)
-countTable &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/createCountTableFromFastQs">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">phenoInfo=</span>phenoInfo)
-countTable &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/filterLowExp">filterLowExp</a></span>(countTable, phenoInfo)
+countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">phenoInfo=</span>phenoInfo)
+countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filterLowExp.html">filterLowExp</a></span>(countTable, phenoInfo)
 <span class="kw">write.table</span>(countTable, <span class="kw">paste</span>(out_dir,<span class="st">"AllCounts_filtered.tsv"</span>,<span class="dt">sep=</span><span class="st">"/"</span>), <span class="dt">col.names=</span>T, <span class="dt">quote=</span>F, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">row.names=</span>T)</code></pre></div>
-<p>Run differential expression analysis</p>
+</div>
+<div id="running-differential-expression-analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#running-differential-expression-analysis" class="anchor"></a>Running differential expression analysis</h3>
+<p>In order to identify significantly differentially expressed sequences, <a href="../reference/runDESeq2.html">runDESeq2</a> is applied.</p>
+<p>Run differential expression analysis and create sequence to sequenceID map</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
-deResults &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runDESeq2">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
+deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
 sigResults &lt;-<span class="st"> </span>deResults$deResult
 sigResults &lt;-<span class="st"> </span>sigResults[!<span class="kw">is.na</span>(sigResults$IHWPval) &amp;<span class="st"> </span>sigResults$IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>,]
-map &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/createMap">createMap</a></span>(sigResults)
-sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/sequencesAsFasta">sequencesAsFasta</a></span>(sigResults,map)
+map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createMap.html">createMap</a></span>(sigResults)
+sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
 
 <span class="co"># get count stats</span>
-countStats &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/getConditionCountStats">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
+countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
 <p>Run blast</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runBlast">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)</code></pre></div>
 <p>Run clustering</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult&lt;-<span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/runClustering">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  clustResult&lt;-<span class="kw"><a href="../reference/runClustering.html">runClustering</a></span>(cd_hit, sigSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)</code></pre></div>
 <p>Merge results</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">classes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"tRNA"</span>,<span class="st">"[Hh]sa"</span>,<span class="st">"^U"</span>)
-summary &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/mergeResults">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
-summary &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/addCountsOfFeatureClasses">addCountsOfFeatureClasses</a></span>(summary, classes)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DEUS/topics/writeSummaryFiles">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
+summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeResults.html">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
+summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a></span>(summary, classes)
+<span class="kw"><a href="../reference/writeSummaryFiles.html">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
 </div>
   </div>
 

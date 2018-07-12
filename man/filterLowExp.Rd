@@ -20,5 +20,5 @@ The input count table with all sequences removed that fail the filter critera
 \description{
 This function filters a table of (sequence) counts using additional information on sample conditions.
 Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
-Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both group has zero counts for all samples.
+Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples.
 }

@@ -1,7 +1,7 @@
 #*  Copyright (C) 2018 the DEUS contributors.
 #*  Website: https://github.com/timjeske/DEUS
 #*
-#*  This file is part of the KNIME4NGS KNIME extension.
+#*  This file is part of the DEUS R package.
 #*
 #*  The DEUS R package is free software: you can redistribute it and/or modify
 #*  it under the terms of the GNU General Public License as published by

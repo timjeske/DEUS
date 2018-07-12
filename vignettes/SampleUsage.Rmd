@@ -1,48 +1,70 @@
 ---
-title: "SampleUsage"
+title: "Run DEUS"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Sample Usage}
+  %\VignetteIndexEntry{Run DEUS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-### Sample Usage
+### (Optional) preprocessing of FASTQ files
 
-Install package
+Before applying DEUS we strongly recommend to trim your input FASTQ files. 
+[Trim Galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/) can be used to do adapter and quality trimming. The `--max_length` parameter should be set to (read length - 1) to remove non-small RNA sequences.
+
+```bash
+# remove adapters (automatically recognized by Trim Galore)
+/software/trim_galore_v0.x.x/trim_galore -q 0 --length 16 --max_length 49 $in_file -o $out_dir
+# quality trimming (use dummy adapter to suppress adapter trimming)
+/software/trim_galore_v0.x.x/trim_galore -q 20 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 $in_file -o $out_dir
+```
+
+### Installing the R package
 
 ```{r, eval=FALSE}
-library(devtools)
-
-install_github("timjeske/DEUS")
+if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
+devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 ```
 
-Set parameters
+### Setting parameters
+
+Before running the individual steps of the DEUS pipeline it is helpful to set all required parameters.
+The `in_dir` is the folder where the (trimmed) FASTQ files are stored. The `phenofile` is the condition file for differential expression analysis (DEA) ([examplary condition file](DEUS.html#preparing-a-condition-file)).
+The `out_dir` is the folder where DEA plots, clustering and summary output files will be stored.
+To use BLAST, it is necessary to set the [BLAST binary](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/), your [BLAST database](DEUS.html#preparing-a-blast-database) and the number of threads to be used. 
+To cluster resulting sequencing, the [cd-hit-est](http://weizhongli-lab.org/cd-hit/) binary is reuqired.
+
 ```{r, eval=FALSE}
-out_dir <- "data/results"
-blast_ncores <- 2
 
-blast_exec <- "/software/blast/bin/blastn"
-cd_hit <- "/software/cdhit/cd-hit-est"
-
-# load data delivered with the package
 in_dir <- "/data/fastq-files/"
 phenofile <- "/data/condition.tsv"
+
+out_dir <- "data/results"
+
+blast_exec <- "/software/blast/bin/blastn"
 blast_db <- "/data/My_Blast_DB.fa"
+blast_ncores <- 2
+
+cd_hit <- "/software/cdhit/cd-hit-est"
 ```
 
-create and filter count table, create sequence to sequenceID map
+### Counting unique sequences
+
+To create the count table for differential expression analysis, `createCountTableFromFastQs` counts all unique sequences in each FASTQ file given in your `phenofile`. To remove low expressed sequences and reduce the size of the count table `filterLowExp` is applied. Sequences are kept if both groups of samples have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples. It can be useful to store the filtered count table in our output folder as counting takes some time.
 ```{r, eval=FALSE}
 phenoInfo <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 countTable <- createCountTableFromFastQs(in_dir, phenoInfo=phenoInfo)
 countTable <- filterLowExp(countTable, phenoInfo)
 write.table(countTable, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
-
 ```
 
-Run differential expression analysis
+### Running differential expression analysis
+
+In order to identify significantly differentially expressed sequences, [runDESeq2](../reference/runDESeq2.html) is applied.
+
+Run differential expression analysis and create sequence to sequenceID map
 ```{r, eval=FALSE}
 design <- ~ condition
 deResults <- runDESeq2(countTable, phenoInfo, design, map, out_dir)
