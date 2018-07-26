@@ -15,4 +15,4 @@ mapping-based approaches, DEUS generates read counts on the actual sequence read
 
 Full documentation is available at <https://timjeske.github.io/DEUS/>
 
-Script is here <a href="https://github.com/timjeske/DEUS/raw/master/sample_usage.R" download="sample_usage.R">script</a>
+Script is here <a href="https://github.com/timjeske/DEUS/raw/master/sample_usage.R" download="sample_usage.R" target="_blank">script</a>
