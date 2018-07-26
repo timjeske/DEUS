@@ -13,4 +13,6 @@ mapping-based approaches, DEUS generates read counts on the actual sequence read
 - Easy to use and flexible due to high modularity
 - Returns intuitively interpretable results
 
-Full documentation is available at  <https://timjeske.github.io/DEUS/>
+Full documentation is available at <https://timjeske.github.io/DEUS/>
+
+Script is here <a class="download" href="https://github.com/timjeske/DEUS/raw/master/sample_usage.R" script>script</a>
