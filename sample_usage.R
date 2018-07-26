@@ -16,12 +16,9 @@
 #*  You should have received a copy of the GNU General Public License
 #*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
-
 # install package
-devtools::install_github("timjeske/DEUS", auth_token = "856ab1ec38c789a1a0ac30cdfbcd8ccf1c6f224f")
-#setwd("~")
-#install("DEUS")
+if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
+devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 # defaults may be changed
