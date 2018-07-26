@@ -22,12 +22,14 @@ devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 # defaults may be changed
-out_dir <- "~/DEUS/inst/extdata/results"
+out_dir <- getwd()
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
-blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
-cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
+# blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
+blast_exec <- ""
+# cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
+cd_hit <- ""
 
 # load data delivered with the package
 in_dir <- system.file("extdata", package = "DEUS")
