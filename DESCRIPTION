@@ -17,9 +17,15 @@ Imports:
   plyr,
   tools,
   bitops
+biocViews: 
+  ShortRead,
+  IHW,
+  DESeq2,
+  pheatmap	
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/timjeske/DEUS
 BugReports: https://github.com/timjeske/DEUS/issues
+

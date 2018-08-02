@@ -71,13 +71,13 @@ mergeResults <- function(de_result=NULL, count_stats=NULL, blast_result=NULL, cl
   }
 
   if(!is.null(clust_result)) {
-    res <- plyr::join(res, clust_result, type = "full")
+    res <- plyr::join(res, clust_result, type = "left")
   }
 
   if(!is.null(blast_result)) {
     blast_result <- blast_result[c("qseqid", "sseqid", "length", "evalue")]
     colnames(blast_result) <- c("SequenceID","sseqid","Length","BlastEvalue")
-    res <- plyr::join(res, blast_result, type = "full")
+    res <- plyr::join(res, blast_result, type = "left")
     group <- data.frame(FeatureList=c(by(res$sseqid, res$sequence, function(x)paste(x, collapse=","))))
     group$sequence <- row.names(group)
     group <- plyr::join(group, res, type = "full", match="first")
