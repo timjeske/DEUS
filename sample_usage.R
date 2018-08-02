@@ -26,9 +26,9 @@ out_dir <- getwd()
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
-# blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
+#blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_exec <- ""
-# cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
+#cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
 cd_hit <- ""
 
 # load data delivered with the package
@@ -42,6 +42,7 @@ clust_int <- system.file("extdata", "results/clustResult.tsv", package="DEUS")
 pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
 count_table <- filterLowExp(count_table, pheno_info)
+map <- createMap(count_table)
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
@@ -49,7 +50,6 @@ design <- ~ condition
 deResults <- runDESeq2(count_table, pheno_info, design, out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
-map <- createMap(sigResults)
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
 
 # get count stats
@@ -78,3 +78,4 @@ writeSummaryFiles(summary, out_dir)
 # compute NA fraction
 notAnnotated <- getNoBlastHitFraction(summary, deResults$normCounts)
 print(notAnnotated)
+
