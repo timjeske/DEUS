@@ -10,14 +10,14 @@ Description: More about what it does (maybe more than one line)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+biocViews:
 Imports:
   methods,
   stringr,
   Rcpp,
   plyr,
   tools,
-  bitops
-biocViews: 
+  bitops,
   ShortRead,
   IHW,
   DESeq2,
@@ -28,4 +28,3 @@ Suggests: knitr,
 VignetteBuilder: knitr
 URL: https://github.com/timjeske/DEUS
 BugReports: https://github.com/timjeske/DEUS/issues
-
