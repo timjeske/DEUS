@@ -16,7 +16,7 @@ Before applying DEUS we strongly recommend to trim your input FASTQ files.
 # remove adapters (automatically recognized by Trim Galore)
 /software/trim_galore_v0.x.x/trim_galore -q 0 --length 16 --max_length 49 $in_file -o $out_dir
 # quality trimming (use dummy adapter to suppress adapter trimming)
-/software/trim_galore_v0.x.x/trim_galore -q 20 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 $in_file -o $out_dir
+/software/trim_galore_v0.x.x/trim_galore -q 20 --length 1 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 $in_file -o $out_dir
 ```
 
 ### Installing DEUS

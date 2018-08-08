@@ -4,7 +4,8 @@
 \alias{createCountTableFromFastQs}
 \title{Create sequence-based count tables}
 \usage{
-createCountTableFromFastQs(in_dir, fq_suffix = ".fq.gz", pheno_info = NULL)
+createCountTableFromFastQs(in_dir, fq_suffix = ".fq.gz",
+  pheno_info = NULL)
 }
 \arguments{
 \item{in_dir}{Input directory containing fastQ files to be analyzed}
