@@ -21,7 +21,7 @@ Imports:
   IHW,
   DESeq2,
   pheatmap	
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
