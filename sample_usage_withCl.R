@@ -22,7 +22,7 @@ devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 # defaults may be changed
-out_dir <- getwd()
+out_dir <- "~/tmp"
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
@@ -58,7 +58,7 @@ cl_counts <- mergeAndAggregate(map,count_table,clustResult)
 
 # run differential expression analysis on clusters
 design <- ~ condition
-cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir)
+cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir = out_dir)
 cl_sigResults <- cl_deResults$deResult
 names(cl_sigResults)=paste("Cl_",names(cl_sigResults),sep="")
 cl_sigResults$ClusterID <- row.names(cl_sigResults)
@@ -71,7 +71,7 @@ count_table <- filterLowExp(count_table, pheno_info)
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
-deResults <- runDESeq2(count_table, pheno_info, design, out_dir)
+deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir)
 sigResults <- deResults$deResult
 
 ###########################
@@ -98,8 +98,3 @@ classes <- c("tRNA","[Hh]sa","^U")
 summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary, out_dir)
-
-# compute NA fraction
-#notAnnotated <- getNoBlastHitFraction(summary, deResults$normCounts)
-#print(notAnnotated)
-
