@@ -72,18 +72,17 @@ write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.na
 deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir)
 sigResults <- deResults$deResult
 
+# get count stats
+countStats <- getConditionCountStats(deResults$normCounts, pheno_info)
+
 ###########################
 #Merge sigResults and cl_sigResults
 sigResults <- mergeSingleAndClusterResults(cl_sigResults,clustResult,sigResults,map)
 ##########################
-
 sigResults <- sigResults[((!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05) | (!is.na(sigResults$Cl_IHWPval) & sigResults$Cl_IHWPval < 0.05)),]
+
+#Get sequences for blast
 sigSeqFasta <- sequencesAsFasta(sigResults,map)
-
-# get count stats
-countStats <- getConditionCountStats(deResults$normCounts, pheno_info)
-
-
 # run blast
 if(file.exists(blast_exec)) {
   blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
