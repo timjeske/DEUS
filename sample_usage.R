@@ -29,7 +29,7 @@ blast_ncores <- 2
 #blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
 blast_exec <- ""
 #cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-cd_hit <- "/data/Software/cdhit/cd-hit-est"
+cd_hit <- ""
 
 # load data delivered with the package
 in_dir <- system.file("extdata", package = "DEUS")
