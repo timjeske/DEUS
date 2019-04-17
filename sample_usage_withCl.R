@@ -54,7 +54,7 @@ allSeqFasta <- sequencesAsFasta(count_table,map)
 #Cluster them
 clustResult<-runClustering(cd_hit, allSeqFasta, out_dir, 0.9, 0.9, 9, map)
 #Aggregate counts by cluster
-cl_counts <- merge_and_aggregate(map,count_table,clustResult)
+cl_counts <- mergeAndAggregate(map,count_table,clustResult)
 
 # run differential expression analysis on clusters
 design <- ~ condition
@@ -76,7 +76,7 @@ sigResults <- deResults$deResult
 
 ###########################
 #Merge sigResults and cl_sigResults
-sigResults <- merge_single_and_cluster_results(cl_sigResults,clustResult,sigResults,map)
+sigResults <- mergeSingleAndClusterResults(cl_sigResults,clustResult,sigResults,map)
 ##########################
 
 sigResults <- sigResults[((!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05) | (!is.na(sigResults$Cl_IHWPval) & sigResults$Cl_IHWPval < 0.05)),]

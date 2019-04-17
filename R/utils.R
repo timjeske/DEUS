@@ -228,7 +228,7 @@ deleteTmp <- function(out_dir){
 #' @return A dataframe that includes sequence counts for each sequence cluster. Can be used as input for DE analysis
 #' @export
 
-merge_and_aggregate <- function(map,cl_count_table,clustResult){
+mergeAndAggregate <- function(map,cl_count_table,clustResult){
   #Add seq_id
   cl_count_table$"SequenceID" <- map[row.names(cl_count_table),]
 
@@ -259,7 +259,7 @@ merge_and_aggregate <- function(map,cl_count_table,clustResult){
 #' @return A combined data frame which includes all pvalues and clusterIDs
 #' @export
 
-merge_single_and_cluster_results <- function(cl_sigResults,clustResult,sigResults,map){
+mergeSingleAndClusterResults <- function(cl_sigResults,clustResult,sigResults,map){
   #Adjust map to work here
   map$sequences <- row.names(map)
   names(map)[1]="SequenceID"

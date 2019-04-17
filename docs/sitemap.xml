@@ -25,7 +25,13 @@
     <loc>http://timjeske.github.io/DEUS//reference/getNoBlastHitFraction.html</loc>
   </url>
   <url>
+    <loc>http://timjeske.github.io/DEUS//reference/mergeAndAggregate.html</loc>
+  </url>
+  <url>
     <loc>http://timjeske.github.io/DEUS//reference/mergeResults.html</loc>
+  </url>
+  <url>
+    <loc>http://timjeske.github.io/DEUS//reference/mergeSingleAndClusterResults.html</loc>
   </url>
   <url>
     <loc>http://timjeske.github.io/DEUS//reference/plotPCA.html</loc>

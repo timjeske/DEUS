@@ -52,7 +52,7 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
   deleteTmp(out_dir)
 
   # generate result
-  out.df <- processClusters_new(map, clusters, out_dir, writeFastas)
+  out.df <- processClusters(map, clusters, out_dir, writeFastas)
   out.df["sequences"] <- NULL
   names(out.df)<-c("SequenceID","ClusterID")
   row.names(out.df)=out.df$SequenceID
