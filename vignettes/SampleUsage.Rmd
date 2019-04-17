@@ -121,3 +121,81 @@ summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary, out_dir)
 
 ```
+___
+
+### Expression analysis using sequence clusters
+
+In addition to the default DEUS pipeline, we developed an adjusted approach that aggregates sequence counts for each sequence cluster and uses this information to find differentially expressed sequence clusters. By some small adjustments, the cluster expression analysis can be included to the default DEUS pipeline.
+
+Instead of creating the sequence map for differentially expressed sequences only, the sequence/id map will be created using [createMap](../reference/createMap.html) on the raw input sequences since all will be used for clustering.
+```{r, eval=FALSE}
+# create count table, create sequence to sequenceID map
+pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
+count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
+#Create map with all sequences
+map <- createMap(count_table)
+
+```
+
+Afterwards, all sequences can be clustered. Based on the clustering results, the sum of sequence counts will be created for each cluster.
+```{r, eval=FALSE}
+#Get all sequences as one fasta file
+allSeqFasta <- sequencesAsFasta(count_table,map)
+#Cluster them
+clustResult<-runClustering(cd_hit, allSeqFasta, out_dir, 0.9, 0.9, 9, map)
+#Aggregate counts by cluster
+cl_counts <- mergeAndAggregate(map,count_table,clustResult)
+
+```
+
+The resulting count matrix can be used as input for the usual DE analysis. 
+```{r, eval=FALSE}
+# run differential expression analysis on clusters
+design <- ~ condition
+cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir = out_dir)
+cl_sigResults <- cl_deResults$deResult
+```
+
+Next, we continue with the standard approach and calculated DE results for unique sequences
+
+```{r, eval=FALSE}
+#Filter lowexpressed but only for single seq approach
+count_table <- filterLowExp(count_table, pheno_info)
+write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
+
+# run differential expression analysis
+deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir)
+sigResults <- deResults$deResult
+
+# get count stats
+countStats <- getConditionCountStats(deResults$normCounts, pheno_info)
+```
+
+Subsequently, both results can be merged into a single data frame. Based on the individual and cluster pvalues, sequences can be filtered to detect potential interesting cases.
+```{r, eval=FALSE}
+#Merge sigResults and cl_sigResults
+sigResults <- mergeSingleAndClusterResults(cl_sigResults,clustResult,sigResults,map)
+
+sigResults <- sigResults[((!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05) | (!is.na(sigResults$Cl_IHWPval) & sigResults$Cl_IHWPval < 0.05)),]
+```
+
+Finally, we continue with the default pipeline and add annotation using Blast. All results are merged and written into summary files
+```{r, eval=FALSE}
+#Get sequences for blast
+sigSeqFasta <- sequencesAsFasta(sigResults,map)
+# run blast
+if(file.exists(blast_exec)) {
+  blastResult <- runBlast(blast_exec, blast_db, blast_ncores, sigSeqFasta)
+} else {
+  blastResult <- read.table(blast_int, header=T, sep="\t")
+}
+
+# merge results
+classes <- c("tRNA","[Hh]sa","^U")
+summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
+summary <- addCountsOfFeatureClasses(summary, classes)
+writeSummaryFiles(summary, out_dir)
+```
+
+
+

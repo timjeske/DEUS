@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Run DEUS • DEUS</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Run DEUS">
 <meta property="og:description" content="">
@@ -157,6 +158,61 @@ blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeResults.html">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
 summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a></span>(summary, classes)
 <span class="kw"><a href="../reference/writeSummaryFiles.html">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
+<hr>
+</div>
+<div id="expression-analysis-using-sequence-clusters" class="section level3">
+<h3 class="hasAnchor">
+<a href="#expression-analysis-using-sequence-clusters" class="anchor"></a>Expression analysis using sequence clusters</h3>
+<p>In addition to the default DEUS pipeline, we developed an adjusted approach that aggregates sequence counts for each sequence cluster and uses this information to find differentially expressed sequence clusters. By some small adjustments, the cluster expression analysis can be included to the default DEUS pipeline.</p>
+<p>Instead of creating the sequence map for differentially expressed sequences only, the sequence/id map will be created using <a href="../reference/createMap.html">createMap</a> on the raw input sequences since all will be used for clustering.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create count table, create sequence to sequenceID map</span>
+pheno_info &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(phenofile, <span class="dt">header=</span>T, <span class="dt">row.names=</span><span class="dv">1</span>, <span class="dt">check.names=</span><span class="ot">FALSE</span>)
+count_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">pheno_info=</span>pheno_info)
+<span class="co">#Create map with all sequences</span>
+map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createMap.html">createMap</a></span>(count_table)</code></pre></div>
+<p>Afterwards, all sequences can be clustered. Based on the clustering results, the sum of sequence counts will be created for each cluster.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Get all sequences as one fasta file</span>
+allSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(count_table,map)
+<span class="co">#Cluster them</span>
+clustResult&lt;-<span class="kw"><a href="../reference/runClustering.html">runClustering</a></span>(cd_hit, allSeqFasta, out_dir, <span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="dv">9</span>, map)
+<span class="co">#Aggregate counts by cluster</span>
+cl_counts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeAndAggregate.html">mergeAndAggregate</a></span>(map,count_table,clustResult)</code></pre></div>
+<p>The resulting count matrix can be used as input for the usual DE analysis.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run differential expression analysis on clusters</span>
+design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
+cl_deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(cl_counts, pheno_info, design, <span class="dt">out_dir =</span> out_dir)
+cl_sigResults &lt;-<span class="st"> </span>cl_deResults<span class="op">$</span>deResult</code></pre></div>
+<p>Next, we continue with the standard approach and calculated DE results for unique sequences</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Filter lowexpressed but only for single seq approach</span>
+count_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filterLowExp.html">filterLowExp</a></span>(count_table, pheno_info)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/write.table">write.table</a></span>(count_table, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(out_dir,<span class="st">"AllCounts_filtered.tsv"</span>,<span class="dt">sep=</span><span class="st">"/"</span>), <span class="dt">col.names=</span>T, <span class="dt">quote=</span>F, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">row.names=</span>T)
+
+<span class="co"># run differential expression analysis</span>
+deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(count_table, pheno_info, design, <span class="dt">out_dir=</span>out_dir)
+sigResults &lt;-<span class="st"> </span>deResults<span class="op">$</span>deResult
+
+<span class="co"># get count stats</span>
+countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults<span class="op">$</span>normCounts, pheno_info)</code></pre></div>
+<p>Subsequently, both results can be merged into a single data frame. Based on the individual and cluster pvalues, sequences can be filtered to detect potential interesting cases.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Merge sigResults and cl_sigResults</span>
+sigResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeSingleAndClusterResults.html">mergeSingleAndClusterResults</a></span>(cl_sigResults,clustResult,sigResults,map)
+
+sigResults &lt;-<span class="st"> </span>sigResults[((<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults<span class="op">$</span>IHWPval) <span class="op">&amp;</span><span class="st"> </span>sigResults<span class="op">$</span>IHWPval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>) <span class="op">|</span><span class="st"> </span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults<span class="op">$</span>Cl_IHWPval) <span class="op">&amp;</span><span class="st"> </span>sigResults<span class="op">$</span>Cl_IHWPval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)),]</code></pre></div>
+<p>Finally, we continue with the default pipeline and add annotation using Blast. All results are merged and written into summary files</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Get sequences for blast</span>
+sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
+<span class="co"># run blast</span>
+<span class="cf">if</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files">file.exists</a></span>(blast_exec)) {
+  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)
+} <span class="cf">else</span> {
+  blastResult &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(blast_int, <span class="dt">header=</span>T, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)
+}
+
+<span class="co"># merge results</span>
+classes &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"tRNA"</span>,<span class="st">"[Hh]sa"</span>,<span class="st">"^U"</span>)
+summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeResults.html">mergeResults</a></span>(sigResults, countStats, blastResult, clustResult, map)
+summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addCountsOfFeatureClasses.html">addCountsOfFeatureClasses</a></span>(summary, classes)
+<span class="kw"><a href="../reference/writeSummaryFiles.html">writeSummaryFiles</a></span>(summary, out_dir)</code></pre></div>
 </div>
   </div>
 
@@ -171,7 +227,7 @@ summary &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>
