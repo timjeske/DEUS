@@ -264,6 +264,12 @@ mergeSingleAndClusterResults <- function(cl_sigResults,clustResult,sigResults,ma
   map$sequences <- row.names(map)
   names(map)[1]="SequenceID"
 
+  #Add prefix for cl_sigResults to ensure unique columns
+  names(cl_sigResults)=paste("Cl_",names(cl_sigResults),sep="")
+
+  #Add ClusterID column for joining
+  cl_sigResults$ClusterID <- row.names(cl_sigResults)
+
   #combine cl_deseq and clustering results
   cl_sigResults <- plyr::join(cl_sigResults,clustResult,type="inner",by="ClusterID")
 
