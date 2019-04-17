@@ -43,20 +43,28 @@ runClustering <- function(cdhit_path, sequences, out_dir, identityCutoff, length
   # tmp fasta file
   seq <- paste(out_dir, "sig_sequences.fa", sep="/")
   write.table(sequences, seq,quote = F, row.names = F, col.names = F)
-
   # run clustering
   clusters <- paste(out_dir,"CD-HIT.fa",sep="/")
   command <- paste("-i",seq,"-c",identityCutoff,"-s",lengthCutoff,"-n",wordlength,"-g 1",optional,"-o",clusters,sep=" ")
   cluster.out <- system2(cdhit_path,command, stdout=TRUE)
-
   # remove tmp files
   deleteTmp(out_dir)
 
   # generate result
-  out.df <- processClusters(map, clusters, out_dir)
-  out.df["sequences"] <- NULL
-  names(out.df)<-c("SequenceID","ClusterID")
+  out.df <- processClusters_new(map, clusters, out_dir)
+  #out.df["sequences"] <- NULL
+  #names(out.df)<-c("SequenceID","ClusterID","sequences")
+  row.names(out.df)=out.df$SequenceID
   return(out.df)
+}
+
+fillCl_Ids <- function(x, blank = -1) {
+  if (is.function(blank)) {
+    isnotblank <- !blank(x)
+  } else {
+    isnotblank <- x != blank
+  }
+  x[which(isnotblank)][cumsum(isnotblank)]
 }
 
 
@@ -95,6 +103,34 @@ processClusters <- function(map, clusters, out_dir) {
   map$sequences<-row.names(map)
   out.df<-merge(x = out.df, y = map, by.x = "qseqid",by.y="seq_id", all.x = TRUE)
   by(out.df,out.df$cl_id,printCluster,cl_dir=cl.dir)
+  return(out.df)
+}
+
+
+processClusters_new <- function(map, clusters, out_dir,writeFastas=FALSE) {
+
+  cluster.file <- paste(clusters,".clstr",sep="")
+
+  clst <- readLines(cluster.file)
+  clst.index <- unlist(lapply(clst,startsWith,prefix=">"))
+  clst.df <- as.data.frame(clst)
+  clst.df$"cl_id" <- -1
+  clst.df[clst.index,2] <- as.numeric(gsub(">Cluster ","",clst.df[clst.index,1]))
+  clst.df$cl_id <- fillCl_Ids(clst.df$cl_id)
+  seqIDsIndex=lapply(clst.df$clst,regexpr,pattern="seq_[0-9]+",perl=TRUE)
+  clst.df$seq_id[!clst.index] <- unlist(regmatches(clst.df$clst,seqIDsIndex))
+  clst.df <- clst.df[-1]
+  clst.df <- clst.df[!is.na(clst.df$seq_id),]
+
+  map$sequences<-row.names(map)
+  out.df<-merge(x = clst.df, y = map, by = "seq_id", all.x = TRUE)
+
+  if(writeFastas){
+    cl.dir <- paste(out_dir, "Clusters",sep="/")
+    dir.create(cl.dir, showWarnings = FALSE)
+    by(out.df,out.df$cl_id,printCluster,cl_dir=cl.dir)
+  }
+
   return(out.df)
 }
 
