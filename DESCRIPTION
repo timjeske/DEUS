@@ -11,6 +11,9 @@ Encoding: UTF-8
 LazyData: true
 biocViews:
 Imports:
+  ashr,
+  apeglm,
+  ggplot2,
   methods,
   stringr,
   Rcpp,

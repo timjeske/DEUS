@@ -47,7 +47,7 @@ write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.na
 
 # run differential expression analysis
 design <- ~ condition
-deResults <- runDESeq2(count_table, pheno_info, design, out_dir)
+deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir)
 sigResults <- deResults$deResult
 sigResults <- sigResults[!is.na(sigResults$IHWPval) & sigResults$IHWPval < 0.05,]
 sigSeqFasta <- sequencesAsFasta(sigResults,map)

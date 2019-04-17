@@ -33,15 +33,53 @@
 #' See \link[DESeq2]{results} and \link[IHW]{ihw} for further documentation on the columns.
 #' @export
 
-runDESeq2 <- function(count_table, pheno_info, design, out_dir=NULL) {
+runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shrinkType, out_dir) {
+
+  if( any(grepl(":", design)) && missing(contrast) && missing(effectName))  {
+    stop("Design formula has interaction terms but no constrast or effectName argument provided! Please change your design formular or provide a contrast of effectName argument.",call.=T)
+  }
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = count_table, colData = pheno_info, design = design)
   dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
-  dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
-  res <- DESeq2::results(dds)
+
+  if(missing(shrinkType)) {
+    shrinkType = "normal"
+  }
+
+  if(missing(contrast) && missing(effectName)) {
+    dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
+    res <- DESeq2::results(dds)
+  } else if(!missing(contrast)) {
+    dds <- DESeq2::DESeq(dds)
+    if(any(grepl(":", design))) {
+      if(shrinkType != "ashr") {
+        warning("The shrinkage estimator was set as 'ashr' due to given design formular with interaction terms.")
+      }
+      shrinkType = "ashr"
+    }
+    if(shrinkType == "apeglm") {
+      warning("The shrinkage estimator 'apeglm' cannot be used together with the contrast argument. Will use the 'normal' shrinkage estimator.")
+      shrinkType = "normal"
+    }
+    res <- DESeq2::lfcShrink(dds, contrast = contrast, type=shrinkType)
+  } else if (!missing(effectName)) {
+    dds <- DESeq2::DESeq(dds)
+    if(any(grepl(":", design))) {
+      if(shrinkType != "apgelm") {
+        warning("The shrinkage estimator was set as 'apeglm' due to given design formular with interaction terms.")
+      }
+      shrinkType = "apeglm"
+    }
+    if(shrinkType == "ashr") {
+      warning("The shrinkage estimator 'ashr' cannot be used together with the effectName argument. Will use the 'normal' shrinkage estimator.")
+      shrinkType = "normal"
+    }
+    res <- DESeq2::lfcShrink(dds, coef = effectName, type=shrinkType)
+  }
+
   res <- res[, c(ncol(res)-1, ncol(res), (1:(ncol(res)-2)))]
   res$"IHWPval"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
 
-  if(!is.null(out_dir)) {
+  if(!missing(out_dir)) {
     # plot sample distance
     rld <- DESeq2::rlog(dds, blind=FALSE)
     plotSampleDistanceMap(rld,out_dir)
