@@ -61,7 +61,7 @@ design <- ~ condition
 cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir)
 cl_sigResults <- cl_deResults$deResult
 names(cl_sigResults)=paste("Cl_",names(cl_sigResults),sep="")
-cl_sigResults$cl_id <- row.names(cl_sigResults)
+cl_sigResults$ClusterID <- row.names(cl_sigResults)
 #>>>>>>>>>
 
 #Continue with regular pipeline

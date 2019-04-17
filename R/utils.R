@@ -212,23 +212,21 @@ deleteTmp <- function(out_dir){
   }
 }
 
-merge_and_aggregate <- function(cl_map,cl_count_table,clustResult){
-  #Merge Cluster Id and Seq
-  #names(clustResult)[1]<-"seq_id"
-  cl_map$Seq <- row.names(cl_map)
-  cl_count_table$Seq <- row.names(cl_count_table)
-  merged <- plyr::join(cl_count_table,cl_map,type="inner")
-  #Drop column after join
-  #count_table <- count_table[ , -which(names(count_table) %in% c("Seq"))]
-  #rm(cl_map)
-  #rm(cl_count_table)
-  merged <- plyr::join(merged,clustResult)
-  row.names(merged) <- merged$Seq
 
-  merged <- merged[ , -which(names(merged) %in% c("Seq","seq_id","sequences"))]
+merge_and_aggregate <- function(map,cl_count_table,clustResult){
+  #Add seq_id
+  cl_count_table$"SequenceID" <- map[row.names(cl_count_table),]
+
+  #Add ClusterID
+  cl_count_table <- plyr::join(cl_count_table,clustResult)
+
+  #Remove extra cols before aggregation
+  cl_count_table <- cl_count_table[ , -which(names(cl_count_table) %in% c("SequenceID"))]
+
   #Sum counts by cluster
-  cl_counts <- aggregate(merged[-(ncol(merged))], by=list(Category=merged$cl_id), FUN=sum)
-  #row.names(cl_counts) <- paste("Cl_",cl_counts$Category,sep="")
+  cl_counts <- aggregate(cl_count_table[-(ncol(cl_count_table))], by=list(Category=cl_count_table$ClusterID), FUN=sum)
+
+  #Rownames indicate ClusterID
   row.names(cl_counts) <- cl_counts$Category
   cl_counts <- cl_counts[ , -which(names(cl_counts) %in% c("Category"))]
 
@@ -236,15 +234,19 @@ merge_and_aggregate <- function(cl_map,cl_count_table,clustResult){
 }
 
 merge_single_and_cluster_results <- function(cl_sigResults,clustResult,sigResults,map){
-  cl_map <- map
-  cl_map$Seq <- row.names(cl_map)
-  #add seq_id to cluster resuls
-  cl_sigResults <- plyr::join(cl_sigResults,clustResult,type="inner",by="cl_id")
-  names(clustResult)[1]<-"SequenceID"
-  sigResults$"seq_id"<-map[row.names(sigResults),]
-  #sigResults$sequence <- rownames(sigResults)
-  sigResults <- plyr::join(sigResults,cl_sigResults,type="full",by="seq_id")
-  sigResults <- plyr::join(sigResults,map,type="inner",by="seq_id")
+  #Adjust map to work here
+  map$sequences <- row.names(map)
+  names(map)[1]="SequenceID"
+
+  #combine cl_deseq and clustering results
+  cl_sigResults <- plyr::join(cl_sigResults,clustResult,type="inner",by="ClusterID")
+
+  #Combine both deseq results
+  sigResults$"SequenceID" <- map[row.names(sigResults),"SequenceID"]
+  sigResults <- plyr::join(sigResults,cl_sigResults,type="full",by="SequenceID")
+
+  #Add sequence as row name
+  sigResults <- plyr::join(sigResults,map,type="inner",by="SequenceID")
   rownames(sigResults) <- sigResults$sequences
   sigResults <- sigResults[ , -which(names(sigResults) %in% c("sequences"))]
 
