@@ -22,14 +22,14 @@ devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 # defaults may be changed
-out_dir <- getwd()
+out_dir <- "~/tmp"
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
-#blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
-blast_exec <- ""
-#cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-cd_hit <- ""
+blast_exec <- "/data/Software/ncbi-blast-2.8.1+/bin/blastn"
+#blast_exec <- ""
+cd_hit <- "/data/Software/cdhit/cd-hit-est"
+#cd_hit <- ""
 
 # load data delivered with the package
 in_dir <- system.file("extdata", package = "DEUS")
@@ -64,9 +64,10 @@ if(file.exists(blast_exec)) {
 
 # run clustering
 if(file.exists(cd_hit)) {
-  clustResult<-runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
+  clustResult <- runClustering(cd_hit, sigSeqFasta, out_dir, 0.9, 0.9, 9, map)
 } else {
   clustResult <- read.table(clust_int, header=T, sep="\t")
+  rownames(clustResult) <- clustResult$SequenceID
 }
 
 # merge results
