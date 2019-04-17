@@ -169,15 +169,21 @@ addCountsOfFeatureClasses<- function(summary, feature_classes) {
 #' The table is split into a file 'SummaryTable_withBlast.tsv' and a file 'SummaryTable_noBlast.tsv' representing the sequences that have a BLAST hit and those with no BLAST hit.
 #' @export
 
-writeSummaryFiles <- function(summary, out_dir) {
-  summary$Sequence=row.names(summary)
+writeSummaryFiles <- function(summary, out_dir, expressedOnly=TRUE) {
+
+  #Remove lines without IHWPvalue. Indicates that sequence expression is below cutoff used during DE analysis
+  if(expressedOnly==TRUE){
+    summary <- summary[!is.na(summary$IHWPvalue),]
+  }
+
+  summary$Sequence <- row.names(summary)
   summary <- summary[,c(ncol(summary),1:ncol(summary)-1)]
   write.table(summary, paste(out_dir, "SummaryTable.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
 
   filtered <- summary[!summary$FeatureList=="NA",]
   write.table(filtered, paste(out_dir, "SummaryTable_withBlast.tsv", sep="/"), sep="\t", quote=F, row.names=F, col.names=T)
 
-  filtered = summary[summary$FeatureList=="NA" | is.na(summary$FeatureList),]
+  filtered <- summary[summary$FeatureList=="NA" | is.na(summary$FeatureList),]
   write.table(filtered, paste(out_dir,"SummaryTable_noBlast.tsv",sep="/"), sep="\t", quote=F,row.names=F,col.names=T)
 
 }
