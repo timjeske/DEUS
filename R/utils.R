@@ -79,7 +79,6 @@ mergeResults <- function(de_result=NULL, count_stats=NULL, blast_result=NULL, cl
   }
 
   if(!is.null(clust_result)) {
-    names(clust_result)[1]<-"SequenceID"
     res <- plyr::join(res, clust_result, type = "left")
   }
 
