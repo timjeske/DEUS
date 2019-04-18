@@ -26,24 +26,25 @@
 #' @param pheno_info A data frame with sample identifiers as row names including the columns used for the design formula.
 #' The sample identifiers must be identical to those in the count_table.
 #' @param design Design formula for differential expression analysis
+#' @param contrast Argument to specify the comparison for which the results table will be generated (corresponds to 'contrast' argument in \link[DESeq2]{results} and \link[DESeq2]{lfcShrink}). Required if interaction terms are part of the design formula.
+#' @param effectName Argument to specify the comparision for which the results table will be generated (corresponds to 'name' argument in \link[DESeq2]{results} and 'coef' argument in \link[DESeq2]{lfcShrink}). Required if interaction terms are part of the design formula.
+#' @param shrinkType DESeq2 shrinkage estimator (corresponds to 'type' argument in \link[DESeq2]{lfcShrink}).
 #' @param out_dir Directory to save sample distance map, PCA and MA plot.
+#' @param prefix Prefix for the names of the PDF files containing the sample distance map, the PCA and the MA plot.
 #' @return Returns a list consisting of 'normCounts' and the 'deResult'.
 #' 'normCounts' is a data frame of normalized counts with sequences as row names.
 #' 'deResult' is a data frame with sequences as row names and the columns 'pvalue', 'padj', 'baseMean', 'log2FoldChange', 'lfcSE', 'stat', 'IHWPval'.
 #' See \link[DESeq2]{results} and \link[IHW]{ihw} for further documentation on the columns.
 #' @export
 
-runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shrinkType, out_dir) {
+runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shrinkType = "normal", out_dir, prefix = "DESeq2") {
 
   if( any(grepl(":", design)) && missing(contrast) && missing(effectName))  {
     stop("Design formula has interaction terms but no constrast or effectName argument provided! Please change your design formular or provide a contrast of effectName argument.",call.=T)
   }
+
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = count_table, colData = pheno_info, design = design)
   dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
-
-  if(missing(shrinkType)) {
-    shrinkType = "normal"
-  }
 
   if(missing(contrast) && missing(effectName)) {
     dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
@@ -76,19 +77,23 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shr
     res <- DESeq2::lfcShrink(dds, coef = effectName, type=shrinkType)
   }
 
-  res <- res[, c(ncol(res)-1, ncol(res), (1:(ncol(res)-2)))]
+  #reorder columns as pvalue, padj, baseMean, log2FoldChange, lfcSE, stat
+  pval_idx <- which("pvalue" == colnames(res))
+  pval_adj_idx <- which("padj" == colnames(res))
+  other_idx <- intersect(which("pvalue" != colnames(res)), which( "padj" != colnames(res)))
+  res <- res[, c(pval_idx, pval_adj_idx, other_idx)]
   res$"IHWPval"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
 
   if(!missing(out_dir)) {
     # plot sample distance
     rld <- DESeq2::rlog(dds, blind=FALSE)
-    plotSampleDistanceMap(rld,out_dir)
+    plotSampleDistanceMap(rld,out_dir,prefix)
 
     # plot PCA
-    plotPCA(rld,pheno_info,out_dir)
+    plotPCA(rld,pheno_info,out_dir,prefix)
 
     # plot MA
-    pdf(paste(out_dir,"DESeq2_MAplot_shrunken.pdf",sep="/"), onefile=FALSE)
+    pdf(paste(out_dir,paste(prefix, "MAplot_shrunken.pdf", sep="_"),sep="/"), onefile=FALSE)
     DESeq2::plotMA(res, main = "DESeq2", ylim=c(-4,4))
     dev.off()
   }
@@ -104,11 +109,12 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shr
 #'
 #' @param rld Count table after 'regularized log transformation' by \link[DESeq2]{rlog}
 #' @param out_dir Directory for PDF file including the sample distance heatmap
+#' @param prefix Prefix for name of PDF file
 #' @return DESeq2_sample_dist.pdf in output directory
 #' @export
 
-plotSampleDistanceMap <- function(rld, out_dir) {
-  pdf(paste(out_dir, "DESeq2_sample_dist.pdf", sep="/"), onefile=FALSE)
+plotSampleDistanceMap <- function(rld, out_dir,prefix="DESeq2") {
+  pdf(paste(out_dir, paste(prefix, "sample_dist.pdf", sep="_"), sep="/"), onefile=FALSE)
   sampleDists <- dist(t(SummarizedExperiment::assay(rld)))
   sampleDistMatrix <- as.matrix(sampleDists)
   rownames(sampleDistMatrix) <- colnames(rld)
@@ -129,12 +135,13 @@ plotSampleDistanceMap <- function(rld, out_dir) {
 #' @param pheno_info A data frame with sample identifiers as row names including maximal two columns defining (sub-)conditions.
 #' The sample identifiers must be identical to those in the rld table.
 #' @param out_dir Directory for PDF file including the PCA plot
+#' @param prefix Prefix for name of PDF file
 #' @return DESeq2_PCA.pdf in output directory
 #' @export
 
-plotPCA <- function(rld, pheno_info, out_dir) {
+plotPCA <- function(rld, pheno_info, out_dir, prefix = "DESeq2") {
   mypheno_info <- pheno_info[, !(names(pheno_info) %in% c("sample")), drop=FALSE]
-  pdf(paste(out_dir,"DESeq2_PCA.pdf", sep="/"), onefile=FALSE)
+  pdf(paste(out_dir,paste(prefix,"PCA.pdf",sep="_"), sep="/"), onefile=FALSE)
   if(ncol(mypheno_info) > 1) {
     data <- DESeq2::plotPCA(rld, intgroup=colnames(mypheno_info), returnData=TRUE)
     percentVar <- round(100 * attr(data, "percentVar"))

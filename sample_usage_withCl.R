@@ -26,10 +26,10 @@ out_dir <- "~/tmp"
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
-#blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
-blast_exec <- "/data/Software/ncbi-blast-2.8.1+/bin/blastn"
-#cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
-cd_hit <- "/data/Software/cdhit/cd-hit-est"
+blast_exec <- "/storageNGS/ngs1/software/ncbi-blast-2.6.0+/bin/blastn"
+#blast_exec <- "/data/Software/ncbi-blast-2.8.1+/bin/blastn"
+cd_hit <- "/storageNGS/ngs1/software/cdhit/cd-hit-est"
+#cd_hit <- "/data/Software/cdhit/cd-hit-est"
 
 # load data delivered with the package
 in_dir <- system.file("extdata", package = "DEUS")
@@ -58,7 +58,7 @@ cl_counts <- mergeAndAggregate(map,count_table,clustResult)
 
 # run differential expression analysis on clusters
 design <- ~ condition
-cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir = out_dir)
+cl_deResults <- runDESeq2(cl_counts, pheno_info, design, out_dir = out_dir, prefix = "Cluster")
 cl_sigResults <- cl_deResults$deResult
 #>>>>>>>>>
 
@@ -69,7 +69,7 @@ count_table <- filterLowExp(count_table, pheno_info)
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
-deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir)
+deResults <- runDESeq2(count_table, pheno_info, design, out_dir=out_dir, prefix = "Sequences")
 sigResults <- deResults$deResult
 
 # get count stats

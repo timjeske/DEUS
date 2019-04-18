@@ -4,12 +4,14 @@
 \alias{plotSampleDistanceMap}
 \title{Plot sample distance heatmap}
 \usage{
-plotSampleDistanceMap(rld, out_dir)
+plotSampleDistanceMap(rld, out_dir, prefix = "DESeq2")
 }
 \arguments{
 \item{rld}{Count table after 'regularized log transformation' by \link[DESeq2]{rlog}}
 
 \item{out_dir}{Directory for PDF file including the sample distance heatmap}
+
+\item{prefix}{Prefix for name of PDF file}
 }
 \value{
 DESeq2_sample_dist.pdf in output directory

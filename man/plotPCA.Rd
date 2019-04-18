@@ -4,7 +4,7 @@
 \alias{plotPCA}
 \title{Plot result of PCA}
 \usage{
-plotPCA(rld, pheno_info, out_dir)
+plotPCA(rld, pheno_info, out_dir, prefix = "DESeq2")
 }
 \arguments{
 \item{rld}{Count table after 'regularized log transformation' by \link[DESeq2]{rlog}}
@@ -13,6 +13,8 @@ plotPCA(rld, pheno_info, out_dir)
 The sample identifiers must be identical to those in the rld table.}
 
 \item{out_dir}{Directory for PDF file including the PCA plot}
+
+\item{prefix}{Prefix for name of PDF file}
 }
 \value{
 DESeq2_PCA.pdf in output directory
