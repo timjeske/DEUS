@@ -284,3 +284,47 @@ mergeSingleAndClusterResults <- function(cl_sigResults,clustResult,sigResults,ma
 
   return(sigResults)
 }
+
+#' Prints a summary of the number of significant sequences and clusters
+#'
+#' @param summary Summary table as created by \link[DEUS]{mergeResults}
+#' @param sig_treshold Significance threshold used for filtering according to the IHW P-value of the sequences and clusters
+#' @return Prints summary values to standard output.
+#' @export
+
+printClusterSummary <- function(summary, sig_threshold = 0.05) {
+  sig_seq_summary <- summary[(!is.na(summary$IHWPval) & summary$IHWPval < sig_threshold),]
+  sig_seqs <- length(sig_seq_summary$SequenceID)
+  clust_incl_sig_seqs <- length(unique(sig_seq_summary$ClusterID))
+
+  #test if Cluster cols exist
+  if("Cl_IHWPvalue" %in% colnames(summary)){
+    sig_clust_summary <- summary[(!is.na(summary$Cl_IHWPval) & summary$Cl_IHWPval < sig_threshold),]
+    sig_clusts <- length(unique(sig_clust_summary$ClusterID))
+    sig_clust_sig_seq <- sig_clust_summary[(!is.na(sig_clust_summary$IHWPval) & sig_clust_summary$IHWPval < sig_threshold),]
+    sig_clust_no_sig_seq <- sig_clust_summary[!(!is.na(sig_clust_summary$IHWPval) & sig_clust_summary$IHWPval < sig_threshold),]
+    sig_clust_no_sig_seq_low_exp <- sig_clust_no_sig_seq[is.na(sig_clust_summary$IHWPval),]
+    sig_clust_no_sig_seq_weak_DE <- sig_clust_no_sig_seq[!is.na(sig_clust_summary$IHWPval) & !(sig_clust_summary$IHWPval < sig_threshold),]
+    sig_seq_no_sig_clust <- summary[(!is.na(summary$IHWPval) & summary$IHWPval < sig_threshold) & !(!is.na(summary$Cl_IHWPval) & summary$Cl_IHWPval < sig_threshold),]
+    clusters_no_sig_seq <- length(setdiff(unique(sig_clust_summary$ClusterID), unique(sig_seq_summary$ClusterID)))
+  }
+
+  writeLines("## Sequence summary ##")
+  writeLines(sprintf("Significant sequences: %d", sig_seqs))
+  if(exists("sig_clust_summary")) {
+    writeLines(sprintf("Sequences in significant clusters: %d", length(sig_clust_summary$SequenceID)))
+    writeLines(sprintf("Non-significant sequences in significant clusters: %d", length(sig_clust_no_sig_seq$SequenceID)))
+    writeLines(sprintf("- too low expressed: %d", length(sig_clust_no_sig_seq_low_exp$SequenceID)))
+    writeLines(sprintf("- too weak differentially expressed: %d", length(sig_clust_no_sig_seq_weak_DE$SequenceID)))
+    writeLines(sprintf("Significant sequences in non-significant clusters: %d", length(sig_seq_no_sig_clust$SequenceID)))
+  }
+
+  writeLines("## Cluster summary ##")
+  if(exists("sig_clust_summary")) {
+    writeLines(sprintf("Significant clusters: %d", sig_clusts))
+  }
+  writeLines(sprintf("Clusters including significant sequences: %d", clust_incl_sig_seqs))
+  if(exists("sig_clust_summary")) {
+    writeLines(sprintf("Significant clusters including no significant sequences: %d", clusters_no_sig_seq))
+  }
+}

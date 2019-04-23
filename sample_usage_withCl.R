@@ -64,7 +64,7 @@ cl_sigResults <- cl_deResults$deResult
 
 #Continue with regular pipeline
 
-#Filter lowexpressed but only for single seq approach
+#Filter low expressed but only for unique sequences approach
 count_table <- filterLowExp(count_table, pheno_info)
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
@@ -95,3 +95,6 @@ classes <- c("tRNA","[Hh]sa","^U")
 summary <- mergeResults(sigResults, countStats, blastResult, clustResult, map)
 summary <- addCountsOfFeatureClasses(summary, classes)
 writeSummaryFiles(summary, out_dir)
+
+# print summary of signficant sequences and clusters
+printClusterSummary(summary)
