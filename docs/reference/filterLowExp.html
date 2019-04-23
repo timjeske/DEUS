@@ -34,7 +34,7 @@
 
 <meta property="og:description" content="This function filters a table of (sequence) counts using additional information on sample conditions.
 Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
-Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples." />
+Sequences are kept if all groups have a default minimum average sequence count of the given 'group_threshold' or if one of both groups has zero counts for all samples." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,11 +110,12 @@ Sequences are kept if both groups have a default minimum average sequence count 
     
     <p>This function filters a table of (sequence) counts using additional information on sample conditions.
 Filtering is especially useful in context of the DEUS package because sequence based count tables are generally very large.
-Sequences are kept if both groups have a default minimum average sequence count of 10 or if one of both groups has zero counts for all samples.</p>
+Sequences are kept if all groups have a default minimum average sequence count of the given 'group_threshold' or if one of both groups has zero counts for all samples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>filterLowExp</span>(<span class='no'>count_table</span>, <span class='no'>pheno_info</span>, <span class='kw'>group_threshold</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
+    <pre class="usage"><span class='fu'>filterLowExp</span>(<span class='no'>count_table</span>, <span class='no'>pheno_info</span>, <span class='kw'>group_threshold</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>filter_col</span> <span class='kw'>=</span> <span class='st'>"condition"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,7 +131,11 @@ The sample identifiers must be identical to those in the count_table.</p></td>
     </tr>
     <tr>
       <th>group_threshold</th>
-      <td><p>Minimum average sequence count for both groups</p></td>
+      <td><p>Minimum average sequence count for all groups</p></td>
+    </tr>
+    <tr>
+      <th>filter_col</th>
+      <td><p>Name of the column in the 'pheno_info' file that should be used to group the samples.</p></td>
     </tr>
     </table>
     
