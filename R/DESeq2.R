@@ -27,62 +27,62 @@
 #' The sample identifiers must be identical to those in the count_table.
 #' @param design Design formula for differential expression analysis
 #' @param contrast Argument to specify the comparison for which the results table will be generated (corresponds to 'contrast' argument in \link[DESeq2]{results} and \link[DESeq2]{lfcShrink}). Required if interaction terms are part of the design formula.
-#' @param effectName Argument to specify the comparision for which the results table will be generated (corresponds to 'name' argument in \link[DESeq2]{results} and 'coef' argument in \link[DESeq2]{lfcShrink}). Required if interaction terms are part of the design formula.
-#' @param shrinkType DESeq2 shrinkage estimator (corresponds to 'type' argument in \link[DESeq2]{lfcShrink}).
+#' @param effect_name Argument to specify the comparision for which the results table will be generated (corresponds to 'name' argument in \link[DESeq2]{results} and 'coef' argument in \link[DESeq2]{lfcShrink}). Required if interaction terms are part of the design formula.
+#' @param shrink_type DESeq2 shrinkage estimator (corresponds to 'type' argument in \link[DESeq2]{lfcShrink}).
 #' @param out_dir Directory to save sample distance map, PCA and MA plot.
 #' @param prefix Prefix for the names of the PDF files containing the sample distance map, the PCA and the MA plot.
 #' @return Returns a list consisting of 'normCounts' and the 'deResult'.
 #' 'normCounts' is a data frame of normalized counts with sequences as row names.
 #' 'deResult' is a data frame with sequences as row names and the columns 'pvalue', 'padj', 'baseMean', 'log2FoldChange', 'lfcSE', 'stat', 'IHWPval'.
-#' See \link[DESeq2]{results} and \link[IHW]{ihw} for further documentation on the columns.
+#' See \link[DESeq2]{results} and \link[IHW]{ihw.default} for further documentation on the columns.
 #' @export
 
-runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shrinkType = "normal", out_dir, prefix = "DESeq2") {
+runDESeq2 <- function(count_table, pheno_info, design, contrast, effect_name, shrink_type = "normal", out_dir, prefix = "DESeq2") {
 
-  if( any(grepl(":", design)) && missing(contrast) && missing(effectName))  {
-    stop("Design formula has interaction terms but no constrast or effectName argument provided! Please change your design formular or provide a contrast of effectName argument.",call.=T)
+  if( any(grepl(":", design)) && missing(contrast) && missing(effect_name))  {
+    stop("Design formula has interaction terms but no constrast or effect_name argument provided! Please change your design formular or provide a contrast of effect_name argument.",call.=T)
   }
 
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = count_table, colData = pheno_info, design = design)
   dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
 
-  if(missing(contrast) && missing(effectName)) {
+  if(missing(contrast) && missing(effect_name)) {
     dds <- DESeq2::DESeq(dds, betaPrior=TRUE)
     res <- DESeq2::results(dds)
   } else if(!missing(contrast)) {
     dds <- DESeq2::DESeq(dds)
     if(any(grepl(":", design))) {
-      if(shrinkType != "ashr") {
+      if(shrink_type != "ashr") {
         warning("The shrinkage estimator was set as 'ashr' due to given design formular with interaction terms.")
       }
-      shrinkType = "ashr"
+      shrink_type = "ashr"
     }
-    if(shrinkType == "apeglm") {
+    if(shrink_type == "apeglm") {
       warning("The shrinkage estimator 'apeglm' cannot be used together with the contrast argument. Will use the 'normal' shrinkage estimator.")
-      shrinkType = "normal"
+      shrink_type = "normal"
     }
-    res <- DESeq2::lfcShrink(dds, contrast = contrast, type=shrinkType)
-  } else if (!missing(effectName)) {
+    res <- DESeq2::lfcShrink(dds, contrast = contrast, type=shrink_type)
+  } else if (!missing(effect_name)) {
     dds <- DESeq2::DESeq(dds)
     if(any(grepl(":", design))) {
-      if(shrinkType != "apgelm") {
+      if(shrink_type != "apgelm") {
         warning("The shrinkage estimator was set as 'apeglm' due to given design formular with interaction terms.")
       }
-      shrinkType = "apeglm"
+      shrink_type = "apeglm"
     }
-    if(shrinkType == "ashr") {
-      warning("The shrinkage estimator 'ashr' cannot be used together with the effectName argument. Will use the 'normal' shrinkage estimator.")
-      shrinkType = "normal"
+    if(shrink_type == "ashr") {
+      warning("The shrinkage estimator 'ashr' cannot be used together with the effect_name argument. Will use the 'normal' shrinkage estimator.")
+      shrink_type = "normal"
     }
-    res <- DESeq2::lfcShrink(dds, coef = effectName, type=shrinkType)
+    res <- DESeq2::lfcShrink(dds, coef = effect_name, type=shrink_type)
   }
 
-  #reorder columns as pvalue, padj, baseMean, log2FoldChange, lfcSE, stat
+  # reorder columns as pvalue, padj, baseMean, log2FoldChange, lfcSE, stat
   pval_idx <- which("pvalue" == colnames(res))
   pval_adj_idx <- which("padj" == colnames(res))
   other_idx <- intersect(which("pvalue" != colnames(res)), which( "padj" != colnames(res)))
   res <- res[, c(pval_idx, pval_adj_idx, other_idx)]
-  res$"IHWPval"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
+  res$"IHWPvalue"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
 
   if(!missing(out_dir)) {
     # plot sample distance
@@ -98,8 +98,12 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effectName, shr
     dev.off()
   }
 
+  # rename pvalue to Pvalue and log2FoldChange to Log2FoldChange
+  res <- as.data.frame(res)
+  colnames(res) <- gsub("pvalue", "Pvalue", colnames(res))
+  colnames(res) <- gsub("log2FoldChange", "Log2FoldChange", colnames(res))
   counts_norm<-DESeq2::counts(dds, normalized=TRUE)
-  newList <- list("normCounts" = counts_norm, "deResult" = as.data.frame(res))
+  newList <- list("norm_counts" = counts_norm, "de_result" = res)
   return(newList)
 }
 
@@ -145,7 +149,7 @@ plotPCA <- function(rld, pheno_info, out_dir, prefix = "DESeq2") {
   if(ncol(mypheno_info) > 1) {
     data <- DESeq2::plotPCA(rld, intgroup=colnames(mypheno_info), returnData=TRUE)
     percentVar <- round(100 * attr(data, "percentVar"))
-    plt <- ggplot(data, aes(PC1, PC2, color=mypheno_info[,1], shape=mypheno_info[,2])) +
+    plt <- ggplot2::ggplot(data, aes(PC1, PC2, color=mypheno_info[,1], shape=mypheno_info[,2])) +
       geom_point(size=3) +
       xlab(paste0("PC1: ",percentVar[1],"% variance")) +
       ylab(paste0("PC2: ",percentVar[2],"% variance")) +

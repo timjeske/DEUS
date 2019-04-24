@@ -80,23 +80,23 @@
 <a href="#optional-preprocessing-of-fastq-files" class="anchor"></a>(Optional) preprocessing of FASTQ files</h3>
 <p>Before applying DEUS we strongly recommend to trim your input FASTQ files. <a href="https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/">Trim Galore</a> can be used to do adapter and quality trimming. The <code>--max_length</code> parameter should be set to (read length - 1) to remove non-small RNA sequences.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># remove adapters (automatically recognized by Trim Galore)</span>
-<span class="kw">/software/trim_galore_v0.x.x/trim_galore</span> -q 0 --length 16 --max_length 49 <span class="ot">$in_file</span> -o <span class="ot">$out_dir</span>
+<span class="ex">/software/trim_galore_v0.x.x/trim_galore</span> -q 0 --length 16 --max_length 49 <span class="va">$in_file</span> -o <span class="va">$out_dir</span>
 <span class="co"># quality trimming (use dummy adapter to suppress adapter trimming)</span>
-<span class="kw">/software/trim_galore_v0.x.x/trim_galore</span> -q 20 --length 1 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 <span class="ot">$in_file</span> -o <span class="ot">$out_dir</span></code></pre></div>
+<span class="ex">/software/trim_galore_v0.x.x/trim_galore</span> -q 20 --length 1 -a CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --stringency 50 <span class="va">$in_file</span> -o <span class="va">$out_dir</span></code></pre></div>
 </div>
 <div id="installing-deus" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installing-deus" class="anchor"></a>Installing DEUS</h3>
 <p>You can install DEUS from GitHub with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
-devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DEUS)</code></pre></div>
 <p>Alternatively, you can install DEUS from a local copy.</p>
 <p>First, you need to unzip it:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/unzip">unzip</a></span> DEUS-master.zip</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">unzip</span> DEUS-master.zip</code></pre></div>
 <p>Then you can install it in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
-devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_local</a></span>(<span class="st">"./DEUS-master"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_local</a></span>(<span class="st">"./DEUS-master"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DEUS)</code></pre></div>
 </div>
 <div id="setting-parameters" class="section level3">
@@ -129,12 +129,12 @@ countTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>Differential expression analysis is done by calling the function <a href="../reference/runDESeq2.html">runDESeq2</a>. After filtering for significant sequences, a map is created by <a href="../reference/createMap.html">createMap</a> which assigns a unique identifier to each sequence. The results of <a href="../reference/runDESeq2.html">runDESeq2</a> are additionally used as input for <a href="../reference/getConditionCountStats.html">getConditionCountStats</a> to compute the mean and the standard deviation of the normalized counts for each analyzed conditions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
 deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(countTable, phenoInfo, design, map, out_dir)
-sigResults &lt;-<span class="st"> </span>deResults$deResult
-sigResults &lt;-<span class="st"> </span>sigResults[!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults$IHWPval) &amp;<span class="st"> </span>sigResults$IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>,]
+sigResults &lt;-<span class="st"> </span>deResults<span class="op">$</span>deResult
+sigResults &lt;-<span class="st"> </span>sigResults[<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults<span class="op">$</span>IHWPval) <span class="op">&amp;</span><span class="st"> </span>sigResults<span class="op">$</span>IHWPval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>,]
 map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createMap.html">createMap</a></span>(sigResults)
 
 <span class="co"># get count stats</span>
-countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults$normCounts, phenoInfo)</code></pre></div>
+countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults<span class="op">$</span>normCounts, phenoInfo)</code></pre></div>
 </div>
 <div id="running-blast" class="section level3">
 <h3 class="hasAnchor">
@@ -180,7 +180,7 @@ cl_counts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/m
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run differential expression analysis on clusters</span>
 design &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>condition
 cl_deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(cl_counts, pheno_info, design, <span class="dt">out_dir =</span> out_dir)
-cl_sigResults &lt;-<span class="st"> </span>cl_deResults$deResult</code></pre></div>
+cl_sigResults &lt;-<span class="st"> </span>cl_deResults<span class="op">$</span>deResult</code></pre></div>
 <p>Next, we continue with the standard approach and calculated DE results for unique sequences</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Filter lowexpressed but only for single seq approach</span>
 count_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filterLowExp.html">filterLowExp</a></span>(count_table, pheno_info)
@@ -188,22 +188,22 @@ count_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 
 <span class="co"># run differential expression analysis</span>
 deResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runDESeq2.html">runDESeq2</a></span>(count_table, pheno_info, design, <span class="dt">out_dir=</span>out_dir)
-sigResults &lt;-<span class="st"> </span>deResults$deResult
+sigResults &lt;-<span class="st"> </span>deResults<span class="op">$</span>deResult
 
 <span class="co"># get count stats</span>
-countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults$normCounts, pheno_info)</code></pre></div>
+countStats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getConditionCountStats.html">getConditionCountStats</a></span>(deResults<span class="op">$</span>normCounts, pheno_info)</code></pre></div>
 <p>Subsequently, both results can be merged into a single data frame. Based on the individual and cluster pvalues, sequences can be filtered to detect potential interesting cases.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Merge sigResults and cl_sigResults</span>
 sigResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mergeSingleAndClusterResults.html">mergeSingleAndClusterResults</a></span>(cl_sigResults,clustResult,sigResults,map)
 
-sigResults &lt;-<span class="st"> </span>sigResults[((!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults$IHWPval) &amp;<span class="st"> </span>sigResults$IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>) |<span class="st"> </span>(!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults$Cl_IHWPval) &amp;<span class="st"> </span>sigResults$Cl_IHWPval &lt;<span class="st"> </span><span class="fl">0.05</span>)),]</code></pre></div>
+sigResults &lt;-<span class="st"> </span>sigResults[((<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults<span class="op">$</span>IHWPval) <span class="op">&amp;</span><span class="st"> </span>sigResults<span class="op">$</span>IHWPval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>) <span class="op">|</span><span class="st"> </span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(sigResults<span class="op">$</span>Cl_IHWPval) <span class="op">&amp;</span><span class="st"> </span>sigResults<span class="op">$</span>Cl_IHWPval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)),]</code></pre></div>
 <p>Finally, we continue with the default pipeline and add annotation using Blast. All results are merged and written into summary files</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Get sequences for blast</span>
 sigSeqFasta &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sequencesAsFasta.html">sequencesAsFasta</a></span>(sigResults,map)
 <span class="co"># run blast</span>
-if(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files">file.exists</a></span>(blast_exec)) {
+<span class="cf">if</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files">file.exists</a></span>(blast_exec)) {
   blastResult &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runBlast.html">runBlast</a></span>(blast_exec, blast_db, blast_ncores, sigSeqFasta)
-} else {
+} <span class="cf">else</span> {
   blastResult &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(blast_int, <span class="dt">header=</span>T, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)
 }
 

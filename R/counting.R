@@ -29,36 +29,36 @@
 #' @return A data frame with unique sequences as row names and the correspoding number of occurrences for each sample
 #' @export
 
-createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",pheno_info=NULL) {
+createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",pheno_info) {
   file.list <- list.files(in_dir)
   fastqs <- file.list[endsWith(file.list,fq_suffix)]
   fastqs <- paste(in_dir,fastqs,sep="/")
 
-  if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+  if(!missing(pheno_info) && "sample" %in% colnames(pheno_info)) {
     pheno_info$sampleName = rownames(pheno_info)
     pheno_info$baseName = basename(as.character(pheno_info$sample))
     fastqs <- paste(in_dir, pheno_info$baseName, sep="/")
   }
 
-  print(paste("Counting all reads in",fastqs[1]))
+  message(paste("Counting all reads in",fastqs[1]))
   content <- ShortRead::readFastq(fastqs[1])
   counts <- ShortRead::tables(content,n=length(content))
   countTable <- as.data.frame(counts$top)
   names(countTable) <- c(basename(fastqs[1]))
 
-  if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+  if(!missing(pheno_info) && "sample" %in% colnames(pheno_info)) {
     names(countTable) <- c(as.character(pheno_info$sampleName[basename(fastqs[1])==pheno_info$baseName]))
   }
 
   countTable$Read <- row.names(countTable)
   fastqs <- fastqs[-1]
   for(f in fastqs) {
-    print(paste("Counting all reads in",f))
+    message(paste("Counting all reads in",f))
     content <- ShortRead::readFastq(f)
     counts <- ShortRead::tables(content,n=length(content))
     counts <- as.data.frame(counts$top)
     names(counts) <- c(basename(f))
-    if(!is.null(pheno_info) && "sample" %in% colnames(pheno_info)) {
+    if(!missing(pheno_info) && "sample" %in% colnames(pheno_info)) {
       names(counts) <- c(as.character(pheno_info$sampleName[basename(f)==pheno_info$baseName]))
     }
     counts$Read <- row.names(counts)
@@ -83,20 +83,22 @@ createCountTableFromFastQs <- function(in_dir,fq_suffix = ".fq.gz",pheno_info=NU
 #' @return The input count table with all sequences removed that fail the filter critera
 #' @export
 
-filterLowExp<-function(count_table,pheno_info, group_threshold = 10, filter_col="condition"){
-  #Get Group Means
-  groups <- unique(pheno_info[[filter_col]])
+filterLowExp<-function(count_table, pheno_info, group_threshold = 10, filter_col="condition"){
 
+  #initialize columns for filtering
   count_table$allPassThreshold <- TRUE
   count_table$oneGroupZero <- FALSE
+  count_table$oneGroupAvgOneRead <- FALSE
 
+  groups <- unique(pheno_info[[filter_col]])
   for(type in groups){
     cols  <- row.names(pheno_info)[which(pheno_info[[filter_col]]==type)]
     subset_means <- rowMeans(count_table[,cols])
     count_table$allPassThreshold <- count_table$allPassThreshold & subset_means >= group_threshold
     count_table$oneGroupZero <- count_table$oneGroupZero | subset_means == 0
+    count_table$oneGroupAvgOneRead <- count_table$oneGroupAvgOneRead | subset_means > 1
   }
-  count_table = count_table[(count_table$allPassThreshold | count_table$oneGroupZero),c(1:(ncol(count_table)-2))]
+  count_table = count_table[(count_table$allPassThreshold | (count_table$oneGroupZero & count_table$oneGroupAvgOneRead)),c(1:(ncol(count_table)-3))]
 
   return(count_table)
 }

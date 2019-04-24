@@ -112,8 +112,8 @@ It is possible to replace this function by any other method generating at least 
     
     </div>
 
-    <pre class="usage"><span class='fu'>runDESeq2</span>(<span class='no'>count_table</span>, <span class='no'>pheno_info</span>, <span class='no'>design</span>, <span class='no'>contrast</span>, <span class='no'>effectName</span>,
-  <span class='kw'>shrinkType</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='no'>out_dir</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"DESeq2"</span>)</pre>
+    <pre class="usage"><span class='fu'>runDESeq2</span>(<span class='no'>count_table</span>, <span class='no'>pheno_info</span>, <span class='no'>design</span>, <span class='no'>contrast</span>, <span class='no'>effect_name</span>,
+  <span class='kw'>shrink_type</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='no'>out_dir</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"DESeq2"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,11 +136,11 @@ The sample identifiers must be identical to those in the count_table.</p></td>
       <td><p>Argument to specify the comparison for which the results table will be generated (corresponds to 'contrast' argument in <a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a> and <a href='https://www.rdocumentation.org/packages/DESeq2/topics/lfcShrink'>lfcShrink</a>). Required if interaction terms are part of the design formula.</p></td>
     </tr>
     <tr>
-      <th>effectName</th>
+      <th>effect_name</th>
       <td><p>Argument to specify the comparision for which the results table will be generated (corresponds to 'name' argument in <a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a> and 'coef' argument in <a href='https://www.rdocumentation.org/packages/DESeq2/topics/lfcShrink'>lfcShrink</a>). Required if interaction terms are part of the design formula.</p></td>
     </tr>
     <tr>
-      <th>shrinkType</th>
+      <th>shrink_type</th>
       <td><p>DESeq2 shrinkage estimator (corresponds to 'type' argument in <a href='https://www.rdocumentation.org/packages/DESeq2/topics/lfcShrink'>lfcShrink</a>).</p></td>
     </tr>
     <tr>
@@ -158,7 +158,7 @@ The sample identifiers must be identical to those in the count_table.</p></td>
     <p>Returns a list consisting of 'normCounts' and the 'deResult'.
 'normCounts' is a data frame of normalized counts with sequences as row names.
 'deResult' is a data frame with sequences as row names and the columns 'pvalue', 'padj', 'baseMean', 'log2FoldChange', 'lfcSE', 'stat', 'IHWPval'.
-See <a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a> and <a href='https://www.rdocumentation.org/packages/IHW/topics/ihw.default'>ihw</a> for further documentation on the columns.</p>
+See <a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a> and <a href='https://www.rdocumentation.org/packages/IHW/topics/ihw.default'>ihw.default</a> for further documentation on the columns.</p>
     
 
   </div>

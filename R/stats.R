@@ -36,7 +36,5 @@ getNoBlastHitFraction <- function(summary, count_table) {
   res <- colSums(sub)/colSums(count_table)
   res <- as.data.frame(res)
   colnames(res) <- c("NA_fraction")
-  #res$Sample <- rownames(res)
-  #res <- res[,c(which(names(res)=="Sample"),which(names(res)!="Sample"))]
   return(res)
 }

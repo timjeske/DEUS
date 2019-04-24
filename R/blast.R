@@ -39,11 +39,17 @@
 #' @export
 
 runBlast <- function(blast_exec, blast_db, ncores, sig_sequences, strand = 'plus', identity=100, dust='no', soft_masking='false') {
-  blast.f6 <- c('qseqid', 'qlen', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart' ,'send', 'evalue', 'bitscore')
-  command=paste("-db",blast_db, "-num_threads", ncores , "-perc_identity", identity, "-dust", dust, "-soft_masking", soft_masking, "-strand", strand, "-task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt", sprintf(" '6 %s'",paste(collapse=" ",blast.f6)),sep=" ")
-cat("Blastn configuration:\n")
-print(paste(blast_exec,command))
-  blast.out <- system2(blast_exec,command, input=sig_sequences, stdout=TRUE)
-  blast.out.df <- `names<-`(read.table(quote="",sep='\t',textConnection(blast.out)),blast.f6)
-  return(blast.out.df)
+  blast_f6 <- c('qseqid', 'qlen', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart' ,'send', 'evalue', 'bitscore')
+  command <- paste("-db",blast_db, "-num_threads", ncores , "-perc_identity", identity, "-dust", dust, "-soft_masking", soft_masking, "-strand", strand, "-task blastn-short -qcov_hsp_perc 100 -max_target_seqs 2000 -outfmt", sprintf(" '6 %s'",paste(collapse=" ",blast_f6)),sep=" ")
+  message("Blastn configuration:")
+  message(paste(blast_exec,command))
+  blast_out <- system2(blast_exec,command, input=sig_sequences, stdout=TRUE)
+  blast_out_df <- `names<-`(read.table(quote="",sep='\t',textConnection(blast_out)),blast_f6)
+
+  # rename qsedid to SequenceID, length to Length, evalue to BlastEvalue, sseqid to Annotation
+  colnames(blast_out_df) <- gsub("qseqid", "SequenceID",colnames(blast_out_df))
+  colnames(blast_out_df) <- gsub("length", "Length", colnames(blast_out_df))
+  colnames(blast_out_df) <- gsub("evalue", "BlastEvalue", colnames(blast_out_df))
+  colnames(blast_out_df) <- gsub("sseqid", "Annotation", colnames(blast_out_df))
+  return(blast_out_df)
 }
