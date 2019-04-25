@@ -3,7 +3,6 @@
 .RData
 .Ruserdata
 test_runDESeq2.R
-inst/doc
 inst/extdata/results/DESeq2*
 inst/extdata/results/Summary*
 inst/extdata/results/AllCounts_filtered.tsv
