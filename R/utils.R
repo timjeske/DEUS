@@ -290,6 +290,7 @@ mergeSingleAndClusterResults <- function(cl_sig_results, clust_result, sig_resul
 printClusterSummary <- function(summary, sig_threshold = 0.05) {
   sig_seq_summary <- summary[(!is.na(summary$IHWPvalue) & summary$IHWPvalue < sig_threshold),]
   sig_seqs <- length(sig_seq_summary$SequenceID)
+  sig_seqs_not_in_cluster <- length(sig_seq_summary[is.na(sig_seq_summary$ClusterID),1])
   clust_incl_sig_seqs <- length(unique(sig_seq_summary$ClusterID))
 
   #test if Cluster cols exist
@@ -300,12 +301,13 @@ printClusterSummary <- function(summary, sig_threshold = 0.05) {
     sig_clust_no_sig_seq <- sig_clust_summary[!(!is.na(sig_clust_summary$IHWPvalue) & sig_clust_summary$IHWPvalue < sig_threshold),]
     sig_clust_no_sig_seq_low_exp <- sig_clust_no_sig_seq[is.na(sig_clust_no_sig_seq$IHWPvalue),]
     sig_clust_no_sig_seq_weak_DE <- sig_clust_no_sig_seq[!is.na(sig_clust_no_sig_seq$IHWPvalue) & !(sig_clust_no_sig_seq$IHWPvalue < sig_threshold),]
-    sig_seq_no_sig_clust <- summary[(!is.na(summary$IHWPvalue) & summary$IHWPvalue < sig_threshold) & !(!is.na(summary$Cl_IHWPvalue) & summary$Cl_IHWPvalue < sig_threshold),]
+    sig_seq_no_sig_clust <- summary[(!is.na(summary$IHWPvalue) & summary$IHWPvalue < sig_threshold) & (!is.na(summary$Cl_IHWPvalue) & summary$Cl_IHWPvalue >= sig_threshold),]
     clusters_no_sig_seq <- length(setdiff(unique(sig_clust_summary$ClusterID), unique(sig_seq_summary$ClusterID)))
   }
 
   writeLines("## Sequence summary ##")
   writeLines(sprintf("Significant sequences: %d", sig_seqs))
+  writeLines(sprintf("Significant sequences not clustered: %d", sig_seqs_not_in_cluster))
   if(exists("sig_clust_summary")) {
     writeLines(sprintf("Sequences in significant clusters: %d", length(sig_clust_summary$SequenceID)))
     writeLines(sprintf("Non-significant sequences in significant clusters: %d", length(sig_clust_no_sig_seq$SequenceID)))
