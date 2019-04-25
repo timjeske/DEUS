@@ -149,12 +149,12 @@ plotPCA <- function(rld, pheno_info, out_dir, prefix = "DESeq2") {
   if(ncol(mypheno_info) > 1) {
     data <- DESeq2::plotPCA(rld, intgroup=colnames(mypheno_info), returnData=TRUE)
     percentVar <- round(100 * attr(data, "percentVar"))
-    plt <- ggplot2::ggplot(data, aes(PC1, PC2, color=mypheno_info[,1], shape=mypheno_info[,2])) +
-      geom_point(size=3) +
-      xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-      ylab(paste0("PC2: ",percentVar[2],"% variance")) +
-      labs(color=colnames(mypheno_info)[1]) +
-      labs(shape=colnames(mypheno_info)[2])
+    plt <- ggplot2::ggplot(data, ggplot2::aes(PC1, PC2, color=mypheno_info[,1], shape=mypheno_info[,2])) +
+      ggplot2::geom_point(size=3) +
+      ggplot2::xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+      ggplot2::ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+      ggplot2::labs(color=colnames(mypheno_info)[1]) +
+      ggplot2::labs(shape=colnames(mypheno_info)[2])
   } else {
     plt <- DESeq2::plotPCA(rld, intgroup=colnames(mypheno_info))
   }
