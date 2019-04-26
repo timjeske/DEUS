@@ -87,6 +87,14 @@ devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devt
 <div id="prerequisites" class="section level3">
 <h3 class="hasAnchor">
 <a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
+<p>The following system libraries are required:</p>
+<ul>
+<li>libssl-dev (Debian)/ openssl-devel (Fedora)</li>
+<li>libcurl4-openssl-dev (Debian)/ libcurl-devel (Fedora)</li>
+<li>libxml2-dev (Debian)/ libxml2-devel (Fedora)</li>
+</ul>
+<p>If these system dependencies are fulfilled, all required R packages should be installed automatically.</p>
+<p>Further, the DEUS pipeline requires the following tools:</p>
 <ul>
 <li>
 <a href="http://weizhongli-lab.org/cd-hit/">CD-Hit</a> (cd-hit-est binary)</li>
@@ -119,7 +127,7 @@ cond2_s2        cond2_s2.fwd.fq.gz      cond2</code></pre>
 <div id="run-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#run-example" class="anchor"></a>Run example</h3>
-<p>To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses. You can find the test script in the <a href="https://github.com/timjeske/DEUS/blob/master/sample_usage.R">DEUS GitHub repository</a>. The individual steps are explained in <a href="SampleUsage.html">Run DEUS</a>.</p>
+<p>To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses. You can find the <a href="https://github.com/timjeske/DEUS/blob/master/sample_usage.R">test script</a> in the <a href="https://github.com/timjeske/DEUS">DEUS GitHub repository</a>. An additional <a href="https://github.com/timjeske/DEUS/blob/master/sample_usage_withCl.R">sample script</a> performing an extended analysis using sequence clusters is also provided in the repository. The individual steps of both scripts are explained in <a href="SampleUsage.html">Run DEUS</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Rscript sample_usage.R</code></pre></div>
 </div>
   </div>

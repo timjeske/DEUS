@@ -23,7 +23,9 @@ Imports:
   ShortRead,
   IHW,
   DESeq2,
-  pheatmap	
+  pheatmap,
+  RColorBrewer,
+  SummarizedExperiment
 RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown

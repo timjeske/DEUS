@@ -38,9 +38,19 @@ devtools::install_local("./DEUS-master", build_opts = c("--no-resave-data", "--n
 
 ### Prerequisites
 
-- [CD-Hit](http://weizhongli-lab.org/cd-hit/) (cd-hit-est binary)
-- [BLAST](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) (blastn binary)
-- Custom BLAST database used for annotation step
+The following system libraries are required:
+
+* libssl-dev (Debian)/ openssl-devel (Fedora)
+* libcurl4-openssl-dev (Debian)/ libcurl-devel (Fedora)
+* libxml2-dev (Debian)/ libxml2-devel (Fedora)
+
+If these system dependencies are fulfilled, all required R packages should be installed automatically.
+
+Further, the DEUS pipeline requires the following tools:
+
+* [CD-Hit](http://weizhongli-lab.org/cd-hit/) (cd-hit-est binary)
+* [BLAST](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) (blastn binary)
+* Custom BLAST database used for annotation step
 
 
 ### Preparing a BLAST database
@@ -65,11 +75,11 @@ cond2_s1        cond2_s1.fwd.fq.gz      cond2
 cond2_s2        cond2_s2.fwd.fq.gz      cond2
 ```
 
-
 ### Run example 
 To test your setup, you can run our test script that will perform DEUS on our simulated example data. It can also be used as a template for further analyses. 
-You can find the test script in the [DEUS GitHub repository](https://github.com/timjeske/DEUS/blob/master/sample_usage.R).
-The individual steps are explained in [Run DEUS](SampleUsage.html).
+You can find the [test script](https://github.com/timjeske/DEUS/blob/master/sample_usage.R) in the [DEUS GitHub repository](https://github.com/timjeske/DEUS).
+An additional [sample script](https://github.com/timjeske/DEUS/blob/master/sample_usage_withCl.R) performing an extended analysis using sequence clusters is also provided in the repository.
+The individual steps of both scripts are explained in [Run DEUS](SampleUsage.html).
 	
 ```r
 Rscript sample_usage.R
