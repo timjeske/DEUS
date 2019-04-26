@@ -3,7 +3,7 @@ Type: Package
 Title: Differential expression of unique sequences
 Version: 1.0
 Author: Tim Jeske, Maximilian Hastreiter
-Authors@R: c(person("Tim","Jeske", role=c("aut","cre")), person("Maximilian","Hastreiter", role=c("aut","cre")))
+Authors@R: c(person("Tim","Jeske", role=c("aut","cre"), email = "tim.jeske@helmholtz-muenchen.de"), person("Maximilian","Hastreiter", role=c("aut","cre"), email = "m.hastreiter@tum.de"))
 Maintainer: Tim Jeske <tim.jeske@helmholtz-muenchen.de>, Maximilian Hastreiter <m.hastreiter@tum.de>
 Description: The DEUS R package is a framework for accurate small non-coding RNA (sncRNA) profiling based on differential expression of unique sequences. 
 License: GPL (>= 3)

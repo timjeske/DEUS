@@ -9,7 +9,7 @@ printClusterSummary(summary, sig_threshold = 0.05)
 \arguments{
 \item{summary}{Summary table as created by \link[DEUS]{mergeResults}}
 
-\item{sig_treshold}{Significance threshold used for filtering according to the IHW P-value of the sequences and clusters}
+\item{sig_threshold}{Significance threshold used for filtering according to the IHW P-value of the sequences and clusters}
 }
 \value{
 Prints summary values to standard output.

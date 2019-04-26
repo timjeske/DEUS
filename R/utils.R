@@ -284,7 +284,7 @@ mergeSingleAndClusterResults <- function(cl_sig_results, clust_result, sig_resul
 #' Prints a summary of the number of significant sequences and clusters
 #'
 #' @param summary Summary table as created by \link[DEUS]{mergeResults}
-#' @param sig_treshold Significance threshold used for filtering according to the IHW P-value of the sequences and clusters
+#' @param sig_threshold Significance threshold used for filtering according to the IHW P-value of the sequences and clusters
 #' @return Prints summary values to standard output.
 #' @export
 
