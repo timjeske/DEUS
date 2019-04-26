@@ -94,7 +94,7 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effect_name, sh
 
     # plot MA
     pdf(paste(out_dir,paste(prefix, "MAplot_shrunken.pdf", sep="_"),sep="/"), onefile=FALSE)
-    DESeq2::plotMA(res, main = "DESeq2", ylim=c(-4,4))
+    DESeq2::plotMA(res, main = paste(prefix, "MA plot", sep=" "), ylim=c(-4,4))
     dev.off()
   }
 
