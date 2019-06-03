@@ -82,7 +82,7 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effect_name, sh
   pval_adj_idx <- which("padj" == colnames(res))
   other_idx <- intersect(which("pvalue" != colnames(res)), which( "padj" != colnames(res)))
   res <- res[, c(pval_idx, pval_adj_idx, other_idx)]
-  res$"IHWPvalue"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.1))
+  res$"IHWPvalue"=IHW::adj_pvalues(IHW::ihw(res$pvalue~res$baseMean, data=res,alpha=0.05))
 
   if(!missing(out_dir)) {
     # plot sample distance

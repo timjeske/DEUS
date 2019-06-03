@@ -22,7 +22,7 @@ devtools::install_github("timjeske/DEUS")
 library(DEUS)
 
 # defaults may be changed
-out_dir <- "~/tmp"
+out_dir <- tempdir()
 blast_ncores <- 2
 
 # leave paths empty if not yet installed, intermediate results will be used for testing purposes
