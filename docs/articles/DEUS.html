@@ -76,14 +76,14 @@
     
     
 <p>You can install DEUS from GitHub with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
-devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>, <span class="dt">build_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>, <span class="dt">build_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>))</code></pre></div>
 <p>Alternatively, you can install DEUS from a local copy.</p>
 <p>First, you need to unzip it:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/unzip">unzip</a></span> DEUS-master.zip</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">unzip</span> DEUS-master.zip</code></pre></div>
 <p>Then you can install it in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
-devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_local</a></span>(<span class="st">"./DEUS-master"</span>, <span class="dt">build_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_local</a></span>(<span class="st">"./DEUS-master"</span>, <span class="dt">build_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>))</code></pre></div>
 <div id="prerequisites" class="section level3">
 <h3 class="hasAnchor">
 <a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
@@ -111,8 +111,8 @@ devtools::<span class="kw"><a href="https://www.rdocumentation.org/packages/devt
 <li>Use existing databases available at e.g. <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db/">NCBI</a>. Database sets may also be retrieved automatically with <code>update_blastdb.pl</code>, which is part of the BLAST+ suite.</li>
 <li>Build a custom database using BLAST <code>makeblastdb</code> and some fasta sequences:</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span> DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Comparison">&gt;</a></span> HumanDB.fa
-<span class="kw">makeblastdb</span> -in HumanDB.fa -dbtype nucl -parse_seqids</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">cat</span> DASHR.fa Homo_sapiens.GRCh37.75.cds.all.fa  Homo_sapiens.GRCh37.75.ncrna.fa <span class="op">&gt;</span> HumanDB.fa
+<span class="ex">makeblastdb</span> -in HumanDB.fa -dbtype nucl -parse_seqids</code></pre></div>
 </div>
 <div id="preparing-a-condition-file" class="section level3">
 <h3 class="hasAnchor">

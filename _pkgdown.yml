@@ -19,7 +19,6 @@ reference:
     contents:
     - createCountTableFromFastQs
     - mergeAndAggregate
-    - filterLowExp
     - runDESeq2
     - getConditionCountStats
     - createMap
