@@ -44,7 +44,6 @@ runDESeq2 <- function(count_table, pheno_info, design, contrast, effect_name, sh
   }
 
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = count_table, colData = pheno_info, design = design)
-  dds <- dds[rowMeans(DESeq2::counts(dds)) > 1, ]
 
   if(missing(contrast) && missing(effect_name)) {
     dds <- DESeq2::DESeq(dds, betaPrior=TRUE)

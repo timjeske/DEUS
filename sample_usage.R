@@ -41,7 +41,8 @@ clust_int <- system.file("extdata", "results/clust_result_sig_sequences.tsv", pa
 # create and filter count table, create sequence to sequenceID map
 pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
-count_table <- filterLowExp(count_table, pheno_info)
+count_table <- count_table[rowMeans(count_table)>1,]
+
 map <- createMap(count_table)
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
