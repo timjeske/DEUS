@@ -76,6 +76,7 @@ cl_sig_results <- cl_de_results$de_result
 #Continue with regular pipeline
 
 #Filter low expressed but only for unique sequences approach
+count_table <- count_table[rowMeans(count_table)>1,]
 write.table(count_table, paste(out_dir,"AllCounts_filtered.tsv",sep="/"), col.names=T, quote=F, sep="\t", row.names=T)
 
 # run differential expression analysis
