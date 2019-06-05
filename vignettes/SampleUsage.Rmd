@@ -62,10 +62,10 @@ pheno_info
 
 ### Counting unique sequences
 
-To create the count table for differential expression analysis, [createCountTableFromFastQs](../reference/createCountTableFromFastQs.html) counts all unique sequences in each FASTQ file given in your `pheno_info`. To remove low expressed sequences and reduce the size of the count table [filterLowExp](../reference/filterLowExp.html) is applied. Sequences are kept if all groups of samples have a default minimum average sequence count of 10 or if one of the groups has zero counts for all samples.
+To create the count table for differential expression analysis, [createCountTableFromFastQs](../reference/createCountTableFromFastQs.html) counts all unique sequences in each FASTQ file given in your `pheno_info`. To remove low expressed sequences and reduce the size of the count table, we keep only sequences with an average sequence count larger than 1.
 ```{r, eval=TRUE, message=FALSE}
 count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
-count_table_filtered <- filterLowExp(count_table, pheno_info)
+count_table_filtered <- count_table[rowMeans(count_table)>1,]
 head(count_table_filtered, n=2)
 ```
 
