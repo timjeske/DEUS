@@ -89,37 +89,8 @@
 <a href="#installing-deus" class="anchor"></a>Installing DEUS</h3>
 <p>You can install DEUS from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>, <span class="dt">repos=</span><span class="st">'http://cran.us.r-project.org'</span>)
-devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)</code></pre></div>
-<pre><code>## 
-##   
-   checking for file ‘/tmp/RtmpQakfGM/remotes79d03498bcf5/timjeske-DEUS-c12c6b2/DESCRIPTION’ ...
-  
-✔  checking for file ‘/tmp/RtmpQakfGM/remotes79d03498bcf5/timjeske-DEUS-c12c6b2/DESCRIPTION’
-## 
-  
-─  preparing ‘DEUS’:
-## 
-  
-   checking DESCRIPTION meta-information ...
-  
-✔  checking DESCRIPTION meta-information
-## 
-  
-─  checking for LF line-endings in source and make files and shell scripts
-## 
-  
-─  checking for empty or unneeded directories
-## 
-  
-─  building ‘DEUS_1.0.tar.gz’
-## 
-  
-   Warning: invalid uid value replaced by that for user 'nobody'
-## 
-  
-   
-## </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DEUS)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"timjeske/DEUS"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DEUS)</code></pre></div>
 <p>Alternatively, you can install DEUS from a local copy.</p>
 <p>First, you need to unzip it:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">unzip</span> DEUS-master.zip</code></pre></div>
@@ -133,7 +104,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <a href="#setting-parameters" class="anchor"></a>Setting parameters</h3>
 <p>Before running the individual steps of the DEUS pipeline it is helpful to set some required parameters. The <code>in_dir</code> is the folder where the (trimmed) FASTQ files are stored. The <code>out_dir</code> is the folder where plots of differential expression analysis (DEA), clustering and summary output files will be stored. The <code>phenofile</code> is the condition file for DEA (<a href="DEUS.html#preparing-a-condition-file">examplary condition file</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">in_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"DEUS"</span>)
-out_dir &lt;-<span class="st"> "~/tmp"</span>
+out_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span>()
 phenofile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"condition.tsv"</span>, <span class="dt">package =</span> <span class="st">"DEUS"</span>)
 pheno_info &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(phenofile, <span class="dt">header=</span>T, <span class="dt">row.names=</span><span class="dv">1</span>, <span class="dt">check.names=</span><span class="ot">FALSE</span>)
 pheno_info</code></pre></div>
@@ -152,7 +123,7 @@ pheno_info</code></pre></div>
 <div id="counting-unique-sequences" class="section level3">
 <h3 class="hasAnchor">
 <a href="#counting-unique-sequences" class="anchor"></a>Counting unique sequences</h3>
-<p>To create the count table for differential expression analysis, <a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a> counts all unique sequences in each FASTQ file given in your <code>pheno_info</code>. To remove low expressed sequences and reduce the size of the count table, we keep only sequences with an average sequence count larger than 1.</p>
+<p>To create the count table for differential expression analysis, <a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a> counts all unique sequences in each FASTQ file given in your <code>pheno_info</code>. As an optional step, we only keep sequences with an average sequence count larger than 1 to remove low expressed sequences and reduce the size of the count table.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">count_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createCountTableFromFastQs.html">createCountTableFromFastQs</a></span>(in_dir, <span class="dt">pheno_info=</span>pheno_info)
 count_table_filtered &lt;-<span class="st"> </span>count_table[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">rowMeans</a></span>(count_table)<span class="op">&gt;</span><span class="dv">1</span>,]
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(count_table_filtered, <span class="dt">n=</span><span class="dv">2</span>)</code></pre></div>

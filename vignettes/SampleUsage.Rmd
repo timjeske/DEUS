@@ -23,7 +23,7 @@ Before applying DEUS we strongly recommend to trim your input FASTQ files.
 
 You can install DEUS from GitHub with:
 
-```{r gh-installation, message=FALSE}
+```{r gh-installation, message=FALSE, results=FALSE}
 if (!require("devtools")) install.packages("devtools", repos='http://cran.us.r-project.org')
 devtools::install_github("timjeske/DEUS")
 library(DEUS)
@@ -54,7 +54,7 @@ The `phenofile` is the condition file for DEA ([examplary condition file](DEUS.h
 
 ```{r, eval=TRUE}
 in_dir <- system.file("extdata", package = "DEUS")
-out_dir <- "~/tmp"
+out_dir <- tempdir()
 phenofile <- system.file("extdata", "condition.tsv", package = "DEUS")
 pheno_info <- read.table(phenofile, header=T, row.names=1, check.names=FALSE)
 pheno_info
@@ -62,7 +62,7 @@ pheno_info
 
 ### Counting unique sequences
 
-To create the count table for differential expression analysis, [createCountTableFromFastQs](../reference/createCountTableFromFastQs.html) counts all unique sequences in each FASTQ file given in your `pheno_info`. To remove low expressed sequences and reduce the size of the count table, we keep only sequences with an average sequence count larger than 1.
+To create the count table for differential expression analysis, [createCountTableFromFastQs](../reference/createCountTableFromFastQs.html) counts all unique sequences in each FASTQ file given in your `pheno_info`. As an optional step, we only keep sequences with an average sequence count larger than 1 to remove low expressed sequences and reduce the size of the count table.
 ```{r, eval=TRUE, message=FALSE}
 count_table <- createCountTableFromFastQs(in_dir, pheno_info=pheno_info)
 count_table_filtered <- count_table[rowMeans(count_table)>1,]
